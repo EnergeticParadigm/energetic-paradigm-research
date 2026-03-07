@@ -41,3 +41,8 @@ Research questions and directions for future investigation.
 Researchers interested in testing or extending the ideas presented here are encouraged to reproduce experiments, propose alternative models, or explore energy-based approaches to AI system design.
 
 The Energetic Paradigm is presented as an open research direction. Contributions, discussions, and independent investigations are welcome.
+
+## Author
+
+Dr. Wesley Shu
+Institute of Energetic Paradigm
