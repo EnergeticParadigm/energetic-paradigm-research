@@ -1,0 +1,273 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2759
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fmodern\fcharset0 Courier;\f1\fmodern\fcharset0 Courier-Bold;}
+{\colortbl;\red255\green255\blue255;\red117\green117\blue117;\red38\green38\blue38;\red16\green121\blue2;
+\red255\green236\blue236;\red0\green0\blue0;\red12\green95\blue24;\red81\green0\blue233;\red251\green0\blue7;
+\red253\green151\blue154;}
+{\*\expandedcolortbl;;\cssrgb\c53333\c53333\c53333;\cssrgb\c20000\c20000\c20000;\cssrgb\c0\c53333\c0;
+\cssrgb\c100000\c94118\c94118;\cssrgb\c0\c0\c0;\cssrgb\c0\c43922\c12549;\cssrgb\c40000\c0\c93333;\cssrgb\c100000\c0\c0;
+\cssrgb\c100000\c66667\c66667;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 # EP Gateway Rules\cf3 \strokec3 \
+\
+\cf2 \strokec2 ## 1. Purpose\cf3 \strokec3 \
+\
+This document defines the official gateway behavior 
+\f1\b \cf4 \strokec4 for
+\f0\b0 \cf3 \strokec3  the Energetic Paradigm (\cf3 \cb5 \strokec3 "EP"\cf3 \cb1 \strokec3 ) system.\
+\
+The gateway exists to ensure that official EP activation 
+\f1\b \cf3 \strokec6 is
+\f0\b0 \cf3 \strokec3  controlled, attributable, auditable, 
+\f1\b \cf3 \strokec6 and
+\f0\b0 \cf3 \strokec3  limited to authorized use.\
+\
+\cf2 \strokec2 ## 2. Gateway Function\cf3 \strokec3 \
+\
+The EP Gateway 
+\f1\b \cf3 \strokec6 is
+\f0\b0 \cf3 \strokec3  the control layer that stands between:\
+- user \cf7 \strokec7 input\cf3 \strokec3 \
+- trigger detection\
+- authorization validation\
+- EP route activation\
+- output delivery\
+\
+Its purpose 
+\f1\b \cf3 \strokec6 is
+\f0\b0 \cf3 \strokec3  to distinguish:\
+- official EP activation\
+- unauthorized trigger attempts\
+- standard non-EP processing\
+- expired 
+\f1\b \cf3 \strokec6 or
+\f0\b0 \cf3 \strokec3  invalid access requests\
+\
+\cf2 \strokec2 ## 3. Core Control Principles\cf3 \strokec3 \
+\
+The gateway must enforce the following principles:\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f1\b \cf8 \strokec8 1.
+\f0\b0 \cf3 \strokec3  No official EP activation without authorization.\
+
+\f1\b \cf8 \strokec8 2.
+\f0\b0 \cf3 \strokec3  No official EP activation based on trigger phrase alone.\
+
+\f1\b \cf8 \strokec8 3.
+\f0\b0 \cf3 \strokec3  No official EP designation 
+\f1\b \cf4 \strokec4 for
+\f0\b0 \cf3 \strokec3  outputs generated outside authorized EP routing.\
+
+\f1\b \cf8 \strokec8 4.
+\f0\b0 \cf3 \strokec3  All official EP activation attempts should be attributable to an account, token, approved identity, 
+\f1\b \cf3 \strokec6 or
+\f0\b0 \cf3 \strokec3  other recognized authorization unit.\
+
+\f1\b \cf8 \strokec8 5.
+\f0\b0 \cf3 \strokec3  Authorization state must be checked before official EP processing begins.\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \strokec2 ## 4. Trigger Handling\cf3 \strokec3 \
+\
+When a request includes an EP trigger marker such 
+\f1\b \cf4 \strokec4 as
+\f0\b0 \cf3 \strokec3 :\
+\
+- \cf9 \cb10 \strokec9 `\cf3 \cb1 \strokec3 EP / Trigger1\cf9 \cb10 \strokec9 `\cf3 \cb1 \strokec3 \
+- \cf9 \cb10 \strokec9 `\cf3 \cb1 \strokec3 EP/Trigger1\cf9 \cb10 \strokec9 `\cf3 \cb1 \strokec3 \
+- \cf9 \cb10 \strokec9 `\cf3 \cb1 \strokec3 EP / Trigger One\cf9 \cb10 \strokec9 `\cf3 \cb1 \strokec3 \
+- \cf9 \cb10 \strokec9 `\cf3 \cb1 \strokec3 Energetic Paradigm / Trigger1\cf9 \cb10 \strokec9 `\cf3 \cb1 \strokec3 \
+\
+the gateway must:\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f1\b \cf8 \strokec8 1.
+\f0\b0 \cf3 \strokec3  detect the trigger\
+
+\f1\b \cf8 \strokec8 2.
+\f0\b0 \cf3 \strokec3  verify whether the request 
+\f1\b \cf3 \strokec6 is
+\f0\b0 \cf3 \strokec3  linked to an authorized entity\
+
+\f1\b \cf8 \strokec8 3.
+\f0\b0 \cf3 \strokec3  verify whether the authorization period 
+\f1\b \cf3 \strokec6 is
+\f0\b0 \cf3 \strokec3  still valid\
+
+\f1\b \cf8 \strokec8 4.
+\f0\b0 \cf3 \strokec3  decide whether to route the request to the official EP engine\
+
+\f1\b \cf8 \strokec8 5.
+\f0\b0 \cf3 \strokec3  deny 
+\f1\b \cf3 \strokec6 or
+\f0\b0 \cf3 \strokec3  downgrade the request 
+\f1\b \cf4 \strokec4 if
+\f0\b0 \cf3 \strokec3  authorization fails\
+\
+\pard\pardeftab720\partightenfactor0
+\cf2 \strokec2 ## 5. Authorization Check\cf3 \strokec3 \
+\
+The gateway should verify at least the following:\
+\
+- account identity\
+- token identity, 
+\f1\b \cf4 \strokec4 if
+\f0\b0 \cf3 \strokec3  applicable\
+- license validity window\
+- partner status, 
+\f1\b \cf4 \strokec4 if
+\f0\b0 \cf3 \strokec3  applicable\
+- abuse 
+\f1\b \cf3 \strokec6 or
+\f0\b0 \cf3 \strokec3  misuse restrictions\
+- policy restrictions, 
+\f1\b \cf4 \strokec4 if
+\f0\b0 \cf3 \strokec3  applicable\
+\
+If \cf7 \strokec7 any\cf3 \strokec3  required condition fails, the request must 
+\f1\b \cf3 \strokec6 not
+\f0\b0 \cf3 \strokec3  be treated 
+\f1\b \cf4 \strokec4 as
+\f0\b0 \cf3 \strokec3  official EP activation.\
+\
+\cf2 \strokec2 ## 6. Valid Gateway Outcomes\cf3 \strokec3 \
+\
+A request may result 
+\f1\b \cf3 \strokec6 in
+\f0\b0 \cf3 \strokec3  one of the following gateway outcomes:\
+\
+\cf2 \strokec2 ### 6.1 Official EP Route\cf3 \strokec3 \
+Conditions:\
+- valid trigger detected\
+- valid authorization confirmed\
+- authorization window 
+\f1\b \cf3 \strokec6 not
+\f0\b0 \cf3 \strokec3  expired\
+- no blocking rule triggered\
+\
+Result:\
+- request routed into official EP processing\
+- output may be labeled 
+\f1\b \cf4 \strokec4 as
+\f0\b0 \cf3 \strokec3  official EP\
+\
+\cf2 \strokec2 ### 6.2 Standard Route\cf3 \strokec3 \
+Conditions:\
+- no EP trigger detected\
+- 
+\f1\b \cf3 \strokec6 or
+\f0\b0 \cf3 \strokec3  request intentionally handled outside EP mode\
+\
+Result:\
+- processed 
+\f1\b \cf4 \strokec4 as
+\f0\b0 \cf3 \strokec3  normal non-EP request\
+- output must 
+\f1\b \cf3 \strokec6 not
+\f0\b0 \cf3 \strokec3  be labeled official EP\
+\
+\cf2 \strokec2 ### 6.3 Trigger Detected but Authorization Failed\cf3 \strokec3 \
+Conditions:\
+- trigger detected\
+- authorization missing, invalid, blocked, 
+\f1\b \cf3 \strokec6 or
+\f0\b0 \cf3 \strokec3  expired\
+\
+Result:\
+- official EP route denied\
+- request may be downgraded to standard route 
+\f1\b \cf3 \strokec6 or
+\f0\b0 \cf3 \strokec3  rejected\
+- system may log the event\
+\
+\cf2 \strokec2 ## 7. Official Label Restriction\cf3 \strokec3 \
+\
+No output should be labeled 
+\f1\b \cf4 \strokec4 as
+\f0\b0 \cf3 \strokec3 :\
+- official EP\
+- official Energetic Paradigm activation\
+- authorized EP result\
+- official Trigger1 output\
+\
+unless the request has passed gateway authorization checks.\
+\
+\cf2 \strokec2 ## 8. Logging and Audit\cf3 \strokec3 \
+\
+The gateway should maintain logs 
+\f1\b \cf4 \strokec4 for
+\f0\b0 \cf3 \strokec3 :\
+- trigger detection\
+- account identity\
+- authorization outcome\
+- timestamp\
+- routing decision\
+- failure reason, where applicable\
+\
+This log may be used 
+\f1\b \cf4 \strokec4 for
+\f0\b0 \cf3 \strokec3 :\
+- audit\
+- billing\
+- dispute review\
+- misuse detection\
+- partner reporting\
+\
+\cf2 \strokec2 ## 9. Expiration Handling\cf3 \strokec3 \
+\
+If the authorization period has expired:\
+- official EP activation must be denied\
+- \cf7 \strokec7 any\cf3 \strokec3  trigger phrase alone 
+\f1\b \cf3 \strokec6 is
+\f0\b0 \cf3 \strokec3  insufficient\
+- the response must 
+\f1\b \cf3 \strokec6 not
+\f0\b0 \cf3 \strokec3  imply official authorization\
+\
+\cf2 \strokec2 ## 10. Abuse and Misrepresentation Handling\cf3 \strokec3 \
+\
+The gateway may deny access where:\
+- the requester attempts to impersonate an authorized account\
+- the requester uses misleading identifiers\
+- the requester repeatedly attempts unauthorized trigger use\
+- the requester attempts to extract 
+\f1\b \cf3 \strokec6 or
+\f0\b0 \cf3 \strokec3  reproduce official private EP logic\
+- the requester falsely claims official EP partnership 
+\f1\b \cf3 \strokec6 or
+\f0\b0 \cf3 \strokec3  certification\
+\
+\cf2 \strokec2 ## 11. Ownership and Control\cf3 \strokec3 \
+\
+The official EP Gateway rules are part of the controlled implementation of Energetic Paradigm by Wes Shu.\
+\
+No party may claim official EP gateway compatibility, official EP authorization handling, 
+\f1\b \cf3 \strokec6 or
+\f0\b0 \cf3 \strokec3  official EP trigger routing unless explicitly authorized by Wes Shu.\
+\
+\cf2 \strokec2 ## 12. Scope\cf3 \strokec3 \
+\
+These rules govern the official EP gateway only.\
+\
+They do 
+\f1\b \cf3 \strokec6 not
+\f0\b0 \cf3 \strokec3  govern unrelated external systems unless those systems copy, represent, deploy, 
+\f1\b \cf3 \strokec6 or
+\f0\b0 \cf3 \strokec3  claim to be the official Energetic Paradigm gateway 
+\f1\b \cf3 \strokec6 or
+\f0\b0 \cf3 \strokec3  official EP implementation.\
+\
+\cf2 \strokec2 ## 13. Rights Reserved\cf3 \strokec3 \
+\
+All rights 
+\f1\b \cf3 \strokec6 in
+\f0\b0 \cf3 \strokec3  the official EP gateway behavior, routing logic, authorization logic, designation rules, 
+\f1\b \cf3 \strokec6 and
+\f0\b0 \cf3 \strokec3  related implementation structure are reserved by Wes Shu.\
+}

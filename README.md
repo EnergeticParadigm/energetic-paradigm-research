@@ -2,47 +2,58 @@
 
 Exploring energy as a fundamental principle of intelligent systems.
 
-# Energetic Paradigm Research
-
 ## Introduction
 
-Artificial intelligence research has largely focused on data, model scale, and computation. The Energetic Paradigm proposes a different perspective: intelligent behavior may be better understood through energy dynamics within complex systems.
+Artificial intelligence research has largely focused on data, model scale, and computation.  
+Energetic Paradigm Research explores a different question: whether intelligent behavior can be better understood and governed through structural energy conditions rather than post hoc correction alone.
 
-Instead of treating intelligence purely as a function of parameters or training data, this framework investigates whether the flow, distribution, and transformation of energy within a system can explain how complex behaviors emerge.
-
-The Energetic Paradigm treats AI systems as energy-processing structures. Under this view, intelligence may arise when energy interactions within a system reach certain structural conditions that enable stable and adaptive behavior.
-
-This repository presents the conceptual foundation of the Energetic Paradigm and invites researchers to explore its implications for artificial intelligence.
-
-## Research Direction
-
-The project explores several core questions:
-
-- Can energy-based descriptions provide a general framework for understanding intelligent systems?
-- Do certain energy configurations enable more stable or efficient system behavior?
-- Can AI architectures be interpreted as energy-processing systems?
-- Can experimental systems be designed to test energy-based hypotheses?
-
-The goal is not to replace existing AI methods, but to investigate whether an energy perspective can reveal deeper structural principles underlying intelligent systems.
+This repository contains conceptual papers, experimental proposals, and selected research materials related to the Energetic Paradigm.
 
 ## Repository Structure
 
-theory  
-Conceptual papers describing the Energetic Paradigm and its theoretical foundations.
+- `theory/` — theoretical foundations and conceptual papers
+- `papers/` — public research papers and experiment documents
+- `experiments/` — experiment implementations and evaluation materials
+- `open_problems/` — unresolved research questions and future directions
 
-experiments  
-Proposed experiments designed to explore energy-based interpretations of AI systems.
+## Papers
 
-open_problems  
-Research questions and directions for future investigation.
+- `papers/Capability-First-or-Structural-Constraint.pdf`  
+  Main conceptual paper on endogenous structural governance in AI systems.
 
-## Participation
+- `papers/Capability-First-or-Structural-Constraint-Experiment-PoC.pdf`  
+  Public proof-of-concept experiment design for testing generation-time structural constraint against reactive governance.
 
-Researchers interested in testing or extending the ideas presented here are encouraged to reproduce experiments, propose alternative models, or explore energy-based approaches to AI system design.
+## Experiments
 
-The Energetic Paradigm is presented as an open research direction. Contributions, discussions, and independent investigations are welcome.
+The current public experiment track focuses on a proof of concept for endogenous structural governance.
 
-## Author
+Core public experiment:
+- Controlled synthetic state-space search
+- Comparison between capability-first generation, reactive governance, and EP-style generation-time structural constraint
+- Evaluation by task success, governance intervention count, unstable branch frequency, resource cost per success, and complexity slope
 
-Dr. Wesley Shu
-Institute of Energetic Paradigm
+Public purpose:
+- Test whether governance embedded into generation conditions can reduce downstream governance burden while preserving comparable task performance
+
+Current public scope:
+- Mechanism-level proof of concept only
+
+Internal next-stage scope:
+- learned-policy environments
+- larger scaling sweeps
+- broader robustness and ablation studies
+- LLM-orchestration benchmarks
+
+## Research Direction
+
+The central question of this project is whether governance can be moved from post-generation correction into the generative structure itself.  
+The Energetic Paradigm treats this as an architectural question rather than only an alignment-after-capability question.
+
+## Status
+
+This repository is under active development. Public materials are selected to show the research direction while reserving later-stage implementation details for future release.
+
+## License
+
+Add the intended license here.
