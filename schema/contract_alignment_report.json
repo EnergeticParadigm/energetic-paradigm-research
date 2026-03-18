@@ -1,0 +1,89 @@
+{
+  "alignment_passed": true,
+  "tests": [
+    {
+      "name": "respond_minimal_en",
+      "url": "http://127.0.0.1:8010/v1/ep/respond",
+      "http_status": 200,
+      "passed": true,
+      "problems": [],
+      "response": {
+        "request_id": "req_7bc75e22a0a0",
+        "status": "success",
+        "result": {
+          "response_type": "final_answer",
+          "content": "Understood. I will reply in English only.",
+          "language": "en",
+          "format": "structured"
+        },
+        "ep": {
+          "mode_applied": "auto",
+          "depth_applied": "auto",
+          "domain_applied": "general",
+          "routing_path": "standard_response"
+        },
+        "provider": {
+          "selected": "openai",
+          "model": "gpt-5.4",
+          "fallback_used": false,
+          "simulated": false
+        },
+        "usage": {
+          "input_tokens": 71,
+          "output_tokens": 14,
+          "total_tokens": 85,
+          "estimated_cost": 0.0
+        },
+        "timing": {
+          "started_at": "2026-03-13T11:44:48.197259+00:00",
+          "completed_at": "2026-03-13T11:44:50.404330+00:00",
+          "latency_ms": 2207
+        },
+        "warnings": [],
+        "error": null
+      }
+    },
+    {
+      "name": "analyze_minimal_en",
+      "url": "http://127.0.0.1:8010/v1/ep/analyze",
+      "http_status": 200,
+      "passed": true,
+      "problems": [],
+      "response": {
+        "request_id": "req_81ee52e93355",
+        "status": "success",
+        "result": {
+          "response_type": "analysis",
+          "content": "Understood. I will answer in English only and analyze the issue in English only.",
+          "language": "en",
+          "format": "structured"
+        },
+        "ep": {
+          "mode_applied": "auto",
+          "depth_applied": "auto",
+          "domain_applied": "general",
+          "routing_path": "standard_response"
+        },
+        "provider": {
+          "selected": "openai",
+          "model": "gpt-5.4",
+          "fallback_used": false,
+          "simulated": false
+        },
+        "usage": {
+          "input_tokens": 70,
+          "output_tokens": 21,
+          "total_tokens": 91,
+          "estimated_cost": 0.0
+        },
+        "timing": {
+          "started_at": "2026-03-13T11:44:50.409341+00:00",
+          "completed_at": "2026-03-13T11:44:52.194568+00:00",
+          "latency_ms": 1785
+        },
+        "warnings": [],
+        "error": null
+      }
+    }
+  ]
+}

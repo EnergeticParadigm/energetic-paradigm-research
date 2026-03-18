@@ -1,0 +1,320 @@
+from pathlib import Path
+import re
+from fastapi import FastAPI, Header, HTTPException, Depends
+from api.listen_router import router as ep_listen_router
+from pydantic import BaseModel
+from typing import Optional, List, Dict, Any
+import os
+import json
+import ssl
+import urllib.request
+import urllib.error
+import time
+
+APP_NAME = "Energetic Paradigm API"
+APP_VERSION = "0.1.0"
+
+EP_REAL_BACKEND_URL = os.environ.get("EP_REAL_BACKEND_URL", "").strip().rstrip("/")
+EP_BACKEND_URL = os.environ.get("EP_BACKEND_URL", "").strip().rstrip("/")
+EP_ENGINE_URL = os.environ.get("EP_ENGINE_URL", "").strip().rstrip("/")
+EP_API_CONNECTOR_URL = os.environ.get("EP_API_CONNECTOR_URL", "").strip().rstrip("/")
+
+app = FastAPI(title=APP_NAME, version=APP_VERSION)
+
+
+app.include_router(ep_listen_router)
+CLIENT_REGISTRY_PATH = "/Users/wesleyshu/ep_system/ep_api_system/client_registry.json"
+
+def load_client_registry() -> dict:
+    p = Path("/Users/wesleyshu/ep_system/ep_api_system/client_registry.json")
+    try:
+        if not p.exists():
+            return {"tokens": {}}
+        data = json.loads(p.read_text(encoding="utf-8"))
+        if isinstance(data, dict):
+            data.setdefault("tokens", {})
+            return data
+        return {"tokens": {}}
+    except Exception:
+        return {"tokens": {}}
+
+def require_client_auth(authorization: str, scope: str) -> dict:
+    if not authorization or not str(authorization).startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Missing bearer token")
+    token = str(authorization).split(" ", 1)[1].strip()
+    registry = load_client_registry()
+    tokens = registry.get("tokens", {}) if isinstance(registry, dict) else {}
+    record = tokens.get(token)
+    if not isinstance(record, dict) or not record.get("active", False):
+        raise HTTPException(status_code=403, detail="Invalid client token")
+    scopes = record.get("scopes", [])
+    if isinstance(scopes, list) and scopes and scope not in scopes:
+        raise HTTPException(status_code=403, detail="Scope not allowed")
+    return record
+
+
+class InputPayload(BaseModel):
+    text: str
+
+class RoutingPayload(BaseModel):
+    preferred_provider: Optional[str] = "ep_api"
+    allowed_providers: Optional[List[str]] = ["ep_api"]
+    fallback_provider: Optional[str] = "local"
+
+class OutputPayload(BaseModel):
+    include_trace: Optional[bool] = True
+    include_provider: Optional[bool] = True
+    language: Optional[str] = "en"
+
+class EPPayload(BaseModel):
+    mode: Optional[str] = "deep"
+    depth: Optional[str] = "long"
+
+class EPUnifiedRequest(BaseModel):
+    request_id: Optional[str] = ""
+    input: InputPayload
+    routing: Optional[RoutingPayload] = RoutingPayload()
+    output: Optional[OutputPayload] = OutputPayload()
+    ep: Optional[EPPayload] = EPPayload()
+
+def candidate_urls() -> List[str]:
+    urls = []
+    for u in [EP_REAL_BACKEND_URL, EP_BACKEND_URL, EP_ENGINE_URL, EP_API_CONNECTOR_URL]:
+        if not u:
+            continue
+        if u.endswith("/v1/ep/respond") or u.endswith("/listen"):
+            urls.append(u)
+        else:
+            urls.append(u + "/v1/ep/respond")
+    seen = []
+    for u in urls:
+        if u not in seen:
+            seen.append(u)
+    return seen
+
+def call_backend(req: EPUnifiedRequest) -> Dict[str, Any]:
+    urls = candidate_urls()
+    if not urls:
+        urls = ["http://127.0.0.1:8001/listen"]
+    text = str(req.input.text or "").strip()
+    if text and not text.startswith("ep/trigger1"):
+        text = "ep/trigger1 " + text
+    payload = {
+        "text": text
+    }
+
+    last_error = None
+    for url in urls:
+        try:
+            request = urllib.request.Request(
+                url=url,
+                data=json.dumps(payload).encode("utf-8"),
+                headers={
+                    "Content-Type": "application/json",
+                    "x-ep-authenticated": "true",
+                    "x-ep-source": "ep_api",
+                    "x-ep-session-id": req.request_id or ("ep_api_" + str(int(time.time() * 1000))),
+                    "x-ep-client-fp": "local_ep_api_client",
+                },
+                method="POST",
+            )
+            with urllib.request.urlopen(request, timeout=60, context=ssl.create_default_context()) as resp:
+                body = resp.read().decode("utf-8", errors="ignore")
+                obj = json.loads(body)
+                if isinstance(obj, dict):
+                    return obj
+        except Exception as e:
+            last_error = str(e)
+
+    raise RuntimeError(last_error or "ep_api backend call failed")
+
+# BEGIN EP 8010 BOUNDARY AUTH
+def _ep_boundary_collect_tokens(obj):
+    found = set()
+    stack = [obj]
+    while stack:
+        cur = stack.pop()
+        if isinstance(cur, dict):
+            for k, v in cur.items():
+                lk = str(k).lower()
+                if isinstance(v, str):
+                    s = v.strip()
+                    if s and (
+                        any(w in lk for w in ["token", "bearer", "secret", "auth", "access", "api_key", "apikey"])
+                        or re.fullmatch(r"[A-Za-z0-9._~+/=-]{16,}", s)
+                    ):
+                        found.add(s)
+                stack.append(v)
+        elif isinstance(cur, list):
+            stack.extend(cur)
+        elif isinstance(cur, str):
+            s = cur.strip()
+            if s and re.fullmatch(r"[A-Za-z0-9._~+/=-]{16,}", s):
+                found.add(s)
+    return found
+
+def ep_boundary_require_bearer(authorization: str = Header(None)):
+    if not authorization or not str(authorization).startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Missing Bearer token")
+    token = str(authorization).split(" ", 1)[1].strip()
+    if not token:
+        raise HTTPException(status_code=401, detail="Empty Bearer token")
+
+    p = Path("/Users/wesleyshu/ep_system/ep_api_system/client_registry.json")
+    try:
+        registry = json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
+    except Exception:
+        registry = {}
+
+    if not isinstance(registry, dict):
+        registry = {}
+
+    allowed = set()
+
+    explicit = registry.get("external_boundary_bearer_token")
+    if isinstance(explicit, str) and explicit.strip():
+        allowed.add(explicit.strip())
+
+    token_map = registry.get("tokens", {})
+    if isinstance(token_map, dict):
+        for key, meta in token_map.items():
+            if isinstance(key, str) and key.strip():
+                if not isinstance(meta, dict) or meta.get("active", True):
+                    allowed.add(key.strip())
+
+    if "_ep_boundary_collect_tokens" in globals():
+        try:
+            allowed.update(_ep_boundary_collect_tokens(registry))
+        except Exception:
+            pass
+
+    if not allowed:
+        raise HTTPException(status_code=503, detail="No registered boundary token")
+    if token not in allowed:
+        raise HTTPException(status_code=403, detail="Invalid Bearer token")
+    return True
+
+@app.get("/")
+def root() -> Dict[str, Any]:
+    return {
+        "service": APP_NAME,
+        "version": APP_VERSION,
+        "backend_candidates": candidate_urls(),
+        "x-ep-authenticated": "true",
+        "x-ep-source": "ep_api",
+        "x-ep-session-id": "local_ep_api_session",
+        "x-ep-client-fp": "local_ep_api_client",
+    }
+
+@app.get("/health")
+@app.get("/v1/ep/health", dependencies=[Depends(ep_boundary_require_bearer)])
+def health() -> Dict[str, Any]:
+    return {
+        "status": "ok",
+        "service": APP_NAME,
+        "version": APP_VERSION,
+        "providers": {
+            "ep_api": "ready" if candidate_urls() else "not_configured",
+            "local": "disabled"
+        }
+    }
+
+@app.get("/v1/ep/providers", dependencies=[Depends(ep_boundary_require_bearer)])
+def providers() -> Dict[str, Any]:
+    return {
+        "providers": [
+            {"name": "ep_api", "status": "ready" if candidate_urls() else "not_configured"},
+            {"name": "local", "status": "disabled"},
+        ]
+    }
+
+@app.post("/v1/ep/respond", dependencies=[Depends(ep_boundary_require_bearer)])
+def respond(payload: EPUnifiedRequest, authorization: str = Header(default="")) -> Dict[str, Any]:
+    require_client_auth(authorization, "respond")
+    return call_backend(payload)
+
+@app.post("/v1/ep/analyze", dependencies=[Depends(ep_boundary_require_bearer)])
+def analyze(payload: EPUnifiedRequest, authorization: str = Header(default="")) -> Dict[str, Any]:
+    require_client_auth(authorization, "analyze")
+    return call_backend(payload)
+
+
+# === EP_TRIGGER1_REAL_COMPAT_SHIM ===
+def _ep_trigger1_real_normalize(payload):
+    try:
+        if payload is None:
+            payload = {}
+        if not isinstance(payload, dict):
+            if hasattr(payload, "model_dump"):
+                payload = payload.model_dump()
+            elif hasattr(payload, "dict"):
+                payload = payload.dict()
+            else:
+                payload = {"input": {"text": str(payload)}}
+
+        raw_input = payload.get("input")
+        if isinstance(raw_input, str):
+            raw_input = {"text": raw_input}
+        elif raw_input is None:
+            raw_input = {}
+        elif not isinstance(raw_input, dict):
+            raw_input = {"text": str(raw_input)}
+
+        text = payload.get("text")
+        if text is None:
+            text = raw_input.get("text") or raw_input.get("question") or ""
+        text = str(text or "").strip()
+
+        if text.startswith("ep/trigger1"):
+            full_text = text
+            question = text[len("ep/trigger1"):].strip()
+        else:
+            question = raw_input.get("question")
+            if question is None:
+                question = text
+            question = str(question or "").strip()
+            full_text = ("ep/trigger1 " + question).strip()
+
+        raw_input["text"] = full_text
+        raw_input["question"] = question
+        raw_input["trigger"] = "ep/trigger1"
+
+        payload["text"] = full_text
+        payload["input"] = raw_input
+
+        routing = payload.get("routing")
+        if not isinstance(routing, dict):
+            routing = {}
+        routing.setdefault("preferred_provider", "ep_api")
+        routing.setdefault("allowed_providers", ["ep_api"])
+        payload["routing"] = routing
+
+        output = payload.get("output")
+        if not isinstance(output, dict):
+            output = {}
+        output.setdefault("include_trace", True)
+        output.setdefault("include_provider", True)
+        output.setdefault("language", payload.get("language", "en") or "en")
+        payload["output"] = output
+
+        ep_block = payload.get("ep")
+        if not isinstance(ep_block, dict):
+            ep_block = {}
+        ep_block.setdefault("mode", "deep")
+        ep_block.setdefault("depth", "long")
+        ep_block.setdefault("entry_trigger", "ep/trigger1")
+        payload["ep"] = ep_block
+
+        payload.setdefault("mode", "respond")
+        payload.setdefault("language", "en")
+        return payload
+    except Exception:
+        return payload
+
+try:
+    _ep_trigger1_real_process_request_original = process_request
+    def process_request(payload, *args, **kwargs):
+        return _ep_trigger1_real_process_request_original(_ep_trigger1_real_normalize(payload), *args, **kwargs)
+except Exception:
+    pass
+

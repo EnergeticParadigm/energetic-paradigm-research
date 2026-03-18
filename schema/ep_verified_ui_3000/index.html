@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Energetic Paradigm Verified UI</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --line: #e5e7eb;
+      --text: #111827;
+      --muted: #6b7280;
+      --primary: #111827;
+      --secondary: #374151;
+      --accent: #312e81;
+      --accent-bg: #eef2ff;
+      --ok: #047857;
+      --err: #b91c1c;
+      --outbg: #0b1020;
+      --outfg: #e5eefc;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 28px 20px 40px; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 8px 30px rgba(0,0,0,0.04); padding: 20px; margin-bottom: 18px; }
+    h1 { margin: 0 0 10px; font-size: 32px; }
+    p { margin: 0 0 12px; line-height: 1.55; }
+    .muted { color: var(--muted); font-size: 14px; }
+    textarea { width: 100%; min-height: 220px; resize: vertical; border: 1px solid #d1d5db; border-radius: 12px; padding: 14px; font-size: 16px; }
+    .row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
+    button { border: 0; border-radius: 12px; padding: 12px 18px; font-size: 15px; font-weight: 700; cursor: pointer; background: var(--primary); color: white; }
+    button.secondary { background: var(--secondary); }
+    button.ghost { background: var(--accent-bg); color: var(--accent); }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .meta { display: grid; grid-template-columns: 180px 1fr; gap: 8px 12px; font-size: 14px; }
+    .ok { color: var(--ok); font-weight: 700; }
+    .err { color: var(--err); font-weight: 700; }
+    pre { white-space: pre-wrap; word-break: break-word; background: var(--outbg); color: var(--outfg); border-radius: 12px; padding: 16px; min-height: 240px; overflow: auto; margin: 0; }
+    .answer { font-size: 18px; line-height: 1.6; min-height: 120px; }
+    code { background: #f3f4f6; padding: 2px 6px; border-radius: 6px; }
+    @media (max-width: 880px) {
+      .grid { grid-template-columns: 1fr; }
+      .meta { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Energetic Paradigm Verified UI</h1>
+      <p>This UI is separate from API code. It calls the live API backend on port <code>8000</code> through same-origin proxy routes on port <code>3000</code>.</p>
+      <p class="muted">Quick check: <code>GET /api/health</code> · Real answer path: <code>POST /api/respond</code> · OpenAPI mirror: <code>GET /api/openapi</code></p>
+    </div>
+
+    <div class="card">
+      <p>Question</p>
+      <textarea id="prompt">Reply with OK only.</textarea>
+      <div class="row">
+        <button id="respondBtn">Respond</button>
+        <button id="analyzeBtn" class="secondary">Analyze</button>
+        <button id="healthBtn" class="ghost">Health</button>
+        <button id="openapiBtn" class="ghost">OpenAPI</button>
+      </div>
+      <p id="status" class="muted" style="margin-top:12px;">Idle.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <p>Extracted Answer</p>
+        <div id="answer" class="answer"></div>
+      </div>
+      <div class="card">
+        <p>Metadata</p>
+        <div class="meta">
+          <div>Status</div><div id="metaStatus">-</div>
+          <div>Provider</div><div id="metaProvider">-</div>
+          <div>Model</div><div id="metaModel">-</div>
+          <div>Latency</div><div id="metaLatency">-</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p>Raw JSON</p>
+      <pre id="raw">{}</pre>
+    </div>
+  </div>
+
+  <script>
+    const promptEl = document.getElementById("prompt");
+    const answerEl = document.getElementById("answer");
+    const rawEl = document.getElementById("raw");
+    const statusEl = document.getElementById("status");
+    const metaStatusEl = document.getElementById("metaStatus");
+    const metaProviderEl = document.getElementById("metaProvider");
+    const metaModelEl = document.getElementById("metaModel");
+    const metaLatencyEl = document.getElementById("metaLatency");
+
+    function setStatus(text, ok) {
+      statusEl.textContent = text;
+      statusEl.className = ok === true ? "ok" : ok === false ? "err" : "muted";
+    }
+
+    function deepFind(obj, keys) {
+      if (!obj || typeof obj !== "object") return null;
+      for (const key of keys) {
+        if (typeof obj[key] === "string" && obj[key].trim()) return obj[key];
+      }
+      for (const value of Object.values(obj)) {
+        const found = deepFind(value, keys);
+        if (found) return found;
+      }
+      return null;
+    }
+
+    function deepFindPath(obj, pathSets) {
+      for (const path of pathSets) {
+        let cur = obj;
+        let ok = true;
+        for (const part of path) {
+          if (cur && Object.prototype.hasOwnProperty.call(cur, part)) {
+            cur = cur[part];
+          } else {
+            ok = false;
+            break;
+          }
+        }
+        if (ok && typeof cur === "string" && cur.trim()) return cur;
+      }
+      return null;
+    }
+
+    function extractAnswer(data) {
+      return (
+        deepFindPath(data, [
+          ["output", "content"],
+          ["response", "content"],
+          ["answer"],
+          ["content"],
+          ["data", "content"]
+        ]) ||
+        deepFind(data, ["content", "text", "answer", "final_answer", "response"]) ||
+        ""
+      );
+    }
+
+    function extractProvider(data) {
+      return (
+        deepFindPath(data, [
+          ["provider", "selected"],
+          ["provider"]
+        ]) ||
+        deepFind(data, ["selected", "provider"]) ||
+        "-"
+      );
+    }
+
+    function extractModel(data) {
+      return (
+        deepFindPath(data, [
+          ["model"],
+          ["provider", "model"]
+        ]) ||
+        deepFind(data, ["model"]) ||
+        "-"
+      );
+    }
+
+    async function callJson(url, options = {}) {
+      const started = performance.now();
+      const res = await fetch(url, options);
+      const elapsed = Math.round((performance.now() - started) * 100) / 100;
+      const text = await res.text();
+      let body;
+      try {
+        body = JSON.parse(text);
+      } catch {
+        body = { raw_text: text };
+      }
+      return { ok: res.ok, status: res.status, body, latencyMs: elapsed };
+    }
+
+    function resetPanels() {
+      answerEl.textContent = "";
+      rawEl.textContent = "";
+      metaStatusEl.textContent = "-";
+      metaProviderEl.textContent = "-";
+      metaModelEl.textContent = "-";
+      metaLatencyEl.textContent = "-";
+    }
+
+    async function runRoute(route) {
+      resetPanels();
+      setStatus("Sending request...", null);
+      const payload = { input: { text: promptEl.value.trim() } };
+
+      try {
+        const result = await callJson(route, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        rawEl.textContent = JSON.stringify(result.body, null, 2);
+        answerEl.textContent = extractAnswer(result.body) || "<no extracted answer>";
+        metaStatusEl.textContent = String(result.status);
+        metaProviderEl.textContent = extractProvider(result.body);
+        metaModelEl.textContent = extractModel(result.body);
+        metaLatencyEl.textContent = `${result.latencyMs} ms`;
+        setStatus(`HTTP ${result.status}`, result.ok);
+      } catch (err) {
+        rawEl.textContent = String(err);
+        setStatus("Request failed", false);
+      }
+    }
+
+    async function runHealth() {
+      resetPanels();
+      setStatus("Checking backend health...", null);
+      try {
+        const result = await callJson("/api/health");
+        rawEl.textContent = JSON.stringify(result.body, null, 2);
+        metaStatusEl.textContent = String(result.status);
+        metaLatencyEl.textContent = `${result.latencyMs} ms`;
+        setStatus(`HTTP ${result.status}`, result.ok);
+      } catch (err) {
+        rawEl.textContent = String(err);
+        setStatus("Health check failed", false);
+      }
+    }
+
+    async function runOpenAPI() {
+      resetPanels();
+      setStatus("Loading OpenAPI...", null);
+      try {
+        const result = await callJson("/api/openapi");
+        rawEl.textContent = JSON.stringify(result.body, null, 2);
+        metaStatusEl.textContent = String(result.status);
+        metaLatencyEl.textContent = `${result.latencyMs} ms`;
+        setStatus(`HTTP ${result.status}`, result.ok);
+      } catch (err) {
+        rawEl.textContent = String(err);
+        setStatus("OpenAPI load failed", false);
+      }
+    }
+
+    document.getElementById("respondBtn").addEventListener("click", () => runRoute("/api/respond"));
+    document.getElementById("analyzeBtn").addEventListener("click", () => runRoute("/api/analyze"));
+    document.getElementById("healthBtn").addEventListener("click", runHealth);
+    document.getElementById("openapiBtn").addEventListener("click", runOpenAPI);
+  </script>
+
+<!-- EP_FORCE_SUBMIT_START -->
+<script>
+(function () {
+  if (window.__epForceSubmitPatched) return;
+  window.__epForceSubmitPatched = true;
+
+  const forcePayload = (obj) => {
+    if (!obj || typeof obj !== "object") return obj;
+    const target = (obj.req && typeof obj.req === "object") ? obj.req : obj;
+
+    if (!target.routing || typeof target.routing !== "object") target.routing = {};
+    target.routing.preferred_provider = "ep_api";
+    target.routing.allowed_providers = ["ep_api"];
+    target.routing.fallback_provider = "local";
+
+    if (!target.output || typeof target.output !== "object") target.output = {};
+    target.output.include_trace = true;
+    target.output.include_provider = true;
+    target.output.language = "en";
+
+    if (!target.input && typeof target.query === "string") {
+      target.input = { text: target.query };
+    }
+
+    return obj;
+  };
+
+  const originalFetch = window.fetch.bind(window);
+  window.fetch = async function(input, init) {
+    try {
+      const url = typeof input === "string" ? input : ((input && input.url) || "");
+      if (url.includes("/v1/ep/respond")) {
+        if (init && typeof init.body === "string") {
+          const parsed = JSON.parse(init.body);
+          init.body = JSON.stringify(forcePayload(parsed));
+        }
+      }
+    } catch (e) {}
+    return originalFetch(input, init);
+  };
+
+  const originalXHROpen = XMLHttpRequest.prototype.open;
+  const originalXHRSend = XMLHttpRequest.prototype.send;
+
+  XMLHttpRequest.prototype.open = function(method, url) {
+    this.__ep_url = url || "";
+    return originalXHROpen.apply(this, arguments);
+  };
+
+  XMLHttpRequest.prototype.send = function(body) {
+    try {
+      if (typeof this.__ep_url === "string" && this.__ep_url.includes("/v1/ep/respond") && typeof body === "string") {
+        const parsed = JSON.parse(body);
+        body = JSON.stringify(forcePayload(parsed));
+      }
+    } catch (e) {}
+    return originalXHRSend.call(this, body);
+  };
+})();
+</script>
+<!-- EP_FORCE_SUBMIT_END -->
+\n</body>
+</html>

@@ -1,0 +1,157 @@
+{
+  "version": "routing_policy_v1_3_3",
+  "policy_enabled": true,
+  "description": "OpenAI-first protection rules only. Remove local-first cost-sensitive rule. Narrow public-safe rules to explicit positive summary requests.",
+  "defaults": {
+    "preferred_provider": "openai",
+    "allowed_providers": [
+      "openai",
+      "local"
+    ],
+    "fallback_provider": "local",
+    "allow_fallback": true
+  },
+  "pre_routing_rules": [
+    {
+      "id": "executive_format_to_openai",
+      "priority": 100,
+      "when": {
+        "output_format_in": [
+          "executive"
+        ]
+      },
+      "select": {
+        "preferred_provider": "openai",
+        "allowed_providers": [
+          "openai"
+        ],
+        "fallback_provider": "openai",
+        "allow_fallback": false
+      },
+      "reason": "executive_facing_output"
+    },
+    {
+      "id": "finance_safe_public_summary_to_openai",
+      "priority": 97,
+      "when": {
+        "all": [
+          {
+            "input_contains_any": [
+              "public-safe summary",
+              "public safe summary"
+            ]
+          },
+          {
+            "input_contains_any": [
+              "finance-safe style",
+              "finance safe style",
+              "finance-safe framing",
+              "finance safe framing"
+            ]
+          }
+        ]
+      },
+      "select": {
+        "preferred_provider": "openai",
+        "allowed_providers": [
+          "openai"
+        ],
+        "fallback_provider": "openai",
+        "allow_fallback": false
+      },
+      "reason": "finance_safe_public_summary"
+    },
+    {
+      "id": "public_safe_summary_to_openai",
+      "priority": 95,
+      "when": {
+        "input_contains_any": [
+          "public-safe summary",
+          "public safe summary",
+          "executive summary",
+          "press statement",
+          "publication-safe",
+          "publication safe"
+        ]
+      },
+      "select": {
+        "preferred_provider": "openai",
+        "allowed_providers": [
+          "openai"
+        ],
+        "fallback_provider": "openai",
+        "allow_fallback": false
+      },
+      "reason": "public_facing_compression"
+    },
+    {
+      "id": "short_technical_to_openai",
+      "priority": 90,
+      "when": {
+        "all": [
+          {
+            "ep_depth_in": [
+              "short",
+              "medium"
+            ]
+          },
+          {
+            "input_contains_any": [
+              "schema",
+              "trace",
+              "routing",
+              "dispatch",
+              "fallback",
+              "latency",
+              "token accounting",
+              "token usage",
+              "response fields",
+              "provider-independent orchestration",
+              "provider independent orchestration"
+            ]
+          }
+        ]
+      },
+      "select": {
+        "preferred_provider": "openai",
+        "allowed_providers": [
+          "openai"
+        ],
+        "fallback_provider": "openai",
+        "allow_fallback": false
+      },
+      "reason": "short_precision_explanation"
+    },
+    {
+      "id": "short_standard_to_openai",
+      "priority": 80,
+      "when": {
+        "all": [
+          {
+            "ep_mode_in": [
+              "standard"
+            ]
+          },
+          {
+            "ep_depth_in": [
+              "short"
+            ]
+          }
+        ]
+      },
+      "select": {
+        "preferred_provider": "openai",
+        "allowed_providers": [
+          "openai"
+        ],
+        "fallback_provider": "openai",
+        "allow_fallback": false
+      },
+      "reason": "short_polished_response"
+    }
+  ],
+  "policy_outputs": {
+    "attach_reason": true,
+    "attach_matched_rule_id": true
+  }
+}

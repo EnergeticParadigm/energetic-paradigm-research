@@ -1,0 +1,60 @@
+{
+  "endpoint": "http://127.0.0.1:8010/v1/ep/respond",
+  "request_payload": {
+    "input": {
+      "text": "Please analyze this problem."
+    },
+    "ep": {
+      "mode": "auto",
+      "depth": "auto"
+    },
+    "routing": {
+      "preferred_provider": "auto",
+      "allowed_providers": [
+        "openai",
+        "local"
+      ]
+    },
+    "output": {
+      "language": "zh-Hant"
+    }
+  },
+  "http_status": 200,
+  "validation_passed": true,
+  "problems": [],
+  "response": {
+    "request_id": "req_7fc50834fe10",
+    "status": "success",
+    "result": {
+      "response_type": "final_answer",
+      "content": "當然可以。請把你要我分析的「問題」貼上來，我可以幫你做例如：\n\n1. **問題拆解**：釐清題意、已知條件、未知目標  \n2. **原因分析**：找出核心成因、限制與風險  \n3. **解法設計**：提出可行方案、比較優缺點  \n4. **逐步推理**：如果是數學、程式、邏輯題，我可一步步分析  \n5. **結論整理**：給你精簡結論與建議\n\n你可以直接貼上：\n- 一段題目文字\n- 一張題目的內容（我可協助解析）\n- 一個案例、情境或錯誤訊息\n- 你目前的想法，我幫你檢查\n\n如果你願意，也可以用這個格式貼給我：\n\n**問題內容：**  \n**你想達成的目標：**  \n**已知條件：**  \n**卡住的地方：**  \n\n把題目貼上來吧。",
+      "language": "zh-Hant",
+      "format": "structured"
+    },
+    "ep": {
+      "mode_applied": "auto",
+      "depth_applied": "auto",
+      "domain_applied": "general",
+      "routing_path": "standard_response"
+    },
+    "provider": {
+      "selected": "openai",
+      "model": "gpt-5.4",
+      "fallback_used": false,
+      "simulated": false
+    },
+    "usage": {
+      "input_tokens": 67,
+      "output_tokens": 245,
+      "total_tokens": 312,
+      "estimated_cost": 0.0
+    },
+    "timing": {
+      "started_at": "2026-03-13T10:09:40.742678+00:00",
+      "completed_at": "2026-03-13T10:09:45.867033+00:00",
+      "latency_ms": 5124
+    },
+    "warnings": [],
+    "error": null
+  }
+}

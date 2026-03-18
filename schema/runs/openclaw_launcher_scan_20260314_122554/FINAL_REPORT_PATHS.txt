@@ -1,0 +1,9 @@
+OPENCLAW_ROOT=/Users/wesleyshu/openclaw
+RUN_ROOT=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_launcher_scan_20260314_122554
+REPORT_ROOT=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_launcher_scan_20260314_122554/reports
+ALL_CANDIDATE_FILES=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_launcher_scan_20260314_122554/reports/all_candidate_files.txt
+RANKED_DIRS_TXT=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_launcher_scan_20260314_122554/reports/ranked_candidate_dirs.txt
+RANKED_DIRS_JSON=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_launcher_scan_20260314_122554/reports/ranked_candidate_dirs.json
+INTERESTING_FILES=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_launcher_scan_20260314_122554/reports/interesting_files.txt
+FILE_PREVIEWS=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_launcher_scan_20260314_122554/reports/file_previews.txt
+TOP_TARGET_README=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_launcher_scan_20260314_122554/reports/top_target_readme.txt

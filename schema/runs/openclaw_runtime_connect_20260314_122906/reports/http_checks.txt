@@ -1,0 +1,7 @@
+ep_api_root	FAIL	http://127.0.0.1:8010/	<HTTPError 404: 'Not Found'>
+ep_api_models	FAIL	http://127.0.0.1:8010/v1/models	<HTTPError 404: 'Not Found'>
+static_frontend	OK	http://127.0.0.1:3000/	200
+<!doctype html> <html lang="en"> <head>   <meta charset="utf-8">   <meta http-equiv="refresh" content="0; url=/studio/index.html">   <title>OpenClaw UI</title> </head> <body>   <a href="/studio/index.html">Open studio</a> </body> </html> 
+bridge_root	OK	http://127.0.0.1:8000/	200
+<!doctype html> <html> <head> <meta charset="utf-8"> <title>Energetic Paradigm System</title> <style> body { font-family: Arial, sans-serif; margin: 32px; line-height: 1.6; max-width: 1000px; } textarea { width: 100%; min-height: 180px; font-size: 16px; padding: 12px; box-sizing: border-box; } input
+bridge_models	FAIL	http://127.0.0.1:8000/v1/models	<HTTPError 404: 'Not Found'>

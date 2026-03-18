@@ -1,0 +1,60 @@
+{
+  "result": "FAIL",
+  "good_app_backup": "/Users/wesleyshu/ep_backups/ep_8010_force_fix_20260318_084421/app.py.bak",
+  "app": "/Users/wesleyshu/ep_system/ep_api_system/app.py",
+  "registry": "/Users/wesleyshu/ep_system/ep_api_system/client_registry.json",
+  "runtime_log": "/private/tmp/ep_api_8010_importable_recover.log",
+  "token_key": "external_boundary_bearer_token",
+  "token_masked": "Eh8q...Z9dK",
+  "tried_backups": [
+    {
+      "path": "/Users/wesleyshu/ep_backups/ep_8010_force_fix_20260318_084421/app.py.bak",
+      "compile_ok": true,
+      "compile_msg": "",
+      "import_ok": true,
+      "import_msg": "FastAPI\n"
+    }
+  ],
+  "tests": {
+    "ready": {
+      "status": "200"
+    },
+    "no_token_health": {
+      "status": "401",
+      "body": "{\"detail\":\"Missing Bearer token\"}"
+    },
+    "invalid_token_health": {
+      "status": "503",
+      "body": "{\"detail\":\"No registered boundary token\"}"
+    },
+    "valid_token_health": {
+      "status": "503",
+      "body": "{\"detail\":\"No registered boundary token\"}"
+    },
+    "no_token_providers": {
+      "status": "401",
+      "body": "{\"detail\":\"Missing Bearer token\"}"
+    },
+    "invalid_token_providers": {
+      "status": "503",
+      "body": "{\"detail\":\"No registered boundary token\"}"
+    },
+    "valid_token_providers": {
+      "status": "503",
+      "body": "{\"detail\":\"No registered boundary token\"}"
+    },
+    "no_token_respond": {
+      "status": "401",
+      "body": "{\"detail\":\"Missing Bearer token\"}"
+    },
+    "invalid_token_respond": {
+      "status": "503",
+      "body": "{\"detail\":\"No registered boundary token\"}"
+    },
+    "valid_token_respond": {
+      "status": "503",
+      "body": "{\"detail\":\"No registered boundary token\"}"
+    }
+  },
+  "log_tail": "INFO:     Started server process [56562]\nINFO:     Waiting for application startup.\nINFO:     Application startup complete.\nINFO:     Uvicorn running on http://127.0.0.1:8010 (Press CTRL+C to quit)\nINFO:     127.0.0.1:62576 - \"GET /health HTTP/1.1\" 200 OK\nINFO:     127.0.0.1:62577 - \"GET /v1/ep/health HTTP/1.1\" 401 Unauthorized\nINFO:     127.0.0.1:62578 - \"GET /v1/ep/health HTTP/1.1\" 503 Service Unavailable\nINFO:     127.0.0.1:62579 - \"GET /v1/ep/health HTTP/1.1\" 503 Service Unavailable\nINFO:     127.0.0.1:62580 - \"GET /v1/ep/providers HTTP/1.1\" 401 Unauthorized\nINFO:     127.0.0.1:62581 - \"GET /v1/ep/providers HTTP/1.1\" 503 Service Unavailable\nINFO:     127.0.0.1:62582 - \"GET /v1/ep/providers HTTP/1.1\" 503 Service Unavailable\nINFO:     127.0.0.1:62583 - \"POST /v1/ep/respond HTTP/1.1\" 401 Unauthorized\nINFO:     127.0.0.1:62584 - \"POST /v1/ep/respond HTTP/1.1\" 503 Service Unavailable\nINFO:     127.0.0.1:62585 - \"POST /v1/ep/respond HTTP/1.1\" 503 Service Unavailable\n"
+}

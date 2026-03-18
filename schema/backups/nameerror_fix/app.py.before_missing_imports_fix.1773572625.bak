@@ -1,0 +1,805 @@
+from pathlib import Path
+import json
+import urllib.request
+import urllib.error
+
+import os
+import time
+import uuid
+from datetime import datetime, timezone
+from typing import Any, Dict, List, Literal, Optional
+
+from dotenv import load_dotenv
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel, Field
+
+load_dotenv("/Users/wesleyshu/ep_system/ep_api_system/.env")
+if os.path.exists("/Users/wesleyshu/ep_system/config/system.env"):
+    load_dotenv("/Users/wesleyshu/ep_system/config/system.env", override=False)
+
+try:
+    from openai import OpenAI
+except Exception:
+    OpenAI = None
+
+APP_NAME = "Energetic Paradigm API"
+APP_VERSION = "0.1.0"
+
+DEFAULT_OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-5")
+DEFAULT_LOCAL_MODEL = os.getenv("LOCAL_MODEL_NAME", "ep-local-sim")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
+
+app = FastAPI(title=APP_NAME, version=APP_VERSION)
+
+PROVIDERS = ["openai", "local"]
+
+
+class ClientInfo(BaseModel):
+    client_id: str = "default-client"
+    client_type: Literal["web_app", "partner_app", "internal_tool", "terminal"] = "terminal"
+    session_id: str = "session-default"
+
+
+class UserInfo(BaseModel):
+    user_id: str = "anonymous"
+    locale: str = "zh-Hant"
+    timezone: str = "Asia/Riyadh"
+
+
+class InputBlock(BaseModel):
+    text: str
+    attachments: List[Dict[str, Any]] = Field(default_factory=list)
+
+
+class EPBlock(BaseModel):
+    mode: Literal["auto", "standard", "deep", "domain"] = "auto"
+    depth: Literal["auto", "short", "medium", "long"] = "auto"
+    domain: str = "general"
+    format: Literal["plain", "structured", "executive", "technical"] = "structured"
+    safety_level: Literal["standard", "strict"] = "standard"
+
+
+class RoutingBlock(BaseModel):
+    preferred_provider: str = "auto"
+    allowed_providers: List[str] = Field(default_factory=lambda: ["openai", "local"])
+    fallback_provider: str = "local"
+    allow_fallback: bool = True
+
+
+class OutputBlock(BaseModel):
+    response_type: Literal["final_answer", "analysis", "summary"] = "final_answer"
+    max_tokens: int = 1200
+    temperature: float = 0.2
+    include_citations: bool = False
+    include_trace: bool = False
+    language: str = "zh-Hant"
+
+
+class MetadataBlock(BaseModel):
+    source: str = "terminal"
+    tags: List[str] = Field(default_factory=list)
+
+
+class EPUnifiedRequest(BaseModel):
+    request_id: str = Field(default_factory=lambda: f"req_{uuid.uuid4().hex[:12]}")
+    client: ClientInfo = Field(default_factory=ClientInfo)
+    user: UserInfo = Field(default_factory=UserInfo)
+    input: InputBlock
+    ep: EPBlock = Field(default_factory=EPBlock)
+    routing: RoutingBlock = Field(default_factory=RoutingBlock)
+    output: OutputBlock = Field(default_factory=OutputBlock)
+    metadata: MetadataBlock = Field(default_factory=MetadataBlock)
+
+
+class MinimalInput(BaseModel):
+    text: str
+
+
+class MinimalEP(BaseModel):
+    mode: Literal["auto", "standard", "deep", "domain"] = "auto"
+    depth: Literal["auto", "short", "medium", "long"] = "auto"
+
+
+class MinimalRouting(BaseModel):
+    preferred_provider: str = "auto"
+    allowed_providers: List[str] = Field(default_factory=lambda: ["openai", "local"])
+
+
+class MinimalOutput(BaseModel):
+    language: str = "zh-Hant"
+
+
+class MinimalRequest(BaseModel):
+    input: MinimalInput
+    ep: MinimalEP = Field(default_factory=MinimalEP)
+    routing: MinimalRouting = Field(default_factory=MinimalRouting)
+    output: MinimalOutput = Field(default_factory=MinimalOutput)
+
+
+def now_iso() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def estimate_tokens(text: str) -> int:
+    return max(1, len(text) // 4)
+
+
+def make_error_response(
+    request_id: str,
+    provider: str,
+    started_at: str,
+    error_code: str,
+    message: str,
+    fallback_used: bool,
+    warnings: Optional[List[str]] = None,
+) -> Dict[str, Any]:
+    completed_at = now_iso()
+    return {
+        "request_id": request_id,
+        "status": "error",
+        "result": None,
+        "ep": {
+            "mode_applied": "auto",
+            "depth_applied": "auto",
+            "domain_applied": "general",
+            "routing_path": None,
+        },
+        "provider": {
+            "selected": provider,
+            "model": None,
+            "fallback_used": fallback_used,
+        },
+        "usage": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "estimated_cost": 0.0,
+        },
+        "timing": {
+            "started_at": started_at,
+            "completed_at": completed_at,
+            "latency_ms": 0,
+        },
+        "warnings": warnings or [],
+        "error": {
+            "code": error_code,
+            "message": message,
+        },
+    }
+
+
+def normalize_request(payload: Dict[str, Any]) -> EPUnifiedRequest:
+    if "request_id" in payload or "client" in payload or "user" in payload or "metadata" in payload:
+        if isinstance(payload, dict) and isinstance(payload.get("req"), dict):
+            wrapped_req = dict(payload["req"])
+            if "request_id" in payload and "request_id" not in wrapped_req:
+                wrapped_req["request_id"] = payload["request_id"]
+            if "input" not in wrapped_req and "query" in wrapped_req:
+                wrapped_req["input"] = {"text": wrapped_req.pop("query")}
+            payload = wrapped_req
+        elif isinstance(payload, dict) and "input" not in payload and "query" in payload:
+            payload = dict(payload)
+            payload["input"] = {"text": payload.pop("query")}
+        return EPUnifiedRequest(**payload)
+    minimal = MinimalRequest(**payload)
+    return EPUnifiedRequest(
+        input=InputBlock(text=minimal.input.text, attachments=[]),
+        ep=EPBlock(mode=minimal.ep.mode, depth=minimal.ep.depth),
+        routing=RoutingBlock(
+            preferred_provider=minimal.routing.preferred_provider,
+            allowed_providers=minimal.routing.allowed_providers,
+            fallback_provider="local",
+            allow_fallback=True,
+        ),
+        output=OutputBlock(language=minimal.output.language),
+    )
+
+
+def choose_provider(req: EPUnifiedRequest) -> str:
+    allowed = [p for p in req.routing.allowed_providers if p in PROVIDERS]
+    if not allowed:
+        allowed = ["local"]
+
+    preferred = req.routing.preferred_provider
+    if preferred == "auto":
+        if OPENAI_API_KEY and "openai" in allowed:
+            return "openai"
+        if "local" in allowed:
+            return "local"
+        return allowed[0]
+
+    if preferred in allowed:
+        return preferred
+
+    if req.routing.allow_fallback:
+        if req.routing.fallback_provider in allowed:
+            return req.routing.fallback_provider
+        if "local" in allowed:
+            return "local"
+        return allowed[0]
+
+    raise HTTPException(status_code=400, detail="preferred provider is not allowed")
+
+
+def build_system_instruction(req: EPUnifiedRequest) -> str:
+    return (
+        f"You are the Energetic Paradigm API answer layer. "
+        f"Mode={req.ep.mode}; Depth={req.ep.depth}; Domain={req.ep.domain}; "
+        f"Format={req.ep.format}; Safety={req.ep.safety_level}; "
+        f"Language={req.output.language}; ResponseType={req.output.response_type}. "
+        f"Answer clearly and follow the requested structure."
+    )
+
+
+def extract_openai_text(resp: Any) -> str:
+    text = getattr(resp, "output_text", None)
+    if text:
+        return text
+
+    try:
+        output = getattr(resp, "output", [])
+        parts: List[str] = []
+        for item in output:
+            content = getattr(item, "content", [])
+            for c in content:
+                ctext = getattr(c, "text", None)
+                if ctext:
+                    parts.append(ctext)
+        if parts:
+            return "\n".join(parts)
+    except Exception:
+        pass
+
+    return ""
+
+
+def call_openai(req: EPUnifiedRequest) -> Dict[str, Any]:
+    if not OPENAI_API_KEY:
+        raise RuntimeError("OPENAI_API_KEY is not configured")
+    if OpenAI is None:
+        raise RuntimeError("openai package is not installed")
+
+    client = OpenAI(api_key=OPENAI_API_KEY)
+
+    response = client.responses.create(
+        model=DEFAULT_OPENAI_MODEL,
+        input=[
+            {"role": "system", "content": build_system_instruction(req)},
+            {"role": "user", "content": req.input.text},
+        ],
+        temperature=req.output.temperature,
+        max_output_tokens=req.output.max_tokens,
+    )
+
+    content = extract_openai_text(response).strip()
+    if not content:
+        content = "No content returned from OpenAI."
+
+    usage = getattr(response, "usage", None)
+    input_tokens = getattr(usage, "input_tokens", estimate_tokens(req.input.text))
+    output_tokens = getattr(usage, "output_tokens", estimate_tokens(content))
+    total_tokens = getattr(usage, "total_tokens", input_tokens + output_tokens)
+
+    return {
+        "content": content,
+        "model": DEFAULT_OPENAI_MODEL,
+        "input_tokens": int(input_tokens),
+        "output_tokens": int(output_tokens),
+        "total_tokens": int(total_tokens),
+        "estimated_cost": 0.0,
+    }
+
+
+def call_local(req: EPUnifiedRequest) -> Dict[str, Any]:
+    endpoint = os.getenv("LOCAL_LLM_ENDPOINT", "http://127.0.0.1:11434/v1/chat/completions").strip()
+    model_name = os.getenv("LOCAL_LLM_MODEL", "").strip() or os.getenv("OLLAMA_MODEL", "").strip()
+    api_key = os.getenv("LOCAL_LLM_API_KEY", "local").strip() or "local"
+
+    if not endpoint:
+        raise RuntimeError("LOCAL_LLM_ENDPOINT is not configured")
+    if not model_name:
+        raise RuntimeError("LOCAL_LLM_MODEL is not configured")
+
+    endpoint_lower = endpoint.lower()
+    system_prompt = build_system_instruction(req)
+
+    if endpoint_lower.endswith("/api/generate"):
+        payload = {
+            "model": model_name,
+            "prompt": f"{system_prompt}\n\nUser:\n{req.input.text}",
+            "stream": False,
+            "options": {
+                "temperature": req.output.temperature,
+                "num_predict": req.output.max_tokens,
+            },
+        }
+    else:
+        payload = {
+            "model": model_name,
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": req.input.text},
+            ],
+            "temperature": req.output.temperature,
+            "max_tokens": req.output.max_tokens,
+            "stream": False,
+        }
+
+    request = urllib.request.Request(
+        url=endpoint,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {api_key}",
+        },
+        method="POST",
+    )
+
+    try:
+        with urllib.request.urlopen(request, timeout=120) as response:
+            raw = response.read().decode("utf-8", errors="replace")
+    except urllib.error.HTTPError as exc:
+        body = exc.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"LOCAL_LLM_ENDPOINT returned HTTP {exc.code}: {body}") from exc
+    except Exception as exc:
+        raise RuntimeError(f"LOCAL_LLM_ENDPOINT request failed: {exc}") from exc
+
+    try:
+        obj = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError("LOCAL_LLM_ENDPOINT did not return valid JSON") from exc
+
+    content = ""
+
+    choices = obj.get("choices")
+    if isinstance(choices, list) and choices:
+        first = choices[0] if isinstance(choices[0], dict) else {}
+        message = first.get("message", {})
+        if isinstance(message, dict):
+            message_content = message.get("content", "")
+            if isinstance(message_content, str):
+                content = message_content
+            elif isinstance(message_content, list):
+                parts = []
+                for item in message_content:
+                    if isinstance(item, dict) and isinstance(item.get("text"), str):
+                        parts.append(item["text"])
+                content = "".join(parts).strip()
+
+    if not content and isinstance(obj.get("response"), str):
+        content = obj["response"].strip()
+
+    if not content:
+        raise RuntimeError("LOCAL_LLM_ENDPOINT returned no assistant content")
+
+    usage = obj.get("usage", {}) if isinstance(obj.get("usage", {}), dict) else {}
+    input_tokens = usage.get("prompt_tokens")
+    output_tokens = usage.get("completion_tokens")
+    total_tokens = usage.get("total_tokens")
+
+    if not isinstance(input_tokens, int):
+        prompt_eval_count = obj.get("prompt_eval_count")
+        input_tokens = prompt_eval_count if isinstance(prompt_eval_count, int) else estimate_tokens(req.input.text)
+
+    if not isinstance(output_tokens, int):
+        eval_count = obj.get("eval_count")
+        output_tokens = eval_count if isinstance(eval_count, int) else estimate_tokens(content)
+
+    if not isinstance(total_tokens, int):
+        total_tokens = int(input_tokens) + int(output_tokens)
+
+    return {
+        "content": content,
+        "model": obj.get("model", model_name),
+        "input_tokens": int(input_tokens),
+        "output_tokens": int(output_tokens),
+        "total_tokens": int(total_tokens),
+        "estimated_cost": 0.0,
+        "simulated": False,
+    }
+
+
+def unavailable_provider(name: str) -> Dict[str, Any]:
+    raise RuntimeError(f"{name} connector is declared but not implemented yet")
+
+
+def execute_provider(provider: str, req: EPUnifiedRequest) -> Dict[str, Any]:
+    if provider == "openai":
+        return call_openai(req)
+    if provider == "local":
+        return call_local(req)
+    if provider in ["gemini", "deepseek", "ep_api", "kimly"]:
+        return unavailable_provider(provider)
+    raise RuntimeError(f"Unsupported provider: {provider}")
+
+
+def routing_path(req: EPUnifiedRequest) -> str:
+    if req.ep.mode == "domain":
+        return "domain_specific_path"
+    if req.ep.mode == "deep" or req.ep.depth in ["medium", "long"]:
+        return "ep_deep_reasoning"
+    return "standard_response"
+
+
+def build_success_response(
+    req: EPUnifiedRequest,
+    provider: str,
+    provider_result: Dict[str, Any],
+    started_at: str,
+    started_ts: float,
+    warnings: Optional[List[str]] = None,
+) -> Dict[str, Any]:
+    completed_at = now_iso()
+    latency_ms = int((time.time() - started_ts) * 1000)
+
+    resp = {
+        "request_id": req.request_id,
+        "status": "success",
+        "result": {
+            "response_type": req.output.response_type,
+            "content": provider_result["content"],
+            "language": req.output.language,
+            "format": req.ep.format,
+        },
+        "ep": {
+            "mode_applied": req.ep.mode,
+            "depth_applied": req.ep.depth,
+            "domain_applied": req.ep.domain,
+            "routing_path": routing_path(req),
+        },
+        "provider": {
+            "selected": provider,
+            "model": provider_result["model"],
+            "fallback_used": False,
+            "simulated": bool(provider_result.get("simulated", False)),
+        },
+        "usage": {
+            "input_tokens": provider_result["input_tokens"],
+            "output_tokens": provider_result["output_tokens"],
+            "total_tokens": provider_result["total_tokens"],
+            "estimated_cost": provider_result["estimated_cost"],
+        },
+        "timing": {
+            "started_at": started_at,
+            "completed_at": completed_at,
+            "latency_ms": latency_ms,
+        },
+        "warnings": warnings or [],
+        "error": None,
+    }
+
+    if provider_result.get("simulated", False):
+        resp["warnings"] = list(resp["warnings"]) + ["provider_response_is_simulated"]
+
+    if req.output.include_trace:
+        resp["trace"] = {
+            "client_id": req.client.client_id,
+            "provider_requested": req.routing.preferred_provider,
+            "provider_allowed": req.routing.allowed_providers,
+            "fallback_provider": req.routing.fallback_provider,
+        }
+
+    return resp
+
+
+def process_request(payload: Dict[str, Any], forced_response_type: Optional[str] = None) -> Dict[str, Any]:
+    req = normalize_request(payload)
+    if forced_response_type is not None:
+        req.output.response_type = forced_response_type
+
+    started_at = now_iso()
+    started_ts = time.time()
+    warnings: List[str] = []
+
+    provider = choose_provider(req)
+
+    try:
+        provider_result = execute_provider(provider, req)
+        return build_success_response(req, provider, provider_result, started_at, started_ts, warnings)
+    except Exception as primary_error:
+        routing_obj = getattr(req, "routing", None)
+        if routing_obj is None:
+            routing_data = {}
+        elif hasattr(routing_obj, "model_dump"):
+            routing_data = routing_obj.model_dump()
+        elif hasattr(routing_obj, "dict"):
+            routing_data = routing_obj.dict()
+        elif isinstance(routing_obj, dict):
+            routing_data = routing_obj
+        else:
+            routing_data = {}
+        strict_ep_lock = routing_data.get("preferred_provider") == "ep_api" and (routing_data.get("allowed_providers") or []) == ["ep_api"]
+        if strict_ep_lock:
+            err = make_error_response(
+                request_id=req.request_id,
+                provider=provider,
+                started_at=started_at,
+                error_code="PROVIDER_UNAVAILABLE",
+                message=f"primary_provider_failed:{provider}",
+                fallback_used=False,
+                warnings=[f"primary_provider_failed:{provider}"],
+            )
+            err["timing"]["latency_ms"] = int((time.time() - started_ts) * 1000)
+            return err
+        if req.routing.allow_fallback:
+            fallback = req.routing.fallback_provider
+            if fallback == provider:
+                fallback = "local"
+            if fallback not in PROVIDERS:
+                fallback = "local"
+
+            try:
+                provider_result = execute_provider(fallback, req)
+                result = build_success_response(req, fallback, provider_result, started_at, started_ts, warnings + [f"primary_provider_failed:{provider}"])
+                result["provider"]["fallback_used"] = True
+                return result
+            except Exception as fallback_error:
+                err = make_error_response(
+                    request_id=req.request_id,
+                    provider=provider,
+                    started_at=started_at,
+                    error_code="PROVIDER_UNAVAILABLE",
+                    message=f"primary error: {str(primary_error)}; fallback error: {str(fallback_error)}",
+                    fallback_used=True,
+                    warnings=[f"primary_provider_failed:{provider}", f"fallback_provider_failed:{fallback}"],
+                )
+                err["timing"]["latency_ms"] = int((time.time() - started_ts) * 1000)
+                return err
+
+        err = make_error_response(
+            request_id=req.request_id,
+            provider=provider,
+            started_at=started_at,
+            error_code="PROVIDER_ERROR",
+            message=str(primary_error),
+            fallback_used=False,
+            warnings=warnings,
+        )
+        err["timing"]["latency_ms"] = int((time.time() - started_ts) * 1000)
+        return err
+
+
+@app.get("/v1/ep/health")
+def health() -> Dict[str, Any]:
+    return {
+        "status": "ok",
+        "service": APP_NAME,
+        "version": APP_VERSION,
+        "openai_configured": bool(OPENAI_API_KEY),
+        "providers": {
+            "openai": "ready" if OPENAI_API_KEY and OpenAI is not None else "not_configured",
+            "gemini": "declared_only",
+            "deepseek": "declared_only",
+            "ep_api": "declared_only",
+            "kimly": "declared_only",
+            "local": "ready",
+        },
+    }
+
+
+@app.get("/v1/ep/providers")
+def providers() -> Dict[str, Any]:
+    return {
+        "providers": [
+            {"name": "openai", "status": "ready" if OPENAI_API_KEY and OpenAI is not None else "not_configured"},
+            {"name": "gemini", "status": "declared_only"},
+            {"name": "deepseek", "status": "declared_only"},
+            {"name": "ep_api", "status": "declared_only"},
+            {"name": "kimly", "status": "declared_only"},
+            {"name": "local", "status": "ready"},
+        ]
+    }
+
+
+@app.post("/v1/ep/respond")
+def respond(payload: Dict[str, Any]) -> Dict[str, Any]:
+    return process_request(payload, forced_response_type="final_answer")
+
+
+@app.post("/v1/ep/analyze")
+def analyze(payload: Dict[str, Any]) -> Dict[str, Any]:
+    return process_request(payload, forced_response_type="analysis")
+
+# EP_FORCE_CHOOSE_PROVIDER_START
+_original_choose_provider = choose_provider
+
+def choose_provider(req):
+    routing_obj = getattr(req, "routing", None)
+    if routing_obj is None:
+        routing_data = {}
+    elif hasattr(routing_obj, "model_dump"):
+        routing_data = routing_obj.model_dump()
+    elif hasattr(routing_obj, "dict"):
+        routing_data = routing_obj.dict()
+    elif isinstance(routing_obj, dict):
+        routing_data = routing_obj
+    else:
+        routing_data = {}
+
+    preferred = routing_data.get("preferred_provider")
+    allowed = routing_data.get("allowed_providers") or []
+
+    if preferred == "ep_api" and allowed == ["ep_api"]:
+        return "ep_api"
+
+    return _original_choose_provider(req)
+# EP_FORCE_CHOOSE_PROVIDER_END
+
+# EP_REAL_CONNECTOR_PATCH_START
+def _ep_connector_to_plain(obj):
+    if obj is None:
+        return None
+    if hasattr(obj, "model_dump"):
+        return obj.model_dump()
+    if hasattr(obj, "dict"):
+        return obj.dict()
+    return obj
+
+def _ep_connector_extract_text(data):
+    if isinstance(data, dict):
+        for key in ("answer", "content", "result", "final_answer", "data", "message"):
+            value = data.get(key)
+            if isinstance(value, str) and value.strip():
+                return value
+        nested = data.get("provider_result")
+        if isinstance(nested, dict):
+            nested_text = _ep_connector_extract_text(nested)
+            if nested_text:
+                return nested_text
+    return ""
+
+def _ep_connector_candidate_urls():
+    env_names = [
+        "EP_API_CONNECTOR_URL",
+        "EP_BACKEND_URL",
+        "EP_ENGINE_URL",
+        "EP_REAL_BACKEND_URL",
+        "EP_GATEWAY_URL",
+    ]
+    candidates = []
+    for name in env_names:
+        value = os.environ.get(name, "").strip()
+        if value:
+            candidates.append(value)
+
+    roots = [
+        Path("/Users/wesleyshu"),
+        Path("/Users/wesleyshu/ep_system"),
+    ]
+    url_pattern = re.compile(r"https?://[^\s\"'<>]+")
+    suffixes = {".py", ".json", ".yaml", ".yml", ".env", ".ini", ".toml", ".sh", ".md", ".txt"}
+
+    seen_files = set()
+    for root in roots:
+        if not root.exists():
+            continue
+        for path in root.rglob("*"):
+            if not path.is_file():
+                continue
+            if path.suffix.lower() not in suffixes:
+                continue
+            path_str = str(path)
+            if "/backups/" in path_str or "/.git/" in path_str:
+                continue
+            if path_str in seen_files:
+                continue
+            seen_files.add(path_str)
+            try:
+                text = path.read_text(encoding="utf-8", errors="ignore")
+            except Exception:
+                continue
+            for url in url_pattern.findall(text):
+                candidates.append(url)
+
+    normalized = []
+    seen = set()
+    for raw in candidates:
+        url = raw.strip().rstrip('",\'')
+        if not url:
+            continue
+        if "127.0.0.1:8000" in url or "127.0.0.1:8010" in url or "127.0.0.1:3002" in url:
+            continue
+        if url in seen:
+            continue
+        seen.add(url)
+        normalized.append(url)
+    return normalized
+
+def _ep_connector_pick_url():
+    candidates = _ep_connector_candidate_urls()
+    preferred = []
+    fallback = []
+    for url in candidates:
+        lowered = url.lower()
+        if "/v1/ep/respond" in lowered or lowered.endswith("/respond"):
+            preferred.append(url)
+        else:
+            fallback.append(url)
+    ordered = preferred + fallback
+    if not ordered:
+        return ""
+    url = ordered[0].rstrip("/")
+    if url.endswith("/v1/ep/respond") or url.endswith("/respond"):
+        return url
+    return url + "/v1/ep/respond"
+
+def _ep_call_real_backend(req):
+    backend_url = _ep_connector_pick_url()
+    if not backend_url:
+        raise RuntimeError("ep_api connector has no real backend URL configured")
+
+    payload = {
+        "request_id": getattr(req, "request_id", None),
+        "req": {
+            "query": "",
+            "routing": _ep_connector_to_plain(getattr(req, "routing", None)) or {},
+            "output": _ep_connector_to_plain(getattr(req, "output", None)) or {},
+            "ep": _ep_connector_to_plain(getattr(req, "ep", None)) or {},
+        },
+    }
+
+    input_obj = _ep_connector_to_plain(getattr(req, "input", None)) or {}
+    if isinstance(input_obj, dict):
+        payload["req"]["input"] = input_obj
+        if isinstance(input_obj.get("text"), str):
+            payload["req"]["query"] = input_obj.get("text", "")
+    elif isinstance(input_obj, str):
+        payload["req"]["input"] = {"text": input_obj}
+        payload["req"]["query"] = input_obj
+
+    data = json.dumps(payload).encode("utf-8")
+    headers = {"Content-Type": "application/json"}
+    request = urllib.request.Request(
+        url=backend_url,
+        data=data,
+        headers=headers,
+        method="POST",
+    )
+
+    try:
+        with urllib.request.urlopen(request, timeout=120, context=ssl.create_default_context()) as resp:
+            body = resp.read().decode("utf-8", errors="ignore")
+    except urllib.error.HTTPError as e:
+        try:
+            body = e.read().decode("utf-8", errors="ignore")
+        except Exception:
+            body = str(e)
+        raise RuntimeError(f"ep_api backend http {e.code}: {body[:400]}")
+    except Exception as e:
+        raise RuntimeError(f"ep_api backend request failed: {e}")
+
+    try:
+        parsed = json.loads(body)
+    except Exception:
+        raise RuntimeError(f"ep_api backend returned non-json: {body[:400]}")
+
+    if isinstance(parsed, dict) and parsed.get("status") == "error":
+        error_obj = parsed.get("error")
+        if isinstance(error_obj, dict):
+            message = error_obj.get("message") or json.dumps(error_obj, ensure_ascii=False)
+        else:
+            message = parsed.get("detail") or parsed.get("message") or body[:400]
+        raise RuntimeError(f"ep_api backend error: {message}")
+
+    provider_info = parsed.get("provider") if isinstance(parsed, dict) else {}
+    usage = parsed.get("usage") if isinstance(parsed, dict) else {}
+    if not isinstance(provider_info, dict):
+        provider_info = {}
+    if not isinstance(usage, dict):
+        usage = {}
+
+    return {
+        "answer": _ep_connector_extract_text(parsed),
+        "model": provider_info.get("model"),
+        "usage": usage,
+        "simulated": False,
+        "raw_response": parsed,
+    }
+
+_original_execute_provider = execute_provider
+
+def execute_provider(provider, req):
+    if provider == "ep_api":
+        return _ep_call_real_backend(req)
+    return _original_execute_provider(provider, req)
+# EP_REAL_CONNECTOR_PATCH_END

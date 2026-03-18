@@ -1,0 +1,3 @@
+API_ROOT=/Users/wesleyshu/ep_system/ep_api_system
+TIMESTAMP=20260314_173303
+ARCHIVE=/Users/wesleyshu/ep_system/ep_api_system/backups/full_api_snapshots/ep_api_snapshot_20260314_173303.tar.gz

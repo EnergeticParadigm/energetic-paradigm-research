@@ -1,0 +1,15 @@
+from typing import Any, Dict
+
+def apply_routing_policy(req: Any) -> Dict[str, Any]:
+    allowed = getattr(req.routing, "allowed_providers", None)
+    if not allowed:
+        allowed = ["openai", "local"]
+    return {
+        "policy_enabled": False,
+        "matched_rule_id": None,
+        "reason": None,
+        "preferred_provider": getattr(req.routing, "preferred_provider", None),
+        "allowed_providers": list(allowed),
+        "fallback_provider": getattr(req.routing, "fallback_provider", None),
+        "allow_fallback": bool(getattr(req.routing, "allow_fallback", True)),
+    }

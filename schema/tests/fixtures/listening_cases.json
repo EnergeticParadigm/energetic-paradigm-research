@@ -1,0 +1,26 @@
+[
+  {
+    "text": "ep/trigger1 what is ep",
+    "expected_route": "ep_reasoning"
+  },
+  {
+    "text": "Please build the listening engine into the EP API and add governance.",
+    "expected_route": "ep_reasoning"
+  },
+  {
+    "text": "Fix the token auth on the boundary endpoint now!",
+    "expected_route": "admin_tooling"
+  },
+  {
+    "text": "Translate this article into English.",
+    "expected_route": "writing_mode"
+  },
+  {
+    "text": "Can this contract clause be enforced under Taiwan law?",
+    "expected_route": "direct_answer"
+  },
+  {
+    "text": "something about system",
+    "expected_route": "clarify_or_narrow"
+  }
+]

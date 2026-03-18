@@ -1,0 +1,164 @@
+[
+  {
+    "path": "/Users/wesleyshu/openclaw/integrations/openclaw_youtube_ui",
+    "score": 80,
+    "reasons": [
+      "package-lock.json",
+      "ui-like-path",
+      "launcher-files"
+    ],
+    "launchers": [
+      "run_studio_ui.sh",
+      "run_ui.sh"
+    ]
+  },
+  {
+    "path": "/Users/wesleyshu/openclaw/integrations/codex_ui",
+    "score": 40,
+    "reasons": [
+      "ui-like-path",
+      "launcher-files"
+    ],
+    "launchers": [
+      "run_openclaw_codex_ui.sh"
+    ]
+  },
+  {
+    "path": "/Users/wesleyshu/openclaw/integrations/openclaw_youtube_ui/ui",
+    "score": 35,
+    "reasons": [
+      "index.html",
+      "ui-like-path"
+    ],
+    "launchers": []
+  },
+  {
+    "path": "/Users/wesleyshu/openclaw/integrations/openclaw_youtube_ui/studio",
+    "score": 35,
+    "reasons": [
+      "index.html",
+      "ui-like-path"
+    ],
+    "launchers": []
+  },
+  {
+    "path": "/Users/wesleyshu/openclaw/_ui_link_backups/20260314_094334/studio",
+    "score": 35,
+    "reasons": [
+      "index.html",
+      "ui-like-path"
+    ],
+    "launchers": []
+  },
+  {
+    "path": "/Users/wesleyshu/openclaw",
+    "score": 25,
+    "reasons": [
+      "launcher-files"
+    ],
+    "launchers": [
+      "run_cmd_prepare.sh",
+      "run_openclaw_film.sh",
+      "run_openclaw_film_prompt.sh",
+      "run_openclaw_youtube_ui_bridge.sh",
+      "run_script_input_gui.sh",
+      "run_script_input_web.sh"
+    ]
+  },
+  {
+    "path": "/Users/wesleyshu/openclaw/tools/ui_link_runtime",
+    "score": 15,
+    "reasons": [
+      "ui-like-path"
+    ],
+    "launchers": []
+  },
+  {
+    "path": "/Users/wesleyshu/openclaw/tools/openclaw_youtube_ui_bridge",
+    "score": 15,
+    "reasons": [
+      "ui-like-path"
+    ],
+    "launchers": []
+  },
+  {
+    "path": "/Users/wesleyshu/openclaw/tools/openclaw_youtube_runtime",
+    "score": 15,
+    "reasons": [
+      "ui-like-path"
+    ],
+    "launchers": []
+  },
+  {
+    "path": "/Users/wesleyshu/openclaw/tools/openclaw_ui_runtime",
+    "score": 15,
+    "reasons": [
+      "ui-like-path"
+    ],
+    "launchers": []
+  },
+  {
+    "path": "/Users/wesleyshu/openclaw/integrations/codex_ui/ui",
+    "score": 15,
+    "reasons": [
+      "ui-like-path"
+    ],
+    "launchers": []
+  },
+  {
+    "path": "/Users/wesleyshu/openclaw/integrations/codex_ui/studio",
+    "score": 15,
+    "reasons": [
+      "ui-like-path"
+    ],
+    "launchers": []
+  },
+  {
+    "path": "/Users/wesleyshu/openclaw/integrations/codex_ui/runtime/jobs",
+    "score": 15,
+    "reasons": [
+      "ui-like-path"
+    ],
+    "launchers": []
+  },
+  {
+    "path": "/Users/wesleyshu/openclaw/integrations/codex_ui/runtime",
+    "score": 15,
+    "reasons": [
+      "ui-like-path"
+    ],
+    "launchers": []
+  },
+  {
+    "path": "/Users/wesleyshu/openclaw/_ui_link_logs",
+    "score": 15,
+    "reasons": [
+      "ui-like-path"
+    ],
+    "launchers": []
+  },
+  {
+    "path": "/Users/wesleyshu/openclaw/_ui_link_backups/20260314_094334",
+    "score": 15,
+    "reasons": [
+      "ui-like-path"
+    ],
+    "launchers": []
+  },
+  {
+    "path": "/Users/wesleyshu/openclaw/_ui_link_backups/20260314_093720",
+    "score": 15,
+    "reasons": [
+      "ui-like-path"
+    ],
+    "launchers": []
+  },
+  {
+    "path": "/Users/wesleyshu/openclaw/_ui_link_backups",
+    "score": 15,
+    "reasons": [
+      "ui-like-path"
+    ],
+    "launchers": []
+  }
+]

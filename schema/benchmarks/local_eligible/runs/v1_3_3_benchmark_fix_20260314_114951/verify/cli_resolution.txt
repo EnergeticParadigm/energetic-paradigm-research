@@ -1,0 +1,7 @@
+RUNNER=/Users/wesleyshu/ep_system/ep_api_system/benchmarks/local_eligible/local_eligible_policy_on_off_runner.py
+API_OPT=None
+DATASET_OPT=None
+POLICY_MODE_OPT=None
+OUTPUT_OPT=None
+POLICY_ON_OPT=None
+POLICY_OFF_OPT=None

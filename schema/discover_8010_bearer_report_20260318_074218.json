@@ -1,0 +1,53 @@
+{
+  "base": "http://127.0.0.1:8010",
+  "app": "/Users/wesleyshu/ep_system/ep_api_system/app.py",
+  "registry": "/Users/wesleyshu/ep_system/ep_api_system/client_registry.json",
+  "baseline_no_token": {
+    "status": 422,
+    "body": "{\"detail\":[{\"type\":\"missing\",\"loc\":[\"query\",\"authorization\"],\"msg\":\"Field required\",\"input\":null},{\"type\":\"missing\",\"loc\":[\"query\",\"scope\"],\"msg\":\"Field required\",\"input\":null}]}"
+  },
+  "baseline_invalid_token": {
+    "status": 422,
+    "body": "{\"detail\":[{\"type\":\"missing\",\"loc\":[\"query\",\"authorization\"],\"msg\":\"Field required\",\"input\":null},{\"type\":\"missing\",\"loc\":[\"query\",\"scope\"],\"msg\":\"Field required\",\"input\":null}]}"
+  },
+  "auth_snippets": [
+    "18: \n19: app = FastAPI(title=APP_NAME, version=APP_VERSION)\n20: \n21: \n22: CLIENT_REGISTRY_PATH = os.environ.get(\"EP_CLIENT_REGISTRY_PATH\", \"/Users/wesleyshu/ep_system/ep_api_system/client_registry.json\").strip()\n23: \n24: def load_client_registry() -> dict:\n25:     try:\n26:         p = Path(CLIENT_REGISTRY_PATH)\n27:         if not p.exists():\n28:             return {\"tokens\": {}}\n29:         data = json.loads(p.read_text())\n30:         return data if isinstance(data, dict) else {\"tokens\": {}}\n31:     except Exception:\n32:         return {\"tokens\": {}}\n33: \n34: def require_client_auth(authorization: str, scope: str) -> dict:\n35:     if not authorization or not str(authorization).startswith(\"Bearer \"):\n36:         raise HTTPException(status_code=401, detail=\"Missing bearer token\")\n37:     token = str(authorization).split(\" \", 1)[1].strip()\n38:     registry = load_client_registry()\n39:     tokens = registry.get(\"tokens\", {}) if isinstance(registry, dict) else {}\n40:     record = tokens.get(token)\n41:     if not isinstance(record, dict) or not record.get(\"active\", False):",
+    "28:             return {\"tokens\": {}}\n29:         data = json.loads(p.read_text())\n30:         return data if isinstance(data, dict) else {\"tokens\": {}}\n31:     except Exception:\n32:         return {\"tokens\": {}}\n33: \n34: def require_client_auth(authorization: str, scope: str) -> dict:\n35:     if not authorization or not str(authorization).startswith(\"Bearer \"):\n36:         raise HTTPException(status_code=401, detail=\"Missing bearer token\")\n37:     token = str(authorization).split(\" \", 1)[1].strip()\n38:     registry = load_client_registry()\n39:     tokens = registry.get(\"tokens\", {}) if isinstance(registry, dict) else {}\n40:     record = tokens.get(token)\n41:     if not isinstance(record, dict) or not record.get(\"active\", False):\n42:         raise HTTPException(status_code=403, detail=\"Invalid client token\")\n43:     scopes = record.get(\"scopes\", [])\n44:     if isinstance(scopes, list) and scopes and scope not in scopes:\n45:         raise HTTPException(status_code=403, detail=\"Scope not allowed\")\n46:     return record\n47: \n48: \n49: class InputPayload(BaseModel):\n50:     text: str\n51: ",
+    "29:         data = json.loads(p.read_text())\n30:         return data if isinstance(data, dict) else {\"tokens\": {}}\n31:     except Exception:\n32:         return {\"tokens\": {}}\n33: \n34: def require_client_auth(authorization: str, scope: str) -> dict:\n35:     if not authorization or not str(authorization).startswith(\"Bearer \"):\n36:         raise HTTPException(status_code=401, detail=\"Missing bearer token\")\n37:     token = str(authorization).split(\" \", 1)[1].strip()\n38:     registry = load_client_registry()\n39:     tokens = registry.get(\"tokens\", {}) if isinstance(registry, dict) else {}\n40:     record = tokens.get(token)\n41:     if not isinstance(record, dict) or not record.get(\"active\", False):\n42:         raise HTTPException(status_code=403, detail=\"Invalid client token\")\n43:     scopes = record.get(\"scopes\", [])\n44:     if isinstance(scopes, list) and scopes and scope not in scopes:\n45:         raise HTTPException(status_code=403, detail=\"Scope not allowed\")\n46:     return record\n47: \n48: \n49: class InputPayload(BaseModel):\n50:     text: str\n51: \n52: class RoutingPayload(BaseModel):",
+    "30:         return data if isinstance(data, dict) else {\"tokens\": {}}\n31:     except Exception:\n32:         return {\"tokens\": {}}\n33: \n34: def require_client_auth(authorization: str, scope: str) -> dict:\n35:     if not authorization or not str(authorization).startswith(\"Bearer \"):\n36:         raise HTTPException(status_code=401, detail=\"Missing bearer token\")\n37:     token = str(authorization).split(\" \", 1)[1].strip()\n38:     registry = load_client_registry()\n39:     tokens = registry.get(\"tokens\", {}) if isinstance(registry, dict) else {}\n40:     record = tokens.get(token)\n41:     if not isinstance(record, dict) or not record.get(\"active\", False):\n42:         raise HTTPException(status_code=403, detail=\"Invalid client token\")\n43:     scopes = record.get(\"scopes\", [])\n44:     if isinstance(scopes, list) and scopes and scope not in scopes:\n45:         raise HTTPException(status_code=403, detail=\"Scope not allowed\")\n46:     return record\n47: \n48: \n49: class InputPayload(BaseModel):\n50:     text: str\n51: \n52: class RoutingPayload(BaseModel):\n53:     preferred_provider: Optional[str] = \"ep_api\"",
+    "31:     except Exception:\n32:         return {\"tokens\": {}}\n33: \n34: def require_client_auth(authorization: str, scope: str) -> dict:\n35:     if not authorization or not str(authorization).startswith(\"Bearer \"):\n36:         raise HTTPException(status_code=401, detail=\"Missing bearer token\")\n37:     token = str(authorization).split(\" \", 1)[1].strip()\n38:     registry = load_client_registry()\n39:     tokens = registry.get(\"tokens\", {}) if isinstance(registry, dict) else {}\n40:     record = tokens.get(token)\n41:     if not isinstance(record, dict) or not record.get(\"active\", False):\n42:         raise HTTPException(status_code=403, detail=\"Invalid client token\")\n43:     scopes = record.get(\"scopes\", [])\n44:     if isinstance(scopes, list) and scopes and scope not in scopes:\n45:         raise HTTPException(status_code=403, detail=\"Scope not allowed\")\n46:     return record\n47: \n48: \n49: class InputPayload(BaseModel):\n50:     text: str\n51: \n52: class RoutingPayload(BaseModel):\n53:     preferred_provider: Optional[str] = \"ep_api\"\n54:     allowed_providers: Optional[List[str]] = [\"ep_api\"]",
+    "32:         return {\"tokens\": {}}\n33: \n34: def require_client_auth(authorization: str, scope: str) -> dict:\n35:     if not authorization or not str(authorization).startswith(\"Bearer \"):\n36:         raise HTTPException(status_code=401, detail=\"Missing bearer token\")\n37:     token = str(authorization).split(\" \", 1)[1].strip()\n38:     registry = load_client_registry()\n39:     tokens = registry.get(\"tokens\", {}) if isinstance(registry, dict) else {}\n40:     record = tokens.get(token)\n41:     if not isinstance(record, dict) or not record.get(\"active\", False):\n42:         raise HTTPException(status_code=403, detail=\"Invalid client token\")\n43:     scopes = record.get(\"scopes\", [])\n44:     if isinstance(scopes, list) and scopes and scope not in scopes:\n45:         raise HTTPException(status_code=403, detail=\"Scope not allowed\")\n46:     return record\n47: \n48: \n49: class InputPayload(BaseModel):\n50:     text: str\n51: \n52: class RoutingPayload(BaseModel):\n53:     preferred_provider: Optional[str] = \"ep_api\"\n54:     allowed_providers: Optional[List[str]] = [\"ep_api\"]\n55:     fallback_provider: Optional[str] = \"local\""
+  ],
+  "registry_string_count": 4,
+  "working_token": null,
+  "tested_candidates_first_80": [
+    {
+      "path": "root.tokens.N-mWttxwQ-MvM7Lkxk_Q7lm7zXxtJ-sBo0xznn9hM74.client_id",
+      "masked": "defa...ient",
+      "length": 14,
+      "status": 422,
+      "body": "{\"detail\":[{\"type\":\"missing\",\"loc\":[\"query\",\"authorization\"],\"msg\":\"Field required\",\"input\":null},{\"type\":\"missing\",\"loc\":[\"query\",\"scope\"],\"msg\":\"Field required\",\"input\":null}]}"
+    },
+    {
+      "path": "root.tokens.N-mWttxwQ-MvM7Lkxk_Q7lm7zXxtJ-sBo0xznn9hM74.scopes[0]",
+      "masked": "re...nd",
+      "length": 7,
+      "status": 422,
+      "body": "{\"detail\":[{\"type\":\"missing\",\"loc\":[\"query\",\"authorization\"],\"msg\":\"Field required\",\"input\":null},{\"type\":\"missing\",\"loc\":[\"query\",\"scope\"],\"msg\":\"Field required\",\"input\":null}]}"
+    },
+    {
+      "path": "root.tokens.N-mWttxwQ-MvM7Lkxk_Q7lm7zXxtJ-sBo0xznn9hM74.scopes[1]",
+      "masked": "an...ze",
+      "length": 7,
+      "status": 422,
+      "body": "{\"detail\":[{\"type\":\"missing\",\"loc\":[\"query\",\"authorization\"],\"msg\":\"Field required\",\"input\":null},{\"type\":\"missing\",\"loc\":[\"query\",\"scope\"],\"msg\":\"Field required\",\"input\":null}]}"
+    },
+    {
+      "path": "root.tokens.N-mWttxwQ-MvM7Lkxk_Q7lm7zXxtJ-sBo0xznn9hM74.created_at",
+      "masked": "2026...9:05",
+      "length": 19,
+      "status": 422,
+      "body": "{\"detail\":[{\"type\":\"missing\",\"loc\":[\"query\",\"authorization\"],\"msg\":\"Field required\",\"input\":null},{\"type\":\"missing\",\"loc\":[\"query\",\"scope\"],\"msg\":\"Field required\",\"input\":null}]}"
+    }
+  ]
+}

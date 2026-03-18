@@ -1,0 +1,30 @@
+{
+  "tokens": {
+    "N-mWttxwQ-MvM7Lkxk_Q7lm7zXxtJ-sBo0xznn9hM74": {
+      "client_id": "default_client",
+      "active": true,
+      "scopes": [
+        "respond",
+        "analyze"
+      ],
+      "created_at": "2026-03-17 12:19:05"
+    },
+    "Eh8qVTn-tyt3mI5F8zLLXM0MPKG7Z9dK": {
+      "client_id": "default_client",
+      "active": true,
+      "scopes": [
+        "respond",
+        "analyze"
+      ]
+    },
+    "izZZOK0Xyxl_N35vLHbO7-nGiHNrcrzj": {
+      "client_id": "external_client",
+      "active": true,
+      "scopes": [
+        "respond",
+        "analyze"
+      ]
+    }
+  },
+  "external_boundary_bearer_token": "izZZOK0Xyxl_N35vLHbO7-nGiHNrcrzj"
+}

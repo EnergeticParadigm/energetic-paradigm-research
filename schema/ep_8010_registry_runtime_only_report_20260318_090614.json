@@ -1,0 +1,53 @@
+{
+  "result": "FAIL",
+  "app": "/Users/wesleyshu/ep_system/ep_api_system/app.py",
+  "app_backup": "/Users/wesleyshu/ep_backups/ep_8010_registry_runtime_only_20260318_090614/app.py.bak",
+  "registry": "/Users/wesleyshu/ep_system/ep_api_system/client_registry.json",
+  "registry_backup": "/Users/wesleyshu/ep_backups/ep_8010_registry_runtime_only_20260318_090614/client_registry.json.bak",
+  "runtime_log": "/private/tmp/ep_api_8010_registry_runtime_only.log",
+  "token_key": "external_boundary_bearer_token",
+  "token_masked": "Eh8q...Z9dK",
+  "tests": {
+    "ready": {
+      "status": 200,
+      "body": "{\"status\":\"ok\",\"service\":\"Energetic Paradigm API\",\"version\":\"0.1.0\",\"providers\":{\"ep_api\":\"not_configured\",\"local\":\"disabled\"}}"
+    },
+    "no_token_health": {
+      "status": 401,
+      "body": "{\"detail\":\"Missing Bearer token\"}"
+    },
+    "invalid_token_health": {
+      "status": 403,
+      "body": "{\"detail\":\"Invalid Bearer token\"}"
+    },
+    "valid_token_health": {
+      "status": 200,
+      "body": "{\"status\":\"ok\",\"service\":\"Energetic Paradigm API\",\"version\":\"0.1.0\",\"providers\":{\"ep_api\":\"not_configured\",\"local\":\"disabled\"}}"
+    },
+    "no_token_providers": {
+      "status": 401,
+      "body": "{\"detail\":\"Missing Bearer token\"}"
+    },
+    "invalid_token_providers": {
+      "status": 403,
+      "body": "{\"detail\":\"Invalid Bearer token\"}"
+    },
+    "valid_token_providers": {
+      "status": 200,
+      "body": "{\"providers\":[{\"name\":\"ep_api\",\"status\":\"not_configured\"},{\"name\":\"local\",\"status\":\"disabled\"}]}"
+    },
+    "no_token_respond": {
+      "status": 401,
+      "body": "{\"detail\":\"Missing Bearer token\"}"
+    },
+    "invalid_token_respond": {
+      "status": 403,
+      "body": "{\"detail\":\"Invalid Bearer token\"}"
+    },
+    "valid_token_respond": {
+      "status": null,
+      "body": "timeout('timed out')"
+    }
+  },
+  "log_tail": "INFO:     Started server process [56781]\nINFO:     Waiting for application startup.\nINFO:     Application startup complete.\nINFO:     Uvicorn running on http://127.0.0.1:8010 (Press CTRL+C to quit)\nINFO:     127.0.0.1:62637 - \"GET /health HTTP/1.1\" 200 OK\nINFO:     127.0.0.1:62638 - \"GET /v1/ep/health HTTP/1.1\" 401 Unauthorized\nINFO:     127.0.0.1:62639 - \"GET /v1/ep/health HTTP/1.1\" 403 Forbidden\nINFO:     127.0.0.1:62640 - \"GET /v1/ep/health HTTP/1.1\" 200 OK\nINFO:     127.0.0.1:62641 - \"GET /v1/ep/providers HTTP/1.1\" 401 Unauthorized\nINFO:     127.0.0.1:62642 - \"GET /v1/ep/providers HTTP/1.1\" 403 Forbidden\nINFO:     127.0.0.1:62643 - \"GET /v1/ep/providers HTTP/1.1\" 200 OK\nINFO:     127.0.0.1:62644 - \"POST /v1/ep/respond HTTP/1.1\" 401 Unauthorized\nINFO:     127.0.0.1:62645 - \"POST /v1/ep/respond HTTP/1.1\" 403 Forbidden\n"
+}

@@ -1,0 +1,80 @@
+import json
+from pathlib import Path
+from typing import Any, Dict, List
+
+ROUTING_POLICY_PATH = Path(__file__).resolve().parent / "config" / "routing_policy_v1.json"
+
+
+def load_routing_policy() -> Dict[str, Any]:
+    if not ROUTING_POLICY_PATH.exists():
+        return {
+            "version": "routing_policy_v1_missing",
+            "policy_enabled": False,
+            "defaults": {
+                "preferred_provider": "openai",
+                "allowed_providers": ["openai", "local"],
+                "fallback_provider": "local",
+                "allow_fallback": True,
+            },
+            "pre_routing_rules": [],
+        }
+    return json.loads(ROUTING_POLICY_PATH.read_text(encoding="utf-8"))
+
+
+ROUTING_POLICY = load_routing_policy()
+
+
+def _contains_any(text: str, phrases: List[str]) -> bool:
+    lower = (text or "").lower()
+    return any((phrase or "").lower() in lower for phrase in phrases)
+
+
+def _rule_match(req: Any, rule_when: Dict[str, Any]) -> bool:
+    if "all" in rule_when:
+        return all(_rule_match(req, item) for item in rule_when["all"])
+    if "any" in rule_when:
+        return any(_rule_match(req, item) for item in rule_when["any"])
+
+    if "output_format_in" in rule_when and getattr(req.ep, "format", None) not in rule_when["output_format_in"]:
+        return False
+    if "ep_mode_in" in rule_when and getattr(req.ep, "mode", None) not in rule_when["ep_mode_in"]:
+        return False
+    if "ep_depth_in" in rule_when and getattr(req.ep, "depth", None) not in rule_when["ep_depth_in"]:
+        return False
+    if "input_contains_any" in rule_when and not _contains_any(getattr(req.input, "text", ""), rule_when["input_contains_any"]):
+        return False
+
+    return True
+
+
+def apply_routing_policy(req: Any) -> Dict[str, Any]:
+    policy = ROUTING_POLICY if isinstance(ROUTING_POLICY, dict) else {}
+    defaults = policy.get("defaults") or {}
+
+    decision = {
+        "policy_enabled": bool(policy.get("policy_enabled", False)),
+        "matched_rule_id": None,
+        "reason": None,
+        "preferred_provider": defaults.get("preferred_provider", getattr(req.routing, "preferred_provider", "openai")),
+        "allowed_providers": list(defaults.get("allowed_providers", getattr(req.routing, "allowed_providers", ["openai", "local"]))),
+        "fallback_provider": defaults.get("fallback_provider", getattr(req.routing, "fallback_provider", "local")),
+        "allow_fallback": bool(defaults.get("allow_fallback", getattr(req.routing, "allow_fallback", True))),
+    }
+
+    if not decision["policy_enabled"]:
+        return decision
+
+    rules = sorted(policy.get("pre_routing_rules", []), key=lambda x: int(x.get("priority", 0)), reverse=True)
+    for rule in rules:
+        when = rule.get("when") or {}
+        if _rule_match(req, when):
+            select = rule.get("select") or {}
+            decision["matched_rule_id"] = rule.get("id")
+            decision["reason"] = rule.get("reason")
+            decision["preferred_provider"] = select.get("preferred_provider", decision["preferred_provider"])
+            decision["allowed_providers"] = list(select.get("allowed_providers", decision["allowed_providers"]))
+            decision["fallback_provider"] = select.get("fallback_provider", decision["fallback_provider"])
+            decision["allow_fallback"] = bool(select.get("allow_fallback", decision["allow_fallback"]))
+            return decision
+
+    return decision

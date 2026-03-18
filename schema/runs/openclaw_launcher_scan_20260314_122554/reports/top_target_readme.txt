@@ -1,0 +1,13 @@
+/Users/wesleyshu/openclaw/integrations/openclaw_youtube_ui
+  /Users/wesleyshu/openclaw/integrations/openclaw_youtube_ui/package-lock.json
+/Users/wesleyshu/openclaw/integrations/codex_ui
+/Users/wesleyshu/openclaw/integrations/openclaw_youtube_ui/ui
+/Users/wesleyshu/openclaw/integrations/openclaw_youtube_ui/studio
+/Users/wesleyshu/openclaw/_ui_link_backups/20260314_094334/studio
+/Users/wesleyshu/openclaw
+/Users/wesleyshu/openclaw/tools/ui_link_runtime
+/Users/wesleyshu/openclaw/tools/openclaw_youtube_ui_bridge
+/Users/wesleyshu/openclaw/tools/openclaw_youtube_runtime
+/Users/wesleyshu/openclaw/tools/openclaw_ui_runtime
+/Users/wesleyshu/openclaw/integrations/codex_ui/ui
+/Users/wesleyshu/openclaw/integrations/codex_ui/studio

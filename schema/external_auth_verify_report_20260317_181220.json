@@ -1,0 +1,31 @@
+{
+  "base": "http://127.0.0.1:8010",
+  "registry": "/Users/wesleyshu/ep_system/ep_api_system/client_registry.json",
+  "candidate_count": 1,
+  "candidate_sources": [
+    "/Users/wesleyshu/ep_system/.env:OPENAI_API_KEY"
+  ],
+  "tests": {
+    "no_token_health": {
+      "status": 200,
+      "body": "{\"status\":\"ok\",\"service\":\"Energetic Paradigm API\",\"version\":\"0.1.0\",\"providers\":{\"ep_api\":\"ready\",\"local\":\"disabled\"}}"
+    },
+    "invalid_token_health": {
+      "status": 200,
+      "body": "{\"status\":\"ok\",\"service\":\"Energetic Paradigm API\",\"version\":\"0.1.0\",\"providers\":{\"ep_api\":\"ready\",\"local\":\"disabled\"}}"
+    },
+    "valid_token_health": {
+      "status": 200,
+      "body": "{\"status\":\"ok\",\"service\":\"Energetic Paradigm API\",\"version\":\"0.1.0\",\"providers\":{\"ep_api\":\"ready\",\"local\":\"disabled\"}}"
+    },
+    "valid_token_respond": {
+      "status": null,
+      "body": "timeout('timed out')"
+    }
+  },
+  "working_token": {
+    "source": "/Users/wesleyshu/ep_system/.env:OPENAI_API_KEY",
+    "masked": "sk-p...yy4A"
+  },
+  "result": "FAIL"
+}

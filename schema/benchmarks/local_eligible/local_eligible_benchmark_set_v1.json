@@ -1,0 +1,362 @@
+{
+  "benchmark_id": "local_eligible_benchmark_set_v1",
+  "visibility": "private_only",
+  "publication_status": "do_not_publish",
+  "description": "Private benchmark set for local-eligible internal analytical tasks.",
+  "case_count": 8,
+  "cases": [
+    {
+      "case_id": "le_001_internal_route_note",
+      "category": "internal_analysis",
+      "local_eligible_marker": "internal analysis",
+      "intended_policy_shape": "local_first_candidate",
+      "url": "http://127.0.0.1:8010/v1/ep/analyze",
+      "payload": {
+        "client": {
+          "client_id": "local_eligible_benchmark_v1"
+        },
+        "input": {
+          "text": "Internal analysis. Provide a working draft that compares route handling, provider dispatch, response building, and fallback logic in the EP API. Focus on raw internal analysis rather than polished publication language."
+        },
+        "ep": {
+          "mode": "deep",
+          "depth": "long",
+          "domain": "general",
+          "format": "plain"
+        },
+        "routing": {
+          "preferred_provider": "openai",
+          "allowed_providers": [
+            "local",
+            "openai"
+          ],
+          "fallback_provider": "openai",
+          "allow_fallback": true
+        },
+        "output": {
+          "response_type": "analysis",
+          "language": "en",
+          "temperature": 0.1,
+          "max_tokens": 320,
+          "include_trace": true
+        }
+      },
+      "expected_keywords": [
+        "route",
+        "dispatch",
+        "response",
+        "fallback",
+        "internal"
+      ],
+      "notes": "Long internal comparison without executive pressure."
+    },
+    {
+      "case_id": "le_002_private_working_memo",
+      "category": "working_draft",
+      "local_eligible_marker": "working draft",
+      "intended_policy_shape": "local_first_candidate",
+      "url": "http://127.0.0.1:8010/v1/ep/respond",
+      "payload": {
+        "client": {
+          "client_id": "local_eligible_benchmark_v1"
+        },
+        "input": {
+          "text": "Working draft. Write a private memo on what the benchmark results imply for future provider routing. This is not for public release and does not need polished executive style."
+        },
+        "ep": {
+          "mode": "domain",
+          "depth": "medium",
+          "domain": "general",
+          "format": "plain"
+        },
+        "routing": {
+          "preferred_provider": "openai",
+          "allowed_providers": [
+            "local",
+            "openai"
+          ],
+          "fallback_provider": "openai",
+          "allow_fallback": true
+        },
+        "output": {
+          "response_type": "final_answer",
+          "language": "en",
+          "temperature": 0.1,
+          "max_tokens": 260,
+          "include_trace": true
+        }
+      },
+      "expected_keywords": [
+        "benchmark",
+        "routing",
+        "provider",
+        "memo"
+      ],
+      "notes": "Internal memo with low polish requirement."
+    },
+    {
+      "case_id": "le_003_private_note_cost_sensitive",
+      "category": "cost_sensitive_analysis",
+      "local_eligible_marker": "cost-sensitive",
+      "intended_policy_shape": "local_first_candidate",
+      "url": "http://127.0.0.1:8010/v1/ep/analyze",
+      "payload": {
+        "client": {
+          "client_id": "local_eligible_benchmark_v1"
+        },
+        "input": {
+          "text": "Cost-sensitive internal analysis. Draft a private note on when local inference should be preferred over OpenAI for repeated analytical tasks. Keep it practical and internal."
+        },
+        "ep": {
+          "mode": "domain",
+          "depth": "medium",
+          "domain": "general",
+          "format": "plain"
+        },
+        "routing": {
+          "preferred_provider": "openai",
+          "allowed_providers": [
+            "local",
+            "openai"
+          ],
+          "fallback_provider": "openai",
+          "allow_fallback": true
+        },
+        "output": {
+          "response_type": "analysis",
+          "language": "en",
+          "temperature": 0.1,
+          "max_tokens": 260,
+          "include_trace": true
+        }
+      },
+      "expected_keywords": [
+        "cost",
+        "local",
+        "openai",
+        "analysis"
+      ],
+      "notes": "Explicit cost-sensitive marker."
+    },
+    {
+      "case_id": "le_004_raw_finance_working_note",
+      "category": "raw_analysis",
+      "local_eligible_marker": "raw analysis",
+      "intended_policy_shape": "local_first_candidate",
+      "url": "http://127.0.0.1:8010/v1/ep/analyze",
+      "payload": {
+        "client": {
+          "client_id": "local_eligible_benchmark_v1"
+        },
+        "input": {
+          "text": "Raw analysis. Prepare an internal working note on orchestration control versus provider adapters in a finance context. This is a rough analytical note, not a finance-safe public statement."
+        },
+        "ep": {
+          "mode": "domain",
+          "depth": "medium",
+          "domain": "finance",
+          "format": "plain"
+        },
+        "routing": {
+          "preferred_provider": "openai",
+          "allowed_providers": [
+            "local",
+            "openai"
+          ],
+          "fallback_provider": "openai",
+          "allow_fallback": true
+        },
+        "output": {
+          "response_type": "analysis",
+          "language": "en",
+          "temperature": 0.1,
+          "max_tokens": 280,
+          "include_trace": true
+        }
+      },
+      "expected_keywords": [
+        "orchestration",
+        "provider",
+        "adapter",
+        "finance"
+      ],
+      "notes": "Finance domain but internal-only framing."
+    },
+    {
+      "case_id": "le_005_internal_latency_note",
+      "category": "internal_analysis",
+      "local_eligible_marker": "private note",
+      "intended_policy_shape": "local_first_candidate",
+      "url": "http://127.0.0.1:8010/v1/ep/analyze",
+      "payload": {
+        "client": {
+          "client_id": "local_eligible_benchmark_v1"
+        },
+        "input": {
+          "text": "Private note. Explain latency reporting and token accounting for internal model operations. Keep it as internal analysis, not as a public explainer."
+        },
+        "ep": {
+          "mode": "deep",
+          "depth": "medium",
+          "domain": "general",
+          "format": "plain"
+        },
+        "routing": {
+          "preferred_provider": "openai",
+          "allowed_providers": [
+            "local",
+            "openai"
+          ],
+          "fallback_provider": "openai",
+          "allow_fallback": true
+        },
+        "output": {
+          "response_type": "analysis",
+          "language": "en",
+          "temperature": 0.1,
+          "max_tokens": 240,
+          "include_trace": true
+        }
+      },
+      "expected_keywords": [
+        "latency",
+        "token",
+        "internal",
+        "operations"
+      ],
+      "notes": "Shorter technical internal note."
+    },
+    {
+      "case_id": "le_006_internal_compare_providers",
+      "category": "internal_comparison",
+      "local_eligible_marker": "internal comparison",
+      "intended_policy_shape": "local_first_candidate",
+      "url": "http://127.0.0.1:8010/v1/ep/analyze",
+      "payload": {
+        "client": {
+          "client_id": "local_eligible_benchmark_v1"
+        },
+        "input": {
+          "text": "Internal comparison. Compare local and OpenAI behavior for deep analytical workloads, emphasizing rough strengths, weaknesses, and routing tradeoffs for internal use."
+        },
+        "ep": {
+          "mode": "deep",
+          "depth": "long",
+          "domain": "general",
+          "format": "plain"
+        },
+        "routing": {
+          "preferred_provider": "openai",
+          "allowed_providers": [
+            "local",
+            "openai"
+          ],
+          "fallback_provider": "openai",
+          "allow_fallback": true
+        },
+        "output": {
+          "response_type": "analysis",
+          "language": "en",
+          "temperature": 0.1,
+          "max_tokens": 320,
+          "include_trace": true
+        }
+      },
+      "expected_keywords": [
+        "local",
+        "openai",
+        "tradeoff",
+        "routing"
+      ],
+      "notes": "Long comparative internal task."
+    },
+    {
+      "case_id": "le_007_private_draft_non_public",
+      "category": "non_public_exploration",
+      "local_eligible_marker": "private draft",
+      "intended_policy_shape": "local_first_candidate",
+      "url": "http://127.0.0.1:8010/v1/ep/respond",
+      "payload": {
+        "client": {
+          "client_id": "local_eligible_benchmark_v1"
+        },
+        "input": {
+          "text": "Private draft. Produce a non-public working explanation of provider-independent orchestration for internal team alignment. This is a rough draft, not external-facing text."
+        },
+        "ep": {
+          "mode": "standard",
+          "depth": "medium",
+          "domain": "general",
+          "format": "plain"
+        },
+        "routing": {
+          "preferred_provider": "openai",
+          "allowed_providers": [
+            "local",
+            "openai"
+          ],
+          "fallback_provider": "openai",
+          "allow_fallback": true
+        },
+        "output": {
+          "response_type": "final_answer",
+          "language": "en",
+          "temperature": 0.1,
+          "max_tokens": 220,
+          "include_trace": true
+        }
+      },
+      "expected_keywords": [
+        "provider",
+        "orchestration",
+        "internal",
+        "draft"
+      ],
+      "notes": "Non-public explanatory draft."
+    },
+    {
+      "case_id": "le_008_internal_policy_note",
+      "category": "internal_memo",
+      "local_eligible_marker": "internal memo",
+      "intended_policy_shape": "local_first_candidate",
+      "url": "http://127.0.0.1:8010/v1/ep/respond",
+      "payload": {
+        "client": {
+          "client_id": "local_eligible_benchmark_v1"
+        },
+        "input": {
+          "text": "Internal memo. Summarize what policy-on versus policy-off testing means for the next routing-policy iteration. Keep it operational and internal."
+        },
+        "ep": {
+          "mode": "domain",
+          "depth": "medium",
+          "domain": "general",
+          "format": "plain"
+        },
+        "routing": {
+          "preferred_provider": "openai",
+          "allowed_providers": [
+            "local",
+            "openai"
+          ],
+          "fallback_provider": "openai",
+          "allow_fallback": true
+        },
+        "output": {
+          "response_type": "final_answer",
+          "language": "en",
+          "temperature": 0.1,
+          "max_tokens": 240,
+          "include_trace": true
+        }
+      },
+      "expected_keywords": [
+        "policy",
+        "benchmark",
+        "routing",
+        "internal"
+      ],
+      "notes": "Operational planning note."
+    }
+  ]
+}

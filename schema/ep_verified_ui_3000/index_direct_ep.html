@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>EP Direct UI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; background: #f5f7fb; color: #111; }
+    .wrap { max-width: 1200px; margin: 0 auto; }
+    textarea { width: 100%; height: 220px; font-size: 32px; padding: 16px; box-sizing: border-box; border-radius: 12px; border: 1px solid #cfd6e4; background: #fff; }
+    .row { margin-top: 16px; display: flex; gap: 12px; align-items: center; }
+    button { font-size: 28px; padding: 14px 22px; border: 0; border-radius: 12px; cursor: pointer; background: #101828; color: #fff; }
+    .secondary { background: #475467; }
+    .light { background: #dbe4ff; color: #1d2b6b; }
+    .status { font-size: 22px; font-weight: bold; color: #0f5132; }
+    .grid { margin-top: 20px; display: grid; grid-template-columns: 1fr 360px; gap: 20px; }
+    .card { background: #fff; border-radius: 16px; padding: 20px; border: 1px solid #d7deea; min-height: 220px; }
+    .title { font-size: 20px; margin-bottom: 12px; color: #344054; }
+    .answer { white-space: pre-wrap; line-height: 1.6; font-size: 18px; }
+    .meta { font-size: 18px; line-height: 1.8; }
+    pre { margin-top: 20px; background: #0b1020; color: #d7e3ff; padding: 16px; border-radius: 16px; overflow: auto; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <textarea id="prompt">what is ep</textarea>
+
+    <div class="row">
+      <button id="respondBtn">Respond</button>
+      <button id="analyzeBtn" class="secondary">Analyze</button>
+      <button id="healthBtn" class="light">Health</button>
+      <div id="httpStatus" class="status"></div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="title">Extracted Answer</div>
+        <div id="answer" class="answer"></div>
+      </div>
+      <div class="card">
+        <div class="title">Metadata</div>
+        <div id="meta" class="meta"></div>
+      </div>
+    </div>
+
+    <pre id="raw"></pre>
+  </div>
+
+  <script>
+    const ENDPOINT = "http://127.0.0.1:8000/v1/ep/respond";
+    const HEALTH = "http://127.0.0.1:8000/v1/ep/health";
+
+    function buildPayload(mode) {
+      const query = document.getElementById("prompt").value;
+      return {
+        request_id: "ui_direct_" + Date.now(),
+        req: {
+          query: query,
+          routing: {
+            preferred_provider: "ep_api",
+            allowed_providers: ["ep_api"],
+            fallback_provider: "local"
+          },
+          output: {
+            include_trace: true,
+            include_provider: true,
+            language: "en"
+          },
+          ep: {
+            mode: mode,
+            depth: "long"
+          }
+        }
+      };
+    }
+
+    function setStatus(text) {
+      document.getElementById("httpStatus").textContent = text;
+    }
+
+    function renderMeta(obj, status) {
+      let provider = "";
+      let model = "";
+      let latency = "";
+      let fallback = "";
+
+      if (obj && typeof obj === "object") {
+        if (obj.provider && typeof obj.provider === "object") {
+          provider = obj.provider.selected || obj.provider.provider || "";
+          model = obj.provider.model || "";
+          fallback = String(obj.provider.fallback_used);
+        } else if (obj.provider) {
+          provider = String(obj.provider);
+        }
+        if (obj.timing && typeof obj.timing === "object") {
+          latency = obj.timing.latency_ms || "";
+        }
+      }
+
+      document.getElementById("meta").innerHTML =
+        "Status: " + String(status) + "<br>" +
+        "Provider: " + String(provider) + "<br>" +
+        "Model: " + String(model) + "<br>" +
+        "Fallback: " + String(fallback) + "<br>" +
+        "Latency: " + String(latency);
+    }
+
+    function extractAnswer(obj) {
+      if (!obj || typeof obj !== "object") return "";
+      if (typeof obj.answer === "string") return obj.answer;
+      if (typeof obj.content === "string") return obj.content;
+      if (typeof obj.result === "string") return obj.result;
+      if (typeof obj.data === "string") return obj.data;
+      if (typeof obj.final_answer === "string") return obj.final_answer;
+      return "";
+    }
+
+    async function send(mode) {
+      const payload = buildPayload(mode);
+      const res = await fetch(ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const text = await res.text();
+      setStatus("HTTP " + res.status);
+
+      let obj = null;
+      try {
+        obj = JSON.parse(text);
+      } catch (e) {}
+
+      if (obj) {
+        document.getElementById("answer").textContent = extractAnswer(obj);
+        renderMeta(obj, res.status);
+        document.getElementById("raw").textContent = JSON.stringify(obj, null, 2);
+      } else {
+        document.getElementById("answer").textContent = text;
+        renderMeta({}, res.status);
+        document.getElementById("raw").textContent = text;
+      }
+    }
+
+    async function health() {
+      const res = await fetch(HEALTH);
+      const text = await res.text();
+      setStatus("HTTP " + res.status);
+      document.getElementById("answer").textContent = "";
+      document.getElementById("meta").innerHTML = "Health endpoint";
+      document.getElementById("raw").textContent = text;
+    }
+
+    document.getElementById("respondBtn").addEventListener("click", () => send("deep"));
+    document.getElementById("analyzeBtn").addEventListener("click", () => send("deep"));
+    document.getElementById("healthBtn").addEventListener("click", health);
+  </script>
+</body>
+</html>

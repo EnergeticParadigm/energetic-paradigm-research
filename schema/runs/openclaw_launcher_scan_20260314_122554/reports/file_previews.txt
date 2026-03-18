@@ -1,0 +1,1437 @@
+===== /Users/wesleyshu/openclaw/_discover_and_start_openclaw_ui.py =====
+from pathlib import Path
+import json
+import os
+import re
+import shutil
+import socket
+import subprocess
+import time
+
+ROOT = Path("/Users/wesleyshu/openclaw")
+INTEGRATIONS = ROOT / "integrations"
+BACKEND_PORT = os.environ.get("OPENCLAW_BACKEND_PORT", "8000")
+BACKEND_BASE = f"http://127.0.0.1:{BACKEND_PORT}"
+STAMP = time.strftime("%Y%m%d_%H%M%S")
+LOG_DIR = ROOT / "_ui_link_logs"
+BACKUP_ROOT = ROOT / "_ui_link_backups" / STAMP
+SKIP_DIRS = {"node_modules", ".git", ".next", "dist", "build", "__pycache__"}
+TEXT_EXTS = {".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".json"}
+
+def port_free(port: int) -> bool:
+    s = socket.socket()
+    try:
+        s.bind(("127.0.0.1", port))
+        s.close()
+        return True
+    except OSError:
+        return False
+
+def pick_port():
+    for p in [3001, 3002, 3003, 5173, 5174, 5175, 8080, 8081]:
+        if port_free(p):
+            return p
+    return 3001
+
+def has_cmd(name: str) -> bool:
+    return shutil.which(name) is not None
+
+def detect_pm(app_root: Path):
+    if (app_root / "pnpm-lock.yaml").exists() and has_cmd("pnpm"):
+        return "pnpm"
+    if (app_root / "yarn.lock").exists() and has_cmd("yarn"):
+        return "yarn"
+    if has_cmd("npm"):
+        return "npm"
+    raise SystemExit("ERROR: no package manager found")
+
+def detect_kind(pkg: dict):
+    deps = {}
+    deps.update(pkg.get("dependencies", {}))
+    deps.update(pkg.get("devDependencies", {}))
+    scripts = pkg.get("scripts", {})
+    joined = " ".join(str(v) for v in scripts.values()).lower()
+    if "next" in deps or "next" in joined:
+        return "next"
+    if "vite" in deps or "vite" in joined:
+        return "vite"
+    if "react-scripts" in deps or "react-scripts" in joined:
+        return "cra"
+    if "react" in deps:
+        return "react"
+    return "unknown"
+
+def score_candidate(pkg_path: Path, pkg: dict):
+    p = str(pkg_path.parent).lower()
+    deps = {}
+    deps.update(pkg.get("dependencies", {}))
+    deps.update(pkg.get("devDependencies", {}))
+    scripts = pkg.get("scripts", {})
+    joined = " ".join(str(v) for v in scripts.values()).lower()
+
+    score = 0
+    if any(k in deps for k in ["react", "react-dom", "next", "vite", "react-scripts"]):
+        score += 100
+    if any(k in scripts for k in ["dev", "start", "build"]):
+        score += 80
+    if "youtube" in p:
+        score += 60
+    if "ui" in p:
+        score += 50
+    if "frontend" in p:
+
+===== /Users/wesleyshu/openclaw/_link_openclaw_ui.py =====
+from pathlib import Path
+import json
+import os
+import re
+import shutil
+import socket
+import subprocess
+import time
+
+UI_ROOT = Path("/Users/wesleyshu/openclaw/integrations/openclaw_youtube_ui")
+BACKEND_PORT = os.environ.get("OPENCLAW_BACKEND_PORT", "8000")
+BACKEND_BASE = f"http://127.0.0.1:{BACKEND_PORT}"
+STAMP = time.strftime("%Y%m%d_%H%M%S")
+BACKUP_ROOT = Path(f"/Users/wesleyshu/openclaw/_ui_link_backups/{STAMP}")
+LOG_DIR = Path("/Users/wesleyshu/openclaw/_ui_link_logs")
+REPORT = UI_ROOT / "_link_result.txt"
+ENV_FILE = UI_ROOT / ".env.local"
+
+SKIP_DIRS = {"node_modules", ".git", ".next", "dist", "build", "__pycache__"}
+TEXT_EXTS = {".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".json"}
+
+def port_free(port: int) -> bool:
+    s = socket.socket()
+    try:
+        s.bind(("127.0.0.1", port))
+        s.close()
+        return True
+    except OSError:
+        return False
+
+def pick_port():
+    for p in [3001, 3002, 3003, 5173, 5174, 5175, 8080, 8081]:
+        if port_free(p):
+            return p
+    return 3001
+
+def has_cmd(name: str) -> bool:
+    return shutil.which(name) is not None
+
+def backup_ui():
+    BACKUP_ROOT.mkdir(parents=True, exist_ok=True)
+    for item in UI_ROOT.iterdir():
+        if item.name in SKIP_DIRS:
+            continue
+        target = BACKUP_ROOT / item.name
+        if item.is_dir():
+            shutil.copytree(
+                item,
+                target,
+                dirs_exist_ok=True,
+                ignore=shutil.ignore_patterns(*SKIP_DIRS),
+            )
+        else:
+            shutil.copy2(item, target)
+
+def detect_pm():
+    if (UI_ROOT / "pnpm-lock.yaml").exists() and has_cmd("pnpm"):
+        return "pnpm"
+    if (UI_ROOT / "yarn.lock").exists() and has_cmd("yarn"):
+        return "yarn"
+    if has_cmd("npm"):
+        return "npm"
+    raise SystemExit("ERROR: no package manager found")
+
+def detect_frontend_kind(pkg):
+    deps = {}
+    deps.update(pkg.get("dependencies", {}))
+    deps.update(pkg.get("devDependencies", {}))
+    if "next" in deps:
+        return "next"
+    if "vite" in deps:
+        return "vite"
+    if "react-scripts" in deps:
+        return "cra"
+    return "unknown"
+
+def write_env(frontend_port: int):
+    ENV_FILE.write_text(
+        "\n".join([
+            f"OPENCLAW_BACKEND_PORT={BACKEND_PORT}",
+
+===== /Users/wesleyshu/openclaw/_link_openclaw_ui_fixed.py =====
+from pathlib import Path
+import json
+import os
+import re
+import shutil
+import socket
+import subprocess
+import time
+
+UI_CONTAINER = Path("/Users/wesleyshu/openclaw/integrations/openclaw_youtube_ui")
+BACKEND_PORT = os.environ.get("OPENCLAW_BACKEND_PORT", "8000")
+BACKEND_BASE = f"http://127.0.0.1:{BACKEND_PORT}"
+STAMP = time.strftime("%Y%m%d_%H%M%S")
+ROOT = Path("/Users/wesleyshu/openclaw")
+LOG_DIR = ROOT / "_ui_link_logs"
+BACKUP_ROOT = ROOT / "_ui_link_backups" / STAMP
+SKIP_DIRS = {"node_modules", ".git", ".next", "dist", "build", "__pycache__"}
+TEXT_EXTS = {".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".json"}
+
+def has_cmd(name: str) -> bool:
+    return shutil.which(name) is not None
+
+def port_free(port: int) -> bool:
+    s = socket.socket()
+    try:
+        s.bind(("127.0.0.1", port))
+        s.close()
+        return True
+    except OSError:
+        return False
+
+def pick_port():
+    for p in [3001, 3002, 3003, 5173, 5174, 5175, 8080, 8081]:
+        if port_free(p):
+            return p
+    return 3001
+
+def find_real_app(ui_root: Path) -> Path:
+    direct = ui_root / "package.json"
+    if direct.exists():
+        return ui_root
+
+    candidates = []
+    for pkg in ui_root.rglob("package.json"):
+        if any(part in SKIP_DIRS for part in pkg.parts):
+            continue
+        try:
+            data = json.loads(pkg.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        deps = {}
+        deps.update(data.get("dependencies", {}))
+        deps.update(data.get("devDependencies", {}))
+        scripts = data.get("scripts", {})
+        script_text = " ".join(str(v) for v in scripts.values()).lower()
+        score = 0
+        if any(k in deps for k in ["next", "vite", "react", "react-dom", "react-scripts"]):
+            score += 50
+        if any(k in scripts for k in ["dev", "start", "build"]):
+            score += 30
+        p = str(pkg.parent).lower()
+        if "ui" in p:
+            score += 10
+        if "web" in p:
+            score += 8
+        if "app" in p:
+            score += 6
+        if "frontend" in p:
+            score += 12
+        if "next" in script_text or "vite" in script_text:
+            score += 10
+        candidates.append((score, pkg.parent))
+
+    if not candidates:
+        raise SystemExit(f"ERROR: no frontend app found under {ui_root}")
+
+    candidates.sort(key=lambda x: (-x[0], len(str(x[1]))))
+    return candidates[0][1]
+
+def detect_pm(app_root: Path) -> str:
+
+===== /Users/wesleyshu/openclaw/_link_openclaw_ui_resolve.py =====
+from pathlib import Path
+import json
+import os
+import re
+import shutil
+import socket
+import subprocess
+import time
+
+ROOT = Path("/Users/wesleyshu/openclaw")
+INTEGRATIONS = Path("/Users/wesleyshu/openclaw/integrations")
+BACKEND_PORT = os.environ.get("OPENCLAW_BACKEND_PORT", "8000")
+BACKEND_BASE = f"http://127.0.0.1:{BACKEND_PORT}"
+STAMP = time.strftime("%Y%m%d_%H%M%S")
+LOG_DIR = ROOT / "_ui_link_logs"
+BACKUP_ROOT = ROOT / "_ui_link_backups" / STAMP
+SKIP_DIRS = {"node_modules", ".git", ".next", "dist", "build", "__pycache__"}
+TEXT_EXTS = {".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".json"}
+
+def has_cmd(name: str) -> bool:
+    return shutil.which(name) is not None
+
+def port_free(port: int) -> bool:
+    s = socket.socket()
+    try:
+        s.bind(("127.0.0.1", port))
+        s.close()
+        return True
+    except OSError:
+        return False
+
+def pick_port():
+    for p in [3001, 3002, 3003, 5173, 5174, 5175, 8080, 8081]:
+        if port_free(p):
+            return p
+    return 3001
+
+def detect_pm(app_root: Path) -> str:
+    if (app_root / "pnpm-lock.yaml").exists() and has_cmd("pnpm"):
+        return "pnpm"
+    if (app_root / "yarn.lock").exists() and has_cmd("yarn"):
+        return "yarn"
+    if has_cmd("npm"):
+        return "npm"
+    raise SystemExit("ERROR: no package manager found")
+
+def detect_frontend_kind(pkg: dict) -> str:
+    deps = {}
+    deps.update(pkg.get("dependencies", {}))
+    deps.update(pkg.get("devDependencies", {}))
+    scripts = pkg.get("scripts", {})
+    joined = " ".join(str(v) for v in scripts.values()).lower()
+
+    if "next" in deps or "next" in joined:
+        return "next"
+    if "vite" in deps or "vite" in joined:
+        return "vite"
+    if "react-scripts" in deps or "react-scripts" in joined:
+        return "cra"
+    if "react" in deps:
+        return "react"
+    return "unknown"
+
+def score_app_root(pkg_path: Path) -> int:
+    app_root = pkg_path.parent
+    score = 0
+    p = str(app_root).lower()
+    try:
+        pkg = json.loads(pkg_path.read_text(encoding="utf-8"))
+    except Exception:
+        return -1
+
+    deps = {}
+    deps.update(pkg.get("dependencies", {}))
+    deps.update(pkg.get("devDependencies", {}))
+    scripts = pkg.get("scripts", {})
+    joined = " ".join(str(v) for v in scripts.values()).lower()
+
+    if any(k in deps for k in ["next", "vite", "react", "react-dom", "react-scripts"]):
+        score += 100
+
+===== /Users/wesleyshu/openclaw/_ui_link_backups/20260314_094334/studio/app.js =====
+(function () {
+  const topicEl = document.getElementById("topic");
+  const materialEl = document.getElementById("material");
+  const outputEl = document.getElementById("output");
+  const statusEl = document.getElementById("status");
+  const generateBtn = document.getElementById("generateBtn");
+  const clearBtn = document.getElementById("clearBtn");
+
+  const endpoints = ["/generate", "/api/generate", "/run", "/submit", "/prompt", "/jobs"];
+
+  function setStatus(text) {
+    statusEl.textContent = text;
+  }
+
+  function setOutput(value) {
+    if (typeof value === "string") {
+      outputEl.textContent = value;
+      return;
+    }
+    outputEl.textContent = JSON.stringify(value, null, 2);
+  }
+
+  async function postJson(url, payload) {
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const text = await resp.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch {
+      data = text;
+    }
+    return { ok: resp.ok, status: resp.status, data };
+  }
+
+  async function generate() {
+    const topic = topicEl.value.trim();
+    const material = materialEl.value.trim();
+    const payload = {
+      topic,
+      material,
+      input: material,
+      text: material,
+      prompt: topic ? `${topic}\n\n${material}`.trim() : material,
+      content: material
+    };
+
+    setStatus("Generating");
+    setOutput("");
+
+    let lastResult = null;
+
+    for (const endpoint of endpoints) {
+      try {
+        const result = await postJson(endpoint, payload);
+        lastResult = { endpoint, ...result };
+        if (result.ok) {
+          setStatus(`Success: ${endpoint}`);
+          setOutput(result.data);
+          return;
+        }
+      } catch (err) {
+        lastResult = { endpoint, ok: false, status: 0, data: String(err) };
+      }
+    }
+
+    setStatus("Failed");
+    setOutput(lastResult || "No backend route responded.");
+  }
+
+  generateBtn.addEventListener("click", generate);
+  clearBtn.addEventListener("click", function () {
+    topicEl.value = "";
+    materialEl.value = "";
+    setStatus("Idle");
+    setOutput("");
+  });
+
+===== /Users/wesleyshu/openclaw/integrations/codex_ui/inspection_report.json =====
+{
+  "root": "/Users/wesleyshu/openclaw",
+  "target": "/Users/wesleyshu/openclaw/integrations/codex_ui",
+  "core_paths": {
+    "existing_ui_server": "/Users/wesleyshu/openclaw/tools/script_input_web_server.py",
+    "existing_gui": "/Users/wesleyshu/openclaw/scripts/script_input_gui.py",
+    "run_script_input_web": "/Users/wesleyshu/openclaw/run_script_input_web.sh",
+    "run_script_input_gui": "/Users/wesleyshu/openclaw/run_script_input_gui.sh",
+    "safe_parse": "/Users/wesleyshu/openclaw/cmd_endcmd_parse_safe.sh",
+    "default_parse": "/Users/wesleyshu/openclaw/openclaw_cmd_parse.sh",
+    "cmd_prepare": "/Users/wesleyshu/openclaw/run_cmd_prepare.sh",
+    "film": "/Users/wesleyshu/openclaw/run_openclaw_film.sh",
+    "film_prompt": "/Users/wesleyshu/openclaw/run_openclaw_film_prompt.sh",
+    "cmd_endcmd_agent": "/Users/wesleyshu/openclaw/agents/cmd_endcmd/cmd_endcmd_agent.py",
+    "cmd_endcmd_core": "/Users/wesleyshu/openclaw/agents/cmd_endcmd/cmd_endcmd_core.py",
+    "cmd_endcmd_safe_core": "/Users/wesleyshu/openclaw/agents/cmd_endcmd_safe/cmd_endcmd_core.py"
+  },
+  "exists": {
+    "existing_ui_server": true,
+    "existing_gui": false,
+    "run_script_input_web": true,
+    "run_script_input_gui": true,
+    "safe_parse": true,
+    "default_parse": true,
+    "cmd_prepare": true,
+    "film": true,
+    "film_prompt": true,
+    "cmd_endcmd_agent": true,
+    "cmd_endcmd_core": false,
+    "cmd_endcmd_safe_core": true
+  },
+  "ui_framework": "stdlib_http",
+  "discovered_client_endpoints": [],
+  "parse_aliases": [
+    "/api/cmd-parse",
+    "/api/parse",
+    "/api/parse-script",
+    "/api/prepare",
+    "/api/run-parse",
+    "/parse"
+  ],
+  "generate_aliases": [
+    "/api/film",
+    "/api/generate",
+    "/api/generate-film",
+    "/api/run-film",
+    "/api/run-generate",
+    "/generate"
+  ],
+  "status_aliases": [
+    "/api/job",
+    "/api/jobs",
+    "/api/status"
+  ],
+  "logs_aliases": [
+    "/api/log",
+    "/api/logs"
+  ]
+}
+===== /Users/wesleyshu/openclaw/integrations/codex_ui/openclaw_codex_bridge.py =====
+from __future__ import annotations
+
+import json
+import os
+import re
+import subprocess
+import threading
+import time
+import uuid
+from pathlib import Path
+
+ROOT = Path("/Users/wesleyshu/openclaw")
+TARGET = Path("/Users/wesleyshu/openclaw/integrations/codex_ui")
+RUNTIME = TARGET / "runtime"
+JOBS_DIR = RUNTIME / "jobs"
+RUNTIME.mkdir(parents=True, exist_ok=True)
+JOBS_DIR.mkdir(parents=True, exist_ok=True)
+
+SAFE_PARSE = ROOT / "cmd_endcmd_parse_safe.sh"
+DEFAULT_PARSE = ROOT / "openclaw_cmd_parse.sh"
+CMD_PREPARE = ROOT / "run_cmd_prepare.sh"
+FILM = ROOT / "run_openclaw_film.sh"
+FILM_PROMPT = ROOT / "run_openclaw_film_prompt.sh"
+
+SKIP_DIR_NAMES = {
+    ".git",
+    "node_modules",
+    ".venv",
+    "venv",
+    "__pycache__",
+    ".pytest_cache",
+    ".mypy_cache",
+    ".cache",
+    "dist",
+    "build",
+    "out",
+    "tmp",
+    "temp",
+    "lobster",
+}
+
+OUTPUT_EXTS = {
+    ".mp4",
+    ".mov",
+    ".mkv",
+    ".avi",
+    ".webm",
+    ".mp3",
+    ".wav",
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".webp",
+    ".gif",
+    ".srt",
+    ".ass",
+    ".vtt",
+    ".txt",
+    ".json",
+    ".md",
+}
+
+LOCK = threading.Lock()
+JOBS = {}
+
+def _resolve_input_path(value: str) -> str:
+    value = (value or "").strip()
+    if not value:
+        return ""
+    p = Path(value)
+    if not p.is_absolute():
+        p = ROOT / value
+    return os.path.abspath(str(p))
+
+def _normalize_materials(value):
+    if value is None:
+        return []
+    if isinstance(value, list):
+        items = value
+    else:
+
+===== /Users/wesleyshu/openclaw/integrations/codex_ui/openclaw_codex_ui_server.py =====
+from __future__ import annotations
+
+import json
+import sys
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from urllib.parse import parse_qs, urlparse
+
+from openclaw_codex_bridge import get_job, get_log_text, submit_generate_job, submit_parse_job
+
+PARSE_ALIASES = ["/api/cmd-parse", "/api/parse", "/api/parse-script", "/api/prepare", "/api/run-parse", "/parse"]
+GENERATE_ALIASES = ["/api/film", "/api/generate", "/api/generate-film", "/api/run-film", "/api/run-generate", "/generate"]
+STATUS_ALIASES = ["/api/job", "/api/jobs", "/api/status"]
+LOGS_ALIASES = ["/api/log", "/api/logs"]
+
+INDEX_HTML = """<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenClaw Codex UI Integration</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Arial, sans-serif; margin: 0; background: #111827; color: #e5e7eb; }
+.wrap { max-width: 1200px; margin: 0 auto; padding: 24px; }
+h1 { margin: 0 0 16px; font-size: 28px; }
+p { color: #9ca3af; margin: 0 0 20px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.card { background: #1f2937; border: 1px solid #374151; border-radius: 12px; padding: 16px; }
+label { display: block; font-size: 14px; color: #cbd5e1; margin-bottom: 8px; }
+input, textarea { width: 100%; box-sizing: border-box; padding: 10px 12px; border-radius: 10px; border: 1px solid #4b5563; background: #0f172a; color: #f8fafc; }
+textarea { min-height: 180px; resize: vertical; }
+.actions { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+button { border: 0; border-radius: 10px; padding: 12px 18px; background: #2563eb; color: white; font-weight: 600; cursor: pointer; }
+button.secondary { background: #475569; }
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+pre { background: #020617; border: 1px solid #374151; border-radius: 10px; padding: 12px; min-height: 320px; white-space: pre-wrap; word-wrap: break-word; overflow: auto; }
+.status { margin-top: 16px; color: #93c5fd; font-size: 14px; }
+.outputs { background: #020617; border: 1px solid #374151; border-radius: 10px; padding: 12px; min-height: 320px; overflow: auto; }
+.output-item { padding: 8px 0; border-bottom: 1px solid #1e293b; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.output-item:last-child { border-bottom: 0; }
+@media (max-width: 960px) {
+  .grid, .row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>OpenClaw Codex UI Integration</h1>
+  <p>This UI is add-only. It does not modify existing production behavior. It runs the existing OpenClaw YouTube parser and film generation scripts.</p>
+
+  <div class="grid">
+    <div class="card">
+      <label for="main_movie">main movie input</label>
+      <input id="main_movie" placeholder="Main movie text or path">
+
+      <div style="height: 16px;"></div>
+
+      <label for="script_path">script path input</label>
+      <input id="script_path" placeholder="/absolute/path/to/script.txt">
+
+      <div style="height: 16px;"></div>
+
+      <label for="materials">one or several materials input</label>
+      <textarea id="materials" placeholder="/absolute/path/to/material-1\n/absolute/path/to/material-2"></textarea>
+
+      <div class="actions">
+        <button id="parse_btn">parse script action</button>
+        <button id="generate_btn">run film generation action</button>
+        <button id="refresh_btn" class="secondary">refresh active job</button>
+      </div>
+
+      <div class="status" id="status_line">status: idle</div>
+    </div>
+
+    <div class="card">
+      <label>generated output area</label>
+      <div class="outputs" id="output_area"></div>
+    </div>
+  </div>
+
+
+===== /Users/wesleyshu/openclaw/integrations/codex_ui/run_openclaw_codex_ui.sh =====
+#!/bin/bash
+set -euo pipefail
+
+TARGET="/Users/wesleyshu/openclaw/integrations/codex_ui"
+PORT="${OPENCLAW_CODEX_UI_PORT:-8011}"
+
+exec /usr/bin/env python3 "$TARGET/openclaw_codex_ui_server.py" "$PORT"
+
+===== /Users/wesleyshu/openclaw/integrations/openclaw_youtube_ui/package-lock.json =====
+{
+  "name": "openclaw_youtube_ui",
+  "lockfileVersion": 3,
+  "requires": true,
+  "packages": {}
+}
+
+===== /Users/wesleyshu/openclaw/integrations/openclaw_youtube_ui/run_studio_ui.sh =====
+#!/bin/bash
+set -euo pipefail
+cd /Users/wesleyshu/openclaw/integrations/openclaw_youtube_ui
+exec /usr/bin/python3 -m http.server 8090 --bind 127.0.0.1
+
+===== /Users/wesleyshu/openclaw/integrations/openclaw_youtube_ui/run_ui.sh =====
+#!/bin/bash
+set -euo pipefail
+cd /Users/wesleyshu/openclaw/integrations/openclaw_youtube_ui
+exec /usr/bin/python3 -m http.server 8088 --bind 127.0.0.1
+
+===== /Users/wesleyshu/openclaw/integrations/openclaw_youtube_ui/studio/app.js =====
+const OPENCLAW_API_BASE = "http://127.0.0.1:8010";
+const API_BASE = OPENCLAW_API_BASE;
+window.OPENCLAW_API_BASE = OPENCLAW_API_BASE;
+window.API_BASE = API_BASE;
+
+(function () {
+  const topicEl = document.getElementById("topic");
+  const materialEl = document.getElementById("material");
+  const outputEl = document.getElementById("output");
+  const statusEl = document.getElementById("status");
+  const generateBtn = document.getElementById("generateBtn");
+  const clearBtn = document.getElementById("clearBtn");
+
+  const endpoints = ["/generate", "/api/generate", "/run", "/submit", "/prompt", "/jobs"];
+
+  function setStatus(text) {
+    statusEl.textContent = text;
+  }
+
+  function setOutput(value) {
+    if (typeof value === "string") {
+      outputEl.textContent = value;
+      return;
+    }
+    outputEl.textContent = JSON.stringify(value, null, 2);
+  }
+
+  async function postJson(url, payload) {
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const text = await resp.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch {
+      data = text;
+    }
+    return { ok: resp.ok, status: resp.status, data };
+  }
+
+  async function generate() {
+    const topic = topicEl.value.trim();
+    const material = materialEl.value.trim();
+    const payload = {
+      topic,
+      material,
+      input: material,
+      text: material,
+      prompt: topic ? `${topic}\n\n${material}`.trim() : material,
+      content: material
+    };
+
+    setStatus("Generating");
+    setOutput("");
+
+    let lastResult = null;
+
+    for (const endpoint of endpoints) {
+      try {
+        const result = await postJson(endpoint, payload);
+        lastResult = { endpoint, ...result };
+        if (result.ok) {
+          setStatus(`Success: ${endpoint}`);
+          setOutput(result.data);
+          return;
+        }
+      } catch (err) {
+        lastResult = { endpoint, ok: false, status: 0, data: String(err) };
+      }
+    }
+
+    setStatus("Failed");
+    setOutput(lastResult || "No backend route responded.");
+  }
+
+  generateBtn.addEventListener("click", generate);
+  clearBtn.addEventListener("click", function () {
+
+===== /Users/wesleyshu/openclaw/run_openclaw_youtube_ui_bridge.sh =====
+#!/bin/bash
+set -euo pipefail
+
+ROOT="/Users/wesleyshu/openclaw"
+TOOLS_DIR="$ROOT/tools"
+INTEGRATIONS_DIR="$ROOT/integrations"
+DEFAULT_UI_APP_ROOT="$INTEGRATIONS_DIR/codex_ui"
+BACKEND_SCRIPT="$TOOLS_DIR/script_input_web_server.py"
+BRIDGE_DIR="$TOOLS_DIR/openclaw_youtube_ui_bridge"
+BRIDGE_PY="$BRIDGE_DIR/bridge_server.py"
+STATE_FILE="$BRIDGE_DIR/runtime.env"
+LOG_DIR="$TOOLS_DIR/logs"
+
+mkdir -p "$BRIDGE_DIR" "$LOG_DIR"
+
+find_python() {
+  for CANDIDATE in \
+    "/Users/wesleyshu/openclaw/.venv/bin/python" \
+    "/Users/wesleyshu/.venv/bin/python" \
+    "/opt/homebrew/bin/python3" \
+    "/usr/local/bin/python3" \
+    "/usr/bin/python3"
+  do
+    if [ -x "$CANDIDATE" ]; then
+      echo "$CANDIDATE"
+      return 0
+    fi
+  done
+  return 1
+}
+
+find_node_pm() {
+  if [ -x "/opt/homebrew/bin/pnpm" ]; then echo "/opt/homebrew/bin/pnpm"; return 0; fi
+  if [ -x "/opt/homebrew/bin/yarn" ]; then echo "/opt/homebrew/bin/yarn"; return 0; fi
+  if [ -x "/opt/homebrew/bin/npm" ]; then echo "/opt/homebrew/bin/npm"; return 0; fi
+  if command -v pnpm >/dev/null 2>&1; then command -v pnpm; return 0; fi
+  if command -v yarn >/dev/null 2>&1; then command -v yarn; return 0; fi
+  if command -v npm >/dev/null 2>&1; then command -v npm; return 0; fi
+  return 1
+}
+
+pick_free_port() {
+  local PORT="$1"
+  while /usr/sbin/lsof -nP -iTCP:"$PORT" -sTCP:LISTEN >/dev/null 2>&1; do
+    PORT=$((PORT + 1))
+  done
+  echo "$PORT"
+}
+
+kill_pid() {
+  local PID="${1:-}"
+  if [ -n "$PID" ] && /bin/kill -0 "$PID" >/dev/null 2>&1; then
+    /bin/kill "$PID" >/dev/null 2>&1 || true
+    /bin/sleep 1
+    /bin/kill -9 "$PID" >/dev/null 2>&1 || true
+  fi
+}
+
+PYTHON_BIN="$(find_python)"
+if [ -z "${PYTHON_BIN:-}" ]; then
+  echo "No usable Python was found."
+  exit 1
+fi
+
+if [ ! -f "$BACKEND_SCRIPT" ]; then
+  echo "Backend script not found: $BACKEND_SCRIPT"
+  exit 1
+fi
+
+if [ -f "$STATE_FILE" ]; then
+  # shellcheck source=/dev/null
+  source "$STATE_FILE" || true
+  kill_pid "${BACKEND_PID:-}"
+  kill_pid "${BRIDGE_PID:-}"
+fi
+
+UI_APP_ROOT="$DEFAULT_UI_APP_ROOT"
+if [ ! -f "$UI_APP_ROOT/package.json" ]; then
+  UI_APP_ROOT="$("$PYTHON_BIN" - <<'PY'
+import os
+
+===== /Users/wesleyshu/openclaw/tools/openclaw_ui_runtime/bridge_proxy.py =====
+#!/usr/bin/env python3
+import os
+import shutil
+import sys
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
+
+FRONTEND_BASE = os.environ["FRONTEND_BASE"].rstrip("/")
+BACKEND_BASE = os.environ["BACKEND_BASE"].rstrip("/")
+LISTEN_PORT = int(os.environ.get("LISTEN_PORT", "3900"))
+API_PREFIXES = tuple(
+    x.strip()
+    for x in os.environ.get(
+        "API_PREFIXES",
+        "/api,/generate,/health,/status,/submit,/run,/films,/film,/prompt,/jobs"
+    ).split(",")
+    if x.strip()
+)
+
+class ProxyHandler(BaseHTTPRequestHandler):
+    protocol_version = "HTTP/1.1"
+
+    def log_message(self, fmt, *args):
+        sys.stdout.write("%s - - [%s] %s\n" % (self.client_address[0], self.log_date_time_string(), fmt % args))
+        sys.stdout.flush()
+
+    def target_base(self):
+        path = self.path.split("?", 1)[0]
+        for prefix in API_PREFIXES:
+            if path == prefix or path.startswith(prefix + "/"):
+                return BACKEND_BASE
+        return FRONTEND_BASE
+
+    def proxy(self):
+        target = self.target_base() + self.path
+
+        body = None
+        if self.headers.get("Content-Length"):
+            body = self.rfile.read(int(self.headers["Content-Length"]))
+
+        headers = {}
+        for key, value in self.headers.items():
+            low = key.lower()
+            if low in {
+                "host",
+                "content-length",
+                "connection",
+                "accept-encoding",
+                "proxy-connection",
+                "keep-alive",
+                "upgrade",
+            }:
+                continue
+            headers[key] = value
+
+        req = Request(target, data=body, headers=headers, method=self.command)
+
+        try:
+            with urlopen(req, timeout=300) as resp:
+                payload = resp.read()
+                self.send_response(resp.status)
+                for key, value in resp.headers.items():
+                    low = key.lower()
+                    if low in {
+                        "transfer-encoding",
+                        "content-encoding",
+                        "connection",
+                        "proxy-authenticate",
+                        "proxy-authorization",
+                        "te",
+                        "trailers",
+                        "upgrade",
+                    }:
+                        continue
+                    self.send_header(key, value)
+                if "Content-Length" not in resp.headers:
+                    self.send_header("Content-Length", str(len(payload)))
+                self.end_headers()
+                if payload:
+
+===== /Users/wesleyshu/openclaw/tools/openclaw_ui_runtime/static_server.py =====
+#!/usr/bin/env python3
+import os
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+
+root = os.environ["STATIC_ROOT"]
+port = int(os.environ["STATIC_PORT"])
+os.chdir(root)
+server = ThreadingHTTPServer(("127.0.0.1", port), SimpleHTTPRequestHandler)
+print(f"Static server listening on http://127.0.0.1:{port}", flush=True)
+server.serve_forever()
+
+===== /Users/wesleyshu/openclaw/tools/openclaw_youtube_runtime/bridge_proxy.py =====
+#!/usr/bin/env python3
+import os
+import sys
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
+
+FRONTEND_BASE = os.environ["FRONTEND_BASE"].rstrip("/")
+BACKEND_BASE = os.environ["BACKEND_BASE"].rstrip("/")
+LISTEN_PORT = int(os.environ.get("LISTEN_PORT", "3900"))
+API_PREFIXES = tuple(
+    x.strip()
+    for x in os.environ.get(
+        "API_PREFIXES",
+        "/api,/generate,/health,/status,/submit,/run,/films,/film,/prompt,/jobs",
+    ).split(",")
+    if x.strip()
+)
+
+class ProxyHandler(BaseHTTPRequestHandler):
+    protocol_version = "HTTP/1.1"
+
+    def log_message(self, fmt, *args):
+        sys.stdout.write("%s - - [%s] %s\n" % (self.client_address[0], self.log_date_time_string(), fmt % args))
+        sys.stdout.flush()
+
+    def target_base(self):
+        path = self.path.split("?", 1)[0]
+        for prefix in API_PREFIXES:
+          if path == prefix or path.startswith(prefix + "/"):
+            return BACKEND_BASE
+        return FRONTEND_BASE
+
+    def proxy(self):
+        target = self.target_base() + self.path
+        body = None
+        if self.headers.get("Content-Length"):
+            body = self.rfile.read(int(self.headers["Content-Length"]))
+
+        headers = {}
+        for key, value in self.headers.items():
+            low = key.lower()
+            if low in {"host","content-length","connection","accept-encoding","proxy-connection","keep-alive","upgrade"}:
+                continue
+            headers[key] = value
+
+        req = Request(target, data=body, headers=headers, method=self.command)
+
+        try:
+            with urlopen(req, timeout=300) as resp:
+                payload = resp.read()
+                self.send_response(resp.status)
+                for key, value in resp.headers.items():
+                    low = key.lower()
+                    if low in {"transfer-encoding","content-encoding","connection","proxy-authenticate","proxy-authorization","te","trailers","upgrade"}:
+                        continue
+                    self.send_header(key, value)
+                if "Content-Length" not in resp.headers:
+                    self.send_header("Content-Length", str(len(payload)))
+                self.end_headers()
+                if payload:
+                    self.wfile.write(payload)
+        except HTTPError as exc:
+            payload = exc.read()
+            self.send_response(exc.code)
+            for key, value in exc.headers.items():
+                low = key.lower()
+                if low in {"transfer-encoding","content-encoding","connection","proxy-authenticate","proxy-authorization","te","trailers","upgrade"}:
+                    continue
+                self.send_header(key, value)
+            self.send_header("Content-Length", str(len(payload)))
+            self.end_headers()
+            if payload:
+                self.wfile.write(payload)
+        except URLError as exc:
+            payload = ('{"error":"upstream_unreachable","target":"%s","detail":"%s"}' % (target, str(exc.reason))).encode("utf-8")
+            self.send_response(502)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(payload)))
+            self.end_headers()
+
+===== /Users/wesleyshu/openclaw/tools/openclaw_youtube_runtime/start_detected_ui.sh =====
+#!/bin/bash
+set -euo pipefail
+
+ROOT="/Users/wesleyshu/openclaw"
+TOOLS_DIR="/Users/wesleyshu/openclaw/tools"
+BACKEND_SCRIPT="/Users/wesleyshu/openclaw/tools/script_input_web_server.py"
+RUNTIME_DIR="/Users/wesleyshu/openclaw/tools/openclaw_youtube_runtime"
+STATE_FILE="/Users/wesleyshu/openclaw/tools/openclaw_youtube_runtime/runtime.env"
+LOG_DIR="/Users/wesleyshu/openclaw/tools/logs"
+BRIDGE_PY="/Users/wesleyshu/openclaw/tools/openclaw_youtube_runtime/bridge_proxy.py"
+
+find_python() {
+  for CANDIDATE in \
+    "/Users/wesleyshu/openclaw/.venv/bin/python" \
+    "/Users/wesleyshu/.venv/bin/python" \
+    "/opt/homebrew/bin/python3" \
+    "/usr/local/bin/python3" \
+    "/usr/bin/python3"
+  do
+    if [ -x "$CANDIDATE" ]; then
+      echo "$CANDIDATE"
+      return 0
+    fi
+  done
+  return 1
+}
+
+kill_pid() {
+  local PID="${1:-}"
+  if [ -n "$PID" ] && /bin/kill -0 "$PID" >/dev/null 2>&1; then
+    /bin/kill "$PID" >/dev/null 2>&1 || true
+    /bin/sleep 1
+    /bin/kill -9 "$PID" >/dev/null 2>&1 || true
+  fi
+}
+
+pick_free_port() {
+  local PORT="$1"
+  while /usr/sbin/lsof -nP -iTCP:"$PORT" -sTCP:LISTEN >/dev/null 2>&1; do
+    PORT=$((PORT + 1))
+  done
+  echo "$PORT"
+}
+
+wait_http_any() {
+  local URL="$1"
+  local LIMIT="$2"
+  local I=0
+  while [ "$I" -lt "$LIMIT" ]; do
+    local CODE
+    CODE="$(/usr/bin/curl -k -s -o /dev/null -w '%{http_code}' "$URL" || true)"
+    if [ "$CODE" != "000" ]; then
+      return 0
+    fi
+    /bin/sleep 1
+    I=$((I + 1))
+  done
+  return 1
+}
+
+wait_port() {
+  local PORT="$1"
+  local LIMIT="$2"
+  local I=0
+  while [ "$I" -lt "$LIMIT" ]; do
+    if /usr/sbin/lsof -nP -iTCP:"$PORT" -sTCP:LISTEN >/dev/null 2>&1; then
+      return 0
+    fi
+    /bin/sleep 1
+    I=$((I + 1))
+  done
+  return 1
+}
+
+current_ports() {
+  /usr/sbin/lsof -nP -iTCP -sTCP:LISTEN 2>/dev/null | /usr/bin/awk '
+    NR>1 {
+      split($9, a, ":");
+      p=a[length(a)];
+      if (p ~ /^[0-9]+$/) print p;
+
+===== /Users/wesleyshu/openclaw/tools/openclaw_youtube_runtime/start_linked_ui.sh =====
+#!/bin/bash
+set -euo pipefail
+
+ROOT="/Users/wesleyshu/openclaw"
+INTEGRATIONS_DIR="/Users/wesleyshu/openclaw/integrations"
+TOOLS_DIR="/Users/wesleyshu/openclaw/tools"
+BACKEND_SCRIPT="/Users/wesleyshu/openclaw/tools/script_input_web_server.py"
+RUNTIME_DIR="/Users/wesleyshu/openclaw/tools/openclaw_youtube_runtime"
+STATE_FILE="/Users/wesleyshu/openclaw/tools/openclaw_youtube_runtime/runtime.env"
+LOG_DIR="/Users/wesleyshu/openclaw/tools/logs"
+STATIC_PY="/Users/wesleyshu/openclaw/tools/openclaw_youtube_runtime/static_server.py"
+BRIDGE_PY="/Users/wesleyshu/openclaw/tools/openclaw_youtube_runtime/bridge_proxy.py"
+
+kill_pid() {
+  local PID="${1:-}"
+  if [ -n "$PID" ] && /bin/kill -0 "$PID" >/dev/null 2>&1; then
+    /bin/kill "$PID" >/dev/null 2>&1 || true
+    /bin/sleep 1
+    /bin/kill -9 "$PID" >/dev/null 2>&1 || true
+  fi
+}
+
+pick_free_port() {
+  local PORT="$1"
+  while /usr/sbin/lsof -nP -iTCP:"$PORT" -sTCP:LISTEN >/dev/null 2>&1; do
+    PORT=$((PORT + 1))
+  done
+  echo "$PORT"
+}
+
+find_python() {
+  for CANDIDATE in \
+    "/Users/wesleyshu/openclaw/.venv/bin/python" \
+    "/Users/wesleyshu/.venv/bin/python" \
+    "/opt/homebrew/bin/python3" \
+    "/usr/local/bin/python3" \
+    "/usr/bin/python3"
+  do
+    if [ -x "$CANDIDATE" ]; then
+      echo "$CANDIDATE"
+      return 0
+    fi
+  done
+  return 1
+}
+
+wait_http_any() {
+  local URL="$1"
+  local LIMIT="$2"
+  local I=0
+  while [ "$I" -lt "$LIMIT" ]; do
+    local CODE
+    CODE="$(/usr/bin/curl -k -s -o /dev/null -w '%{http_code}' "$URL" || true)"
+    if [ "$CODE" != "000" ]; then
+      return 0
+    fi
+    /bin/sleep 1
+    I=$((I + 1))
+  done
+  return 1
+}
+
+wait_port() {
+  local PORT="$1"
+  local LIMIT="$2"
+  local I=0
+  while [ "$I" -lt "$LIMIT" ]; do
+    if /usr/sbin/lsof -nP -iTCP:"$PORT" -sTCP:LISTEN >/dev/null 2>&1; then
+      return 0
+    fi
+    /bin/sleep 1
+    I=$((I + 1))
+  done
+  return 1
+}
+
+current_ports() {
+  /usr/sbin/lsof -nP -iTCP -sTCP:LISTEN 2>/dev/null | /usr/bin/awk '
+    NR>1 {
+      split($9, a, ":");
+
+===== /Users/wesleyshu/openclaw/tools/openclaw_youtube_runtime/start_real_ui.sh =====
+#!/bin/bash
+set -euo pipefail
+
+ROOT="/Users/wesleyshu/openclaw"
+INTEGRATIONS_DIR="/Users/wesleyshu/openclaw/integrations"
+TOOLS_DIR="/Users/wesleyshu/openclaw/tools"
+BACKEND_SCRIPT="/Users/wesleyshu/openclaw/tools/script_input_web_server.py"
+RUNTIME_DIR="/Users/wesleyshu/openclaw/tools/openclaw_youtube_runtime"
+STATE_FILE="/Users/wesleyshu/openclaw/tools/openclaw_youtube_runtime/runtime.env"
+LOG_DIR="/Users/wesleyshu/openclaw/tools/logs"
+STATIC_PY="/Users/wesleyshu/openclaw/tools/openclaw_youtube_runtime/static_server.py"
+BRIDGE_PY="/Users/wesleyshu/openclaw/tools/openclaw_youtube_runtime/bridge_proxy.py"
+
+kill_pid() {
+  local PID="${1:-}"
+  if [ -n "$PID" ] && /bin/kill -0 "$PID" >/dev/null 2>&1; then
+    /bin/kill "$PID" >/dev/null 2>&1 || true
+    /bin/sleep 1
+    /bin/kill -9 "$PID" >/dev/null 2>&1 || true
+  fi
+}
+
+pick_free_port() {
+  local PORT="$1"
+  while /usr/sbin/lsof -nP -iTCP:"$PORT" -sTCP:LISTEN >/dev/null 2>&1; do
+    PORT=$((PORT + 1))
+  done
+  echo "$PORT"
+}
+
+find_python() {
+  for CANDIDATE in \
+    "/Users/wesleyshu/openclaw/.venv/bin/python" \
+    "/Users/wesleyshu/.venv/bin/python" \
+    "/opt/homebrew/bin/python3" \
+    "/usr/local/bin/python3" \
+    "/usr/bin/python3"
+  do
+    if [ -x "$CANDIDATE" ]; then
+      echo "$CANDIDATE"
+      return 0
+    fi
+  done
+  return 1
+}
+
+wait_http_any() {
+  local URL="$1"
+  local LIMIT="$2"
+  local I=0
+  while [ "$I" -lt "$LIMIT" ]; do
+    local CODE
+    CODE="$(/usr/bin/curl -k -s -o /dev/null -w '%{http_code}' "$URL" || true)"
+    if [ "$CODE" != "000" ]; then
+      return 0
+    fi
+    /bin/sleep 1
+    I=$((I + 1))
+  done
+  return 1
+}
+
+wait_port() {
+  local PORT="$1"
+  local LIMIT="$2"
+  local I=0
+  while [ "$I" -lt "$LIMIT" ]; do
+    if /usr/sbin/lsof -nP -iTCP:"$PORT" -sTCP:LISTEN >/dev/null 2>&1; then
+      return 0
+    fi
+    /bin/sleep 1
+    I=$((I + 1))
+  done
+  return 1
+}
+
+current_ports() {
+  /usr/sbin/lsof -nP -iTCP -sTCP:LISTEN 2>/dev/null | /usr/bin/awk '
+    NR>1 {
+      split($9, a, ":");
+
+===== /Users/wesleyshu/openclaw/tools/openclaw_youtube_runtime/static_server.py =====
+#!/usr/bin/env python3
+import os
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+
+root = os.environ["STATIC_ROOT"]
+port = int(os.environ["STATIC_PORT"])
+os.chdir(root)
+server = ThreadingHTTPServer(("127.0.0.1", port), SimpleHTTPRequestHandler)
+print(f"Static server listening on http://127.0.0.1:{port}", flush=True)
+server.serve_forever()
+
+===== /Users/wesleyshu/openclaw/tools/openclaw_youtube_ui_bridge/bridge_server.py =====
+#!/usr/bin/env python3
+import os
+import shutil
+import sys
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
+
+UI_DIR = Path(os.environ["UI_DIR"]).resolve()
+BACKEND_BASE = os.environ["BACKEND_BASE"].rstrip("/")
+UI_PORT = int(os.environ.get("UI_PORT", "3900"))
+API_PREFIXES = tuple(
+    part.strip()
+    for part in os.environ.get(
+        "API_PREFIXES",
+        "/api,/generate,/health,/status,/submit,/run,/films,/film,/prompt,/jobs",
+    ).split(",")
+    if part.strip()
+)
+
+def is_inside(base: Path, candidate: Path) -> bool:
+    try:
+        candidate.resolve().relative_to(base.resolve())
+        return True
+    except Exception:
+        return False
+
+class Handler(SimpleHTTPRequestHandler):
+    def log_message(self, fmt, *args):
+        sys.stdout.write("%s - - [%s] %s\n" % (self.client_address[0], self.log_date_time_string(), fmt % args))
+
+    def translate_path(self, path: str) -> str:
+        clean = path.split("?", 1)[0].split("#", 1)[0].lstrip("/")
+        target = (UI_DIR / clean).resolve()
+        if is_inside(UI_DIR, target):
+            return str(target)
+        return str(UI_DIR / "index.html")
+
+    def should_proxy(self) -> bool:
+        route = self.path.split("?", 1)[0]
+        if self.command != "GET":
+            return True
+        for prefix in API_PREFIXES:
+            if route == prefix or route.startswith(prefix + "/"):
+                return True
+        return False
+
+    def serve_spa(self):
+        local_path = Path(self.translate_path(self.path))
+        if local_path.exists() and local_path.is_file():
+            return super().do_GET()
+
+        index_file = UI_DIR / "index.html"
+        if not index_file.exists():
+            self.send_error(404, "index.html not found in UI_DIR")
+            return
+
+        self.send_response(200)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(index_file.stat().st_size))
+        self.end_headers()
+        with index_file.open("rb") as fh:
+            shutil.copyfileobj(fh, self.wfile)
+
+    def proxy(self):
+        url = BACKEND_BASE + self.path
+        body = None
+        if self.headers.get("Content-Length"):
+            body = self.rfile.read(int(self.headers["Content-Length"]))
+
+        headers = {}
+        for key, value in self.headers.items():
+            low = key.lower()
+            if low in {"host", "content-length", "connection", "accept-encoding", "proxy-connection", "keep-alive", "upgrade"}:
+                continue
+            headers[key] = value
+
+        req = Request(url, data=body, headers=headers, method=self.command)
+        try:
+
+===== /Users/wesleyshu/openclaw/tools/ui_link_runtime/bridge_proxy.py =====
+#!/usr/bin/env python3
+import os
+import sys
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
+
+FRONTEND_BASE = os.environ["FRONTEND_BASE"].rstrip("/")
+BACKEND_BASE = os.environ["BACKEND_BASE"].rstrip("/")
+LISTEN_PORT = int(os.environ.get("LISTEN_PORT", "3900"))
+API_PREFIXES = tuple(
+    x.strip()
+    for x in os.environ.get(
+        "API_PREFIXES",
+        "/api,/generate,/health,/status,/submit,/run,/films,/film,/prompt,/jobs",
+    ).split(",")
+    if x.strip()
+)
+
+class ProxyHandler(BaseHTTPRequestHandler):
+    protocol_version = "HTTP/1.1"
+
+    def log_message(self, fmt, *args):
+        sys.stdout.write("%s - - [%s] %s\n" % (self.client_address[0], self.log_date_time_string(), fmt % args))
+        sys.stdout.flush()
+
+    def target_base(self):
+        path = self.path.split("?", 1)[0]
+        for prefix in API_PREFIXES:
+            if path == prefix or path.startswith(prefix + "/"):
+                return BACKEND_BASE
+        return FRONTEND_BASE
+
+    def proxy(self):
+        target = self.target_base() + self.path
+        body = None
+        if self.headers.get("Content-Length"):
+            body = self.rfile.read(int(self.headers["Content-Length"]))
+
+        headers = {}
+        for key, value in self.headers.items():
+            low = key.lower()
+            if low in {
+                "host",
+                "content-length",
+                "connection",
+                "accept-encoding",
+                "proxy-connection",
+                "keep-alive",
+                "upgrade",
+            }:
+                continue
+            headers[key] = value
+
+        req = Request(target, data=body, headers=headers, method=self.command)
+
+        try:
+            with urlopen(req, timeout=300) as resp:
+                payload = resp.read()
+                self.send_response(resp.status)
+                for key, value in resp.headers.items():
+                    low = key.lower()
+                    if low in {
+                        "transfer-encoding",
+                        "content-encoding",
+                        "connection",
+                        "proxy-authenticate",
+                        "proxy-authorization",
+                        "te",
+                        "trailers",
+                        "upgrade",
+                    }:
+                        continue
+                    self.send_header(key, value)
+                if "Content-Length" not in resp.headers:
+                    self.send_header("Content-Length", str(len(payload)))
+                self.end_headers()
+                if payload:
+                    self.wfile.write(payload)
+        except HTTPError as exc:
+
+===== /Users/wesleyshu/openclaw/tools/ui_link_runtime/static_server.py =====
+#!/usr/bin/env python3
+import os
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+
+root = os.environ["STATIC_ROOT"]
+port = int(os.environ["STATIC_PORT"])
+os.chdir(root)
+server = ThreadingHTTPServer(("127.0.0.1", port), SimpleHTTPRequestHandler)
+print(f"Static server listening on http://127.0.0.1:{port}", flush=True)
+server.serve_forever()
+

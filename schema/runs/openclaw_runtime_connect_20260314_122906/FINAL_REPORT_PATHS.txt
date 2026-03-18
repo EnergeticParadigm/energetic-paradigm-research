@@ -1,0 +1,11 @@
+OPENCLAW_ROOT=/Users/wesleyshu/openclaw
+RUN_ROOT=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_runtime_connect_20260314_122906
+REPORT_ROOT=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_runtime_connect_20260314_122906/reports
+STATIC_SERVER=/Users/wesleyshu/openclaw/tools/openclaw_youtube_runtime/static_server.py
+PROXY_SERVER=/Users/wesleyshu/openclaw/tools/openclaw_youtube_runtime/bridge_proxy.py
+FRONTEND_ROOT=/Users/wesleyshu/openclaw/integrations/openclaw_youtube_ui/ui
+STATIC_LOG=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_runtime_connect_20260314_122906/reports/static_server.log
+PROXY_LOG=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_runtime_connect_20260314_122906/reports/proxy_server.log
+FRONTEND_CANDIDATES=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_runtime_connect_20260314_122906/reports/frontend_candidates.txt
+HTTP_CHECKS=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_runtime_connect_20260314_122906/reports/http_checks.txt
+ENTRY_URL=http://127.0.0.1:8000/

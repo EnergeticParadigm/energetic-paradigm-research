@@ -1,0 +1,449 @@
+PROJECT_ROOT=/Users/wesleyshu/ep_system/ep_api_system
+
+=== FILE TREE depth 3 ===
+/Users/wesleyshu/ep_system/ep_api_system
+/Users/wesleyshu/ep_system/ep_api_system/.env
+/Users/wesleyshu/ep_system/ep_api_system/app.py
+/Users/wesleyshu/ep_system/ep_api_system/check_no_chinese.sh
+/Users/wesleyshu/ep_system/ep_api_system/cleanup_provider_state.sh
+/Users/wesleyshu/ep_system/ep_api_system/launch_ep_api.sh
+/Users/wesleyshu/ep_system/ep_api_system/requirements.txt
+/Users/wesleyshu/ep_system/ep_api_system/runtime_arch_context.txt
+/Users/wesleyshu/ep_system/ep_api_system/runtime_arch_request.json
+/Users/wesleyshu/ep_system/ep_api_system/sample_request.json
+/Users/wesleyshu/ep_system/ep_api_system/sample_request_en.json
+/Users/wesleyshu/ep_system/ep_api_system/start_api.sh
+/Users/wesleyshu/ep_system/ep_api_system/test_ep_api.sh
+
+=== FILE: /Users/wesleyshu/ep_system/ep_api_system/app.py ===
+import os
+import time
+import uuid
+from datetime import datetime, timezone
+from typing import Any, Dict, List, Literal, Optional
+
+from dotenv import load_dotenv
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel, Field
+
+load_dotenv("/Users/wesleyshu/ep_system/ep_api_system/.env")
+if os.path.exists("/Users/wesleyshu/ep_system/config/system.env"):
+    load_dotenv("/Users/wesleyshu/ep_system/config/system.env", override=False)
+
+try:
+    from openai import OpenAI
+except Exception:
+    OpenAI = None
+
+APP_NAME = "Energetic Paradigm API"
+APP_VERSION = "0.1.0"
+
+DEFAULT_OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-5")
+DEFAULT_LOCAL_MODEL = os.getenv("LOCAL_MODEL_NAME", "ep-local-sim")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
+
+app = FastAPI(title=APP_NAME, version=APP_VERSION)
+
+PROVIDERS = ["openai", "local"]
+
+
+class ClientInfo(BaseModel):
+    client_id: str = "default-client"
+    client_type: Literal["web_app", "partner_app", "internal_tool", "terminal"] = "terminal"
+    session_id: str = "session-default"
+
+
+class UserInfo(BaseModel):
+    user_id: str = "anonymous"
+    locale: str = "zh-Hant"
+    timezone: str = "Asia/Riyadh"
+
+
+class InputBlock(BaseModel):
+    text: str
+    attachments: List[Dict[str, Any]] = Field(default_factory=list)
+
+
+class EPBlock(BaseModel):
+    mode: Literal["auto", "standard", "deep", "domain"] = "auto"
+    depth: Literal["auto", "short", "medium", "long"] = "auto"
+    domain: str = "general"
+    format: Literal["plain", "structured", "executive", "technical"] = "structured"
+    safety_level: Literal["standard", "strict"] = "standard"
+
+
+class RoutingBlock(BaseModel):
+    preferred_provider: str = "auto"
+    allowed_providers: List[str] = Field(default_factory=lambda: ["openai", "local"])
+    fallback_provider: str = "local"
+    allow_fallback: bool = True
+
+
+class OutputBlock(BaseModel):
+    response_type: Literal["final_answer", "analysis", "summary"] = "final_answer"
+    max_tokens: int = 1200
+    temperature: float = 0.2
+    include_citations: bool = False
+    include_trace: bool = False
+    language: str = "zh-Hant"
+
+
+class MetadataBlock(BaseModel):
+    source: str = "terminal"
+    tags: List[str] = Field(default_factory=list)
+
+
+class EPUnifiedRequest(BaseModel):
+    request_id: str = Field(default_factory=lambda: f"req_{uuid.uuid4().hex[:12]}")
+    client: ClientInfo = Field(default_factory=ClientInfo)
+    user: UserInfo = Field(default_factory=UserInfo)
+    input: InputBlock
+    ep: EPBlock = Field(default_factory=EPBlock)
+    routing: RoutingBlock = Field(default_factory=RoutingBlock)
+    output: OutputBlock = Field(default_factory=OutputBlock)
+    metadata: MetadataBlock = Field(default_factory=MetadataBlock)
+
+
+class MinimalInput(BaseModel):
+    text: str
+
+
+class MinimalEP(BaseModel):
+    mode: Literal["auto", "standard", "deep", "domain"] = "auto"
+    depth: Literal["auto", "short", "medium", "long"] = "auto"
+
+
+class MinimalRouting(BaseModel):
+    preferred_provider: str = "auto"
+    allowed_providers: List[str] = Field(default_factory=lambda: ["openai", "local"])
+
+
+class MinimalOutput(BaseModel):
+    language: str = "zh-Hant"
+
+
+class MinimalRequest(BaseModel):
+    input: MinimalInput
+    ep: MinimalEP = Field(default_factory=MinimalEP)
+    routing: MinimalRouting = Field(default_factory=MinimalRouting)
+    output: MinimalOutput = Field(default_factory=MinimalOutput)
+
+
+def now_iso() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def estimate_tokens(text: str) -> int:
+    return max(1, len(text) // 4)
+
+
+def make_error_response(
+    request_id: str,
+    provider: str,
+    started_at: str,
+    error_code: str,
+    message: str,
+    fallback_used: bool,
+    warnings: Optional[List[str]] = None,
+) -> Dict[str, Any]:
+    completed_at = now_iso()
+    return {
+        "request_id": request_id,
+        "status": "error",
+        "result": None,
+        "ep": {
+            "mode_applied": "auto",
+            "depth_applied": "auto",
+            "domain_applied": "general",
+            "routing_path": None,
+        },
+        "provider": {
+            "selected": provider,
+            "model": None,
+            "fallback_used": fallback_used,
+        },
+        "usage": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "total_tokens": 0,
+            "estimated_cost": 0.0,
+        },
+        "timing": {
+            "started_at": started_at,
+            "completed_at": completed_at,
+            "latency_ms": 0,
+        },
+        "warnings": warnings or [],
+        "error": {
+            "code": error_code,
+            "message": message,
+        },
+    }
+
+
+def normalize_request(payload: Dict[str, Any]) -> EPUnifiedRequest:
+    if "request_id" in payload or "client" in payload or "user" in payload or "metadata" in payload:
+        return EPUnifiedRequest(**payload)
+
+    minimal = MinimalRequest(**payload)
+    return EPUnifiedRequest(
+        input=InputBlock(text=minimal.input.text, attachments=[]),
+        ep=EPBlock(mode=minimal.ep.mode, depth=minimal.ep.depth),
+        routing=RoutingBlock(
+            preferred_provider=minimal.routing.preferred_provider,
+            allowed_providers=minimal.routing.allowed_providers,
+            fallback_provider="local",
+            allow_fallback=True,
+        ),
+        output=OutputBlock(language=minimal.output.language),
+    )
+
+
+def choose_provider(req: EPUnifiedRequest) -> str:
+    allowed = [p for p in req.routing.allowed_providers if p in PROVIDERS]
+    if not allowed:
+        allowed = ["local"]
+
+    preferred = req.routing.preferred_provider
+    if preferred == "auto":
+        if OPENAI_API_KEY and "openai" in allowed:
+            return "openai"
+        if "local" in allowed:
+            return "local"
+        return allowed[0]
+
+    if preferred in allowed:
+        return preferred
+
+    if req.routing.allow_fallback:
+        if req.routing.fallback_provider in allowed:
+            return req.routing.fallback_provider
+        if "local" in allowed:
+            return "local"
+        return allowed[0]
+
+    raise HTTPException(status_code=400, detail="preferred provider is not allowed")
+
+
+def build_system_instruction(req: EPUnifiedRequest) -> str:
+    return (
+        f"You are the Energetic Paradigm API answer layer. "
+        f"Mode={req.ep.mode}; Depth={req.ep.depth}; Domain={req.ep.domain}; "
+        f"Format={req.ep.format}; Safety={req.ep.safety_level}; "
+        f"Language={req.output.language}; ResponseType={req.output.response_type}. "
+        f"Answer clearly and follow the requested structure."
+    )
+
+
+def extract_openai_text(resp: Any) -> str:
+    text = getattr(resp, "output_text", None)
+    if text:
+        return text
+
+    try:
+        output = getattr(resp, "output", [])
+        parts: List[str] = []
+        for item in output:
+            content = getattr(item, "content", [])
+            for c in content:
+                ctext = getattr(c, "text", None)
+                if ctext:
+                    parts.append(ctext)
+        if parts:
+            return "\n".join(parts)
+    except Exception:
+        pass
+
+    return ""
+
+
+def call_openai(req: EPUnifiedRequest) -> Dict[str, Any]:
+    if not OPENAI_API_KEY:
+        raise RuntimeError("OPENAI_API_KEY is not configured")
+    if OpenAI is None:
+        raise RuntimeError("openai package is not installed")
+
+    client = OpenAI(api_key=OPENAI_API_KEY)
+
+    response = client.responses.create(
+        model=DEFAULT_OPENAI_MODEL,
+        input=[
+            {"role": "system", "content": build_system_instruction(req)},
+            {"role": "user", "content": req.input.text},
+        ],
+        temperature=req.output.temperature,
+        max_output_tokens=req.output.max_tokens,
+    )
+
+    content = extract_openai_text(response).strip()
+
+=== FILE: /Users/wesleyshu/ep_system/ep_api_system/requirements.txt ===
+fastapi==0.115.12
+uvicorn[standard]==0.34.0
+pydantic==2.11.1
+openai==1.75.0
+python-dotenv==1.0.1
+
+=== FILE: /Users/wesleyshu/ep_system/ep_api_system/launch_ep_api.sh ===
+#!/bin/bash
+set -euo pipefail
+
+APP_ROOT="/Users/wesleyshu/ep_system/ep_api_system"
+PY="$APP_ROOT/.venv/bin/python"
+
+if [ ! -x "$PY" ]; then
+  echo "ERROR: missing virtualenv python at $PY"
+  exit 1
+fi
+
+if [ -f "$APP_ROOT/app.py" ]; then
+  exec "$PY" -m uvicorn app:app \
+    --app-dir "$APP_ROOT" \
+    --reload-dir "$APP_ROOT" \
+    --host 127.0.0.1 \
+    --port 8010 \
+    --reload
+elif [ -f "$APP_ROOT/main.py" ]; then
+  exec "$PY" -m uvicorn main:app \
+    --app-dir "$APP_ROOT" \
+    --reload-dir "$APP_ROOT" \
+    --host 127.0.0.1 \
+    --port 8010 \
+    --reload
+else
+  echo "ERROR: no app.py or main.py found under $APP_ROOT"
+  exit 1
+fi
+
+=== FILE: /Users/wesleyshu/ep_system/ep_api_system/start_api.sh ===
+#!/bin/bash
+set -euo pipefail
+
+BASE_DIR="/Users/wesleyshu/ep_system/ep_api_system"
+VENV_DIR="/Users/wesleyshu/ep_system/ep_api_system/.venv"
+APP_FILE="/Users/wesleyshu/ep_system/ep_api_system/app.py"
+LOG_FILE="/Users/wesleyshu/ep_system/ep_api_system/server.log"
+PID_FILE="/Users/wesleyshu/ep_system/ep_api_system/server.pid"
+PORT="8010"
+
+if [ ! -x "/Users/wesleyshu/ep_system/ep_api_system/.venv/bin/python" ]; then
+  /usr/bin/python3 -m venv "/Users/wesleyshu/ep_system/ep_api_system/.venv"
+  "/Users/wesleyshu/ep_system/ep_api_system/.venv/bin/pip" install --upgrade pip
+  "/Users/wesleyshu/ep_system/ep_api_system/.venv/bin/pip" install -r "/Users/wesleyshu/ep_system/ep_api_system/requirements.txt"
+fi
+
+if [ -f "${PID_FILE}" ]; then
+  OLD_PID="$(cat "${PID_FILE}" || true)"
+  if [ -n "${OLD_PID}" ] && ps -p "${OLD_PID}" > /dev/null 2>&1; then
+    kill "${OLD_PID}" || true
+    sleep 1
+  fi
+fi
+
+RUNNING_PID="$(lsof -ti tcp:${PORT} || true)"
+if [ -n "${RUNNING_PID}" ]; then
+  kill ${RUNNING_PID} || true
+  sleep 1
+fi
+
+nohup "/Users/wesleyshu/ep_system/ep_api_system/.venv/bin/python" -m uvicorn app:app \
+  --host 0.0.0.0 \
+  --port "${PORT}" \
+  --app-dir "/Users/wesleyshu/ep_system/ep_api_system" \
+  > "${LOG_FILE}" 2>&1 &
+
+echo $! > "${PID_FILE}"
+sleep 2
+/usr/bin/curl -s "http://127.0.0.1:${PORT}/v1/ep/health"
+echo
+
+=== FILE: /Users/wesleyshu/ep_system/ep_api_system/sample_request.json ===
+{
+  "request_id": "req_demo_en_0001",
+  "client": {
+    "client_id": "ep_partner_app_demo",
+    "client_type": "partner_app",
+    "session_id": "sess_demo_123"
+  },
+  "user": {
+    "user_id": "user_001",
+    "locale": "en",
+    "timezone": "Asia/Riyadh"
+  },
+  "input": {
+    "text": "Explain exactly what this EP API currently does, what each major layer is responsible for, and whether it already has a provider-independent core. Draw a plain-text structure diagram. Answer in English only.",
+    "attachments": []
+  },
+  "ep": {
+    "mode": "deep",
+    "depth": "long",
+    "domain": "general",
+    "format": "structured",
+    "safety_level": "standard"
+  },
+  "routing": {
+    "preferred_provider": "auto",
+    "allowed_providers": ["openai", "local"],
+    "fallback_provider": "local",
+    "allow_fallback": true
+  },
+  "output": {
+    "response_type": "final_answer",
+    "max_tokens": 1400,
+    "temperature": 0.1,
+    "include_citations": false,
+    "include_trace": true,
+    "language": "en"
+  },
+  "metadata": {
+    "source": "terminal",
+    "tags": ["ep", "api-test", "architecture"]
+  }
+}
+
+=== FILE: /Users/wesleyshu/ep_system/ep_api_system/sample_request_en.json ===
+{
+  "request_id": "req_demo_en_0001",
+  "client": {
+    "client_id": "ep_partner_app_demo",
+    "client_type": "partner_app",
+    "session_id": "sess_demo_123"
+  },
+  "user": {
+    "user_id": "user_001",
+    "locale": "en",
+    "timezone": "Asia/Riyadh"
+  },
+  "input": {
+    "text": "Explain exactly what this EP API currently does, what each major layer is responsible for, and whether it already has a provider-independent core. Draw a plain-text structure diagram. Answer in English only.",
+    "attachments": []
+  },
+  "ep": {
+    "mode": "deep",
+    "depth": "long",
+    "domain": "general",
+    "format": "structured",
+    "safety_level": "standard"
+  },
+  "routing": {
+    "preferred_provider": "auto",
+    "allowed_providers": ["openai", "local"],
+    "fallback_provider": "local",
+    "allow_fallback": true
+  },
+  "output": {
+    "response_type": "final_answer",
+    "max_tokens": 1400,
+    "temperature": 0.1,
+    "include_citations": false,
+    "include_trace": true,
+    "language": "en"
+  },
+  "metadata": {
+    "source": "terminal",
+    "tags": ["ep", "api-test", "architecture"]
+  }
+}
+
+=== OPENAPI JSON ===
+{"openapi":"3.1.0","info":{"title":"Energetic Paradigm API","version":"0.1.0"},"paths":{"/v1/ep/health":{"get":{"summary":"Health","operationId":"health_v1_ep_health_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"additionalProperties":true,"type":"object","title":"Response Health V1 Ep Health Get"}}}}}}},"/v1/ep/providers":{"get":{"summary":"Providers","operationId":"providers_v1_ep_providers_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"additionalProperties":true,"type":"object","title":"Response Providers V1 Ep Providers Get"}}}}}}},"/v1/ep/respond":{"post":{"summary":"Respond","operationId":"respond_v1_ep_respond_post","requestBody":{"content":{"application/json":{"schema":{"additionalProperties":true,"type":"object","title":"Payload"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"additionalProperties":true,"type":"object","title":"Response Respond V1 Ep Respond Post"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/v1/ep/analyze":{"post":{"summary":"Analyze","operationId":"analyze_v1_ep_analyze_post","requestBody":{"content":{"application/json":{"schema":{"additionalProperties":true,"type":"object","title":"Payload"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"additionalProperties":true,"type":"object","title":"Response Analyze V1 Ep Analyze Post"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}}},"components":{"schemas":{"HTTPValidationError":{"properties":{"detail":{"items":{"$ref":"#/components/schemas/ValidationError"},"type":"array","title":"Detail"}},"type":"object","title":"HTTPValidationError"},"ValidationError":{"properties":{"loc":{"items":{"anyOf":[{"type":"string"},{"type":"integer"}]},"type":"array","title":"Location"},"msg":{"type":"string","title":"Message"},"type":{"type":"string","title":"Error Type"}},"type":"object","required":["loc","msg","type"],"title":"ValidationError"}}}}

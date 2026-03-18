@@ -1,0 +1,4 @@
+policy_adapter: /Users/wesleyshu/ep_system/ep_api_system/policy_adapter.py
+function: apply_routing_policy
+private_internal_negative_case: {"policy_enabled": true, "matched_rule_id": null, "reason": null, "preferred_provider": "openai", "allowed_providers": ["openai", "local"], "fallback_provider": "local", "allow_fallback": true}
+public_safe_finance_case: {"policy_enabled": true, "matched_rule_id": null, "reason": null, "preferred_provider": "openai", "allowed_providers": ["openai", "local"], "fallback_provider": "local", "allow_fallback": true}

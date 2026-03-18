@@ -1,0 +1,294 @@
+{
+  "version": "1.3.3",
+  "policy_enabled": true,
+  "description": "Flatten finance/public-safe summary routing. Keep safe OpenAI-first rules. Keep only cost-sensitive internal local-first. Do not force raw internal comparison to local.",
+  "defaults": {
+    "preferred_provider": "openai",
+    "allowed_providers": [
+      "openai",
+      "local"
+    ],
+    "fallback_provider": "local",
+    "allow_fallback": true
+  },
+  "pre_routing_rules": [
+    {
+      "id": "executive_format_to_openai",
+      "priority": 100,
+      "when": {
+        "output_format_in": [
+          "executive"
+        ]
+      },
+      "select": {
+        "preferred_provider": "openai",
+        "allowed_providers": [
+          "openai"
+        ],
+        "fallback_provider": "openai",
+        "allow_fallback": false
+      },
+      "reason": "executive_facing_output"
+    },
+    {
+      "id": "finance_or_public_safe_summary_to_openai",
+      "priority": 97,
+      "when": {
+        "input_contains_any": [
+          "public-safe summary",
+          "public safe summary",
+          "public summary",
+          "finance-safe style",
+          "finance safe style",
+          "finance-safe framing",
+          "finance safe framing",
+          "finance-safe",
+          "finance safe",
+          "publication-safe",
+          "publication safe",
+          "external-facing",
+          "external facing",
+          "press statement"
+        ],
+        "exclude_keywords": [
+          "internal",
+          "private",
+          "confidential",
+          "secret",
+          "sensitive",
+          "negative",
+          "complaint",
+          "issue",
+          "problem",
+          "risk",
+          "incident",
+          "leak",
+          "not public",
+          "non-public"
+        ],
+        "must_not_contain": [
+          "internal",
+          "private",
+          "confidential",
+          "secret",
+          "sensitive",
+          "negative",
+          "complaint",
+          "issue",
+          "problem",
+          "risk",
+          "incident",
+          "leak",
+          "not public",
+          "non-public"
+        ],
+        "exclude_phrases": [
+          "internal",
+          "private",
+          "confidential",
+          "secret",
+          "sensitive",
+          "negative",
+          "complaint",
+          "issue",
+          "problem",
+          "risk",
+          "incident",
+          "leak",
+          "not public",
+          "non-public"
+        ],
+        "deny_keywords": [
+          "internal",
+          "private",
+          "confidential",
+          "secret",
+          "sensitive",
+          "negative",
+          "complaint",
+          "issue",
+          "problem",
+          "risk",
+          "incident",
+          "leak",
+          "not public",
+          "non-public"
+        ],
+        "negative_keywords": [
+          "internal",
+          "private",
+          "confidential",
+          "secret",
+          "sensitive",
+          "negative",
+          "complaint",
+          "issue",
+          "problem",
+          "risk",
+          "incident",
+          "leak",
+          "not public",
+          "non-public"
+        ]
+      },
+      "select": {
+        "preferred_provider": "openai",
+        "allowed_providers": [
+          "openai"
+        ],
+        "fallback_provider": "openai",
+        "allow_fallback": false
+      },
+      "reason": "finance_or_public_safe_summary",
+      "exclude_keywords": [
+        "internal",
+        "private",
+        "confidential",
+        "secret",
+        "sensitive",
+        "negative",
+        "complaint",
+        "issue",
+        "problem",
+        "risk",
+        "incident",
+        "leak",
+        "not public",
+        "non-public"
+      ],
+      "must_not_contain": [
+        "internal",
+        "private",
+        "confidential",
+        "secret",
+        "sensitive",
+        "negative",
+        "complaint",
+        "issue",
+        "problem",
+        "risk",
+        "incident",
+        "leak",
+        "not public",
+        "non-public"
+      ],
+      "exclude_phrases": [
+        "internal",
+        "private",
+        "confidential",
+        "secret",
+        "sensitive",
+        "negative",
+        "complaint",
+        "issue",
+        "problem",
+        "risk",
+        "incident",
+        "leak",
+        "not public",
+        "non-public"
+      ],
+      "deny_keywords": [
+        "internal",
+        "private",
+        "confidential",
+        "secret",
+        "sensitive",
+        "negative",
+        "complaint",
+        "issue",
+        "problem",
+        "risk",
+        "incident",
+        "leak",
+        "not public",
+        "non-public"
+      ],
+      "negative_keywords": [
+        "internal",
+        "private",
+        "confidential",
+        "secret",
+        "sensitive",
+        "negative",
+        "complaint",
+        "issue",
+        "problem",
+        "risk",
+        "incident",
+        "leak",
+        "not public",
+        "non-public"
+      ]
+    },
+    {
+      "id": "short_technical_to_openai",
+      "priority": 90,
+      "when": {
+        "all": [
+          {
+            "ep_depth_in": [
+              "short",
+              "medium"
+            ]
+          },
+          {
+            "input_contains_any": [
+              "schema",
+              "trace",
+              "routing",
+              "dispatch",
+              "fallback",
+              "latency",
+              "token accounting",
+              "token usage",
+              "response fields",
+              "provider-independent orchestration",
+              "provider independent orchestration"
+            ]
+          }
+        ]
+      },
+      "select": {
+        "preferred_provider": "openai",
+        "allowed_providers": [
+          "openai"
+        ],
+        "fallback_provider": "openai",
+        "allow_fallback": false
+      },
+      "reason": "short_precision_explanation"
+    },
+    {
+      "id": "short_standard_to_openai",
+      "priority": 80,
+      "when": {
+        "all": [
+          {
+            "ep_mode_in": [
+              "standard"
+            ]
+          },
+          {
+            "ep_depth_in": [
+              "short"
+            ]
+          }
+        ]
+      },
+      "select": {
+        "preferred_provider": "openai",
+        "allowed_providers": [
+          "openai"
+        ],
+        "fallback_provider": "openai",
+        "allow_fallback": false
+      },
+      "reason": "short_polished_response"
+    }
+  ],
+  "policy_outputs": {
+    "attach_reason": true,
+    "attach_matched_rule_id": true
+  }
+}

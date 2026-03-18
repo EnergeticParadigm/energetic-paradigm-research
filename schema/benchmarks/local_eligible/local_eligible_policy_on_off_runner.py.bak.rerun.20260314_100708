@@ -1,0 +1,140 @@
+import json
+import os
+import re
+import time
+import urllib.error
+import urllib.request
+from pathlib import Path
+
+phase_name = os.environ["PHASE_NAME"]
+bench_set = Path(os.environ["BENCH_SET"]).resolve()
+outfile = Path(os.environ["OUTFILE"]).resolve()
+
+bundle = json.loads(bench_set.read_text(encoding="utf-8"))
+cases = bundle["cases"]
+
+def post_json(url: str, payload: dict):
+    req = urllib.request.Request(
+        url=url,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=240) as resp:
+            raw = resp.read().decode("utf-8", errors="replace")
+            return resp.status, json.loads(raw)
+    except urllib.error.HTTPError as exc:
+        raw = exc.read().decode("utf-8", errors="replace")
+        try:
+            body = json.loads(raw)
+        except Exception:
+            body = {"raw_error_body": raw}
+        return exc.code, body
+    except Exception as exc:
+        return None, {"exception": str(exc)}
+
+def count_sentences(text: str) -> int:
+    return len([part for part in re.split(r"[.!?]+", text) if part.strip()])
+
+def keyword_hits(text: str, keywords):
+    lower = text.lower()
+    return sum(1 for kw in keywords if kw.lower() in lower)
+
+def score_quality(text: str, expected_keywords, success: bool, response_type_ok: bool):
+    keyword_score = min(5, keyword_hits(text, expected_keywords))
+
+    structure_score = 1
+    if len(text) >= 140:
+        structure_score += 1
+    if "\n" in text or count_sentences(text) >= 2:
+        structure_score += 1
+    if len(text.split()) >= 60:
+        structure_score += 1
+    if any(marker in text.lower() for marker in ["analysis", "comparison", "difference", "draft", "internal", "because"]):
+        structure_score += 1
+    structure_score = min(structure_score, 5)
+
+    completeness_score = 1
+    if len(text.split()) >= 40:
+        completeness_score += 1
+    if keyword_score >= max(1, len(expected_keywords) // 2):
+        completeness_score += 1
+    if response_type_ok:
+        completeness_score += 1
+    if success:
+        completeness_score += 1
+    completeness_score = min(completeness_score, 5)
+
+    return {
+        "keyword_score": keyword_score,
+        "structure_score": structure_score,
+        "completeness_score": completeness_score,
+        "total_quality_score": keyword_score + structure_score + completeness_score,
+    }
+
+results = []
+
+for case in cases:
+    payload = case["payload"]
+    original_requested = payload["routing"]["preferred_provider"]
+
+    started = time.time()
+    http_status, body = post_json(case["url"], payload)
+    wall_ms = int((time.time() - started) * 1000)
+
+    result_block = body.get("result") if isinstance(body.get("result"), dict) else {}
+    provider_block = body.get("provider") if isinstance(body.get("provider"), dict) else {}
+    timing_block = body.get("timing") if isinstance(body.get("timing"), dict) else {}
+    policy_block = body.get("policy") if isinstance(body.get("policy"), dict) else {}
+    trace_block = body.get("trace") if isinstance(body.get("trace"), dict) else {}
+    usage_block = body.get("usage") if isinstance(body.get("usage"), dict) else {}
+
+    content = result_block.get("content") if isinstance(result_block.get("content"), str) else ""
+    response_type_ok = result_block.get("response_type") == payload["output"]["response_type"]
+    success = body.get("status") == "success" and http_status == 200
+    quality = score_quality(content, case["expected_keywords"], success, response_type_ok)
+
+    results.append({
+        "phase": phase_name,
+        "case_id": case["case_id"],
+        "category": case["category"],
+        "local_eligible_marker": case["local_eligible_marker"],
+        "intended_policy_shape": case["intended_policy_shape"],
+        "original_requested_provider": original_requested,
+        "effective_requested_provider": trace_block.get("provider_requested"),
+        "selected_provider": provider_block.get("selected"),
+        "provider_model": provider_block.get("model"),
+        "matched_rule_id": policy_block.get("matched_rule_id"),
+        "policy_reason": policy_block.get("reason"),
+        "http_status": http_status,
+        "success": success,
+        "latency_ms": timing_block.get("latency_ms"),
+        "wall_ms": wall_ms,
+        "total_tokens": usage_block.get("total_tokens"),
+        "response_type": result_block.get("response_type"),
+        "quality": quality,
+        "content_words": len(content.split()),
+        "content_preview": content.replace("\n", " ")[:260],
+        "error": body.get("error"),
+        "notes": case.get("notes"),
+    })
+
+summary = {
+    "benchmark_id": bundle["benchmark_id"],
+    "phase": phase_name,
+    "generated_at_epoch": int(time.time()),
+    "case_count": len(results),
+    "selected_local_count": sum(1 for r in results if r["selected_provider"] == "local"),
+    "selected_openai_count": sum(1 for r in results if r["selected_provider"] == "openai"),
+    "reroute_count": sum(1 for r in results if r["selected_provider"] != r["original_requested_provider"]),
+    "avg_latency_ms": round(sum((r["latency_ms"] or 0) for r in results) / len(results), 2),
+    "avg_total_tokens": round(sum((r["total_tokens"] or 0) for r in results) / len(results), 2),
+    "avg_quality_score": round(sum(r["quality"]["total_quality_score"] for r in results) / len(results), 2),
+    "results": results,
+}
+
+outfile.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+print(f"phase={phase_name}")
+print(f"outfile={outfile}")
+print(json.dumps(summary, indent=2, ensure_ascii=False))

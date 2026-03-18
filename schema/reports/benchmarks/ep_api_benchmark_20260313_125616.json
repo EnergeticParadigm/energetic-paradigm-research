@@ -1,0 +1,3473 @@
+{
+  "generated_at_epoch": 1773395969,
+  "base_url": "http://127.0.0.1:8010",
+  "repeats": 2,
+  "totals": {
+    "cases": 5,
+    "routes": 2,
+    "providers": 2,
+    "requests": 40,
+    "local_successes": 16,
+    "openai_successes": 16
+  },
+  "aggregates": [
+    {
+      "case_id": "executive_short_summary",
+      "route": "analyze",
+      "provider": "local",
+      "runs": 2,
+      "successes": 2,
+      "all_success": true,
+      "response_type_all_match": true,
+      "schema_stable_across_repeats": true,
+      "routing_path_stable_across_repeats": true,
+      "provider_selected_stable_across_repeats": true,
+      "provider_models": [
+        "qwen2.5:3b"
+      ],
+      "avg_latency_ms": 5435.5,
+      "median_latency_ms": 5435.5,
+      "latency_stdev_ms": 215.5,
+      "avg_wall_ms": 5457.0,
+      "avg_total_tokens": 212.5,
+      "avg_output_tokens": 114.5,
+      "avg_content_chars": 732.5,
+      "avg_content_words_approx": 98.0
+    },
+    {
+      "case_id": "executive_short_summary",
+      "route": "analyze",
+      "provider": "openai",
+      "runs": 2,
+      "successes": 2,
+      "all_success": true,
+      "response_type_all_match": true,
+      "schema_stable_across_repeats": true,
+      "routing_path_stable_across_repeats": true,
+      "provider_selected_stable_across_repeats": true,
+      "provider_models": [
+        "gpt-5.4"
+      ],
+      "avg_latency_ms": 5070.5,
+      "median_latency_ms": 5070.5,
+      "latency_stdev_ms": 371.5,
+      "avg_wall_ms": 5082.0,
+      "avg_total_tokens": 296.0,
+      "avg_output_tokens": 219.0,
+      "avg_content_chars": 1238.0,
+      "avg_content_words_approx": 167.5
+    },
+    {
+      "case_id": "executive_short_summary",
+      "route": "respond",
+      "provider": "local",
+      "runs": 2,
+      "successes": 2,
+      "all_success": true,
+      "response_type_all_match": true,
+      "schema_stable_across_repeats": true,
+      "routing_path_stable_across_repeats": true,
+      "provider_selected_stable_across_repeats": true,
+      "provider_models": [
+        "qwen2.5:3b"
+      ],
+      "avg_latency_ms": 4132.0,
+      "median_latency_ms": 4132.0,
+      "latency_stdev_ms": 551.0,
+      "avg_wall_ms": 4146.0,
+      "avg_total_tokens": 189.0,
+      "avg_output_tokens": 90.0,
+      "avg_content_chars": 576.5,
+      "avg_content_words_approx": 77.0
+    },
+    {
+      "case_id": "executive_short_summary",
+      "route": "respond",
+      "provider": "openai",
+      "runs": 2,
+      "successes": 2,
+      "all_success": true,
+      "response_type_all_match": true,
+      "schema_stable_across_repeats": true,
+      "routing_path_stable_across_repeats": true,
+      "provider_selected_stable_across_repeats": true,
+      "provider_models": [
+        "gpt-5.4"
+      ],
+      "avg_latency_ms": 7354.0,
+      "median_latency_ms": 7354.0,
+      "latency_stdev_ms": 1128.0,
+      "avg_wall_ms": 7363.0,
+      "avg_total_tokens": 323.5,
+      "avg_output_tokens": 245.5,
+      "avg_content_chars": 1392.5,
+      "avg_content_words_approx": 190.0
+    },
+    {
+      "case_id": "finance_medium_control",
+      "route": "analyze",
+      "provider": "local",
+      "runs": 2,
+      "successes": 2,
+      "all_success": true,
+      "response_type_all_match": true,
+      "schema_stable_across_repeats": true,
+      "routing_path_stable_across_repeats": true,
+      "provider_selected_stable_across_repeats": true,
+      "provider_models": [
+        "qwen2.5:3b"
+      ],
+      "avg_latency_ms": 11121.0,
+      "median_latency_ms": 11121.0,
+      "latency_stdev_ms": 437.0,
+      "avg_wall_ms": 11143.5,
+      "avg_total_tokens": 378.0,
+      "avg_output_tokens": 280.0,
+      "avg_content_chars": 1679.5,
+      "avg_content_words_approx": 227.0
+    },
+    {
+      "case_id": "finance_medium_control",
+      "route": "analyze",
+      "provider": "openai",
+      "runs": 2,
+      "successes": 2,
+      "all_success": true,
+      "response_type_all_match": true,
+      "schema_stable_across_repeats": true,
+      "routing_path_stable_across_repeats": true,
+      "provider_selected_stable_across_repeats": true,
+      "provider_models": [
+        "gpt-5.4"
+      ],
+      "avg_latency_ms": 5652.0,
+      "median_latency_ms": 5652.0,
+      "latency_stdev_ms": 425.0,
+      "avg_wall_ms": 5663.5,
+      "avg_total_tokens": 357.0,
+      "avg_output_tokens": 280.0,
+      "avg_content_chars": 1358.5,
+      "avg_content_words_approx": 186.5
+    },
+    {
+      "case_id": "finance_medium_control",
+      "route": "respond",
+      "provider": "local",
+      "runs": 2,
+      "successes": 2,
+      "all_success": true,
+      "response_type_all_match": true,
+      "schema_stable_across_repeats": true,
+      "routing_path_stable_across_repeats": true,
+      "provider_selected_stable_across_repeats": true,
+      "provider_models": [
+        "qwen2.5:3b"
+      ],
+      "avg_latency_ms": 8098.0,
+      "median_latency_ms": 8098.0,
+      "latency_stdev_ms": 564.0,
+      "avg_wall_ms": 8110.0,
+      "avg_total_tokens": 355.0,
+      "avg_output_tokens": 256.0,
+      "avg_content_chars": 1529.0,
+      "avg_content_words_approx": 216.0
+    },
+    {
+      "case_id": "finance_medium_control",
+      "route": "respond",
+      "provider": "openai",
+      "runs": 2,
+      "successes": 2,
+      "all_success": true,
+      "response_type_all_match": true,
+      "schema_stable_across_repeats": true,
+      "routing_path_stable_across_repeats": true,
+      "provider_selected_stable_across_repeats": true,
+      "provider_models": [
+        "gpt-5.4"
+      ],
+      "avg_latency_ms": 5289.5,
+      "median_latency_ms": 5289.5,
+      "latency_stdev_ms": 199.5,
+      "avg_wall_ms": 5299.5,
+      "avg_total_tokens": 358.0,
+      "avg_output_tokens": 280.0,
+      "avg_content_chars": 1398.0,
+      "avg_content_words_approx": 186.0
+    },
+    {
+      "case_id": "general_long_comparison",
+      "route": "analyze",
+      "provider": "local",
+      "runs": 2,
+      "successes": 2,
+      "all_success": true,
+      "response_type_all_match": true,
+      "schema_stable_across_repeats": true,
+      "routing_path_stable_across_repeats": true,
+      "provider_selected_stable_across_repeats": true,
+      "provider_models": [
+        "qwen2.5:3b"
+      ],
+      "avg_latency_ms": 9664.5,
+      "median_latency_ms": 9664.5,
+      "latency_stdev_ms": 1103.5,
+      "avg_wall_ms": 9686.0,
+      "avg_total_tokens": 384.0,
+      "avg_output_tokens": 280.0,
+      "avg_content_chars": 1653.5,
+      "avg_content_words_approx": 247.0
+    },
+    {
+      "case_id": "general_long_comparison",
+      "route": "analyze",
+      "provider": "openai",
+      "runs": 2,
+      "successes": 2,
+      "all_success": true,
+      "response_type_all_match": true,
+      "schema_stable_across_repeats": true,
+      "routing_path_stable_across_repeats": true,
+      "provider_selected_stable_across_repeats": true,
+      "provider_models": [
+        "gpt-5.4"
+      ],
+      "avg_latency_ms": 5701.0,
+      "median_latency_ms": 5701.0,
+      "latency_stdev_ms": 575.0,
+      "avg_wall_ms": 5714.5,
+      "avg_total_tokens": 363.0,
+      "avg_output_tokens": 280.0,
+      "avg_content_chars": 1289.5,
+      "avg_content_words_approx": 191.5
+    },
+    {
+      "case_id": "general_long_comparison",
+      "route": "respond",
+      "provider": "local",
+      "runs": 2,
+      "successes": 2,
+      "all_success": true,
+      "response_type_all_match": true,
+      "schema_stable_across_repeats": true,
+      "routing_path_stable_across_repeats": true,
+      "provider_selected_stable_across_repeats": true,
+      "provider_models": [
+        "qwen2.5:3b"
+      ],
+      "avg_latency_ms": 9239.0,
+      "median_latency_ms": 9239.0,
+      "latency_stdev_ms": 1679.0,
+      "avg_wall_ms": 9259.5,
+      "avg_total_tokens": 385.0,
+      "avg_output_tokens": 280.0,
+      "avg_content_chars": 1546.0,
+      "avg_content_words_approx": 219.0
+    },
+    {
+      "case_id": "general_long_comparison",
+      "route": "respond",
+      "provider": "openai",
+      "runs": 2,
+      "successes": 2,
+      "all_success": true,
+      "response_type_all_match": true,
+      "schema_stable_across_repeats": true,
+      "routing_path_stable_across_repeats": true,
+      "provider_selected_stable_across_repeats": true,
+      "provider_models": [
+        "gpt-5.4"
+      ],
+      "avg_latency_ms": 5733.5,
+      "median_latency_ms": 5733.5,
+      "latency_stdev_ms": 69.5,
+      "avg_wall_ms": 5742.5,
+      "avg_total_tokens": 364.0,
+      "avg_output_tokens": 280.0,
+      "avg_content_chars": 1231.5,
+      "avg_content_words_approx": 186.0
+    },
+    {
+      "case_id": "general_short_structure",
+      "route": "analyze",
+      "provider": "local",
+      "runs": 2,
+      "successes": 2,
+      "all_success": true,
+      "response_type_all_match": true,
+      "schema_stable_across_repeats": true,
+      "routing_path_stable_across_repeats": true,
+      "provider_selected_stable_across_repeats": true,
+      "provider_models": [
+        "qwen2.5:3b"
+      ],
+      "avg_latency_ms": 5084.5,
+      "median_latency_ms": 5084.5,
+      "latency_stdev_ms": 1452.5,
+      "avg_wall_ms": 5100.5,
+      "avg_total_tokens": 148.5,
+      "avg_output_tokens": 48.5,
+      "avg_content_chars": 308.0,
+      "avg_content_words_approx": 40.5
+    },
+    {
+      "case_id": "general_short_structure",
+      "route": "analyze",
+      "provider": "openai",
+      "runs": 2,
+      "successes": 2,
+      "all_success": true,
+      "response_type_all_match": true,
+      "schema_stable_across_repeats": true,
+      "routing_path_stable_across_repeats": true,
+      "provider_selected_stable_across_repeats": true,
+      "provider_models": [
+        "gpt-5.4"
+      ],
+      "avg_latency_ms": 2702.0,
+      "median_latency_ms": 2702.0,
+      "latency_stdev_ms": 76.0,
+      "avg_wall_ms": 2712.0,
+      "avg_total_tokens": 162.0,
+      "avg_output_tokens": 84.0,
+      "avg_content_chars": 490.5,
+      "avg_content_words_approx": 62.5
+    },
+    {
+      "case_id": "general_short_structure",
+      "route": "respond",
+      "provider": "local",
+      "runs": 2,
+      "successes": 2,
+      "all_success": true,
+      "response_type_all_match": true,
+      "schema_stable_across_repeats": true,
+      "routing_path_stable_across_repeats": true,
+      "provider_selected_stable_across_repeats": true,
+      "provider_models": [
+        "qwen2.5:3b"
+      ],
+      "avg_latency_ms": 2315.0,
+      "median_latency_ms": 2315.0,
+      "latency_stdev_ms": 297.0,
+      "avg_wall_ms": 2328.5,
+      "avg_total_tokens": 146.0,
+      "avg_output_tokens": 45.0,
+      "avg_content_chars": 284.0,
+      "avg_content_words_approx": 38.0
+    },
+    {
+      "case_id": "general_short_structure",
+      "route": "respond",
+      "provider": "openai",
+      "runs": 2,
+      "successes": 2,
+      "all_success": true,
+      "response_type_all_match": true,
+      "schema_stable_across_repeats": true,
+      "routing_path_stable_across_repeats": true,
+      "provider_selected_stable_across_repeats": true,
+      "provider_models": [
+        "gpt-5.4"
+      ],
+      "avg_latency_ms": 3042.5,
+      "median_latency_ms": 3042.5,
+      "latency_stdev_ms": 203.5,
+      "avg_wall_ms": 3059.0,
+      "avg_total_tokens": 159.5,
+      "avg_output_tokens": 80.5,
+      "avg_content_chars": 457.0,
+      "avg_content_words_approx": 60.5
+    },
+    {
+      "case_id": "technical_medium_trace",
+      "route": "analyze",
+      "provider": "local",
+      "runs": 2,
+      "successes": 0,
+      "all_success": false,
+      "response_type_all_match": true,
+      "schema_stable_across_repeats": true,
+      "routing_path_stable_across_repeats": true,
+      "provider_selected_stable_across_repeats": true,
+      "provider_models": [
+        "None"
+      ],
+      "avg_latency_ms": null,
+      "median_latency_ms": null,
+      "latency_stdev_ms": null,
+      "avg_wall_ms": 35.0,
+      "avg_total_tokens": null,
+      "avg_output_tokens": null,
+      "avg_content_chars": 0.0,
+      "avg_content_words_approx": 0.0
+    },
+    {
+      "case_id": "technical_medium_trace",
+      "route": "analyze",
+      "provider": "openai",
+      "runs": 2,
+      "successes": 0,
+      "all_success": false,
+      "response_type_all_match": true,
+      "schema_stable_across_repeats": true,
+      "routing_path_stable_across_repeats": true,
+      "provider_selected_stable_across_repeats": true,
+      "provider_models": [
+        "None"
+      ],
+      "avg_latency_ms": null,
+      "median_latency_ms": null,
+      "latency_stdev_ms": null,
+      "avg_wall_ms": 1.5,
+      "avg_total_tokens": null,
+      "avg_output_tokens": null,
+      "avg_content_chars": 0.0,
+      "avg_content_words_approx": 0.0
+    },
+    {
+      "case_id": "technical_medium_trace",
+      "route": "respond",
+      "provider": "local",
+      "runs": 2,
+      "successes": 0,
+      "all_success": false,
+      "response_type_all_match": true,
+      "schema_stable_across_repeats": true,
+      "routing_path_stable_across_repeats": true,
+      "provider_selected_stable_across_repeats": true,
+      "provider_models": [
+        "None"
+      ],
+      "avg_latency_ms": null,
+      "median_latency_ms": null,
+      "latency_stdev_ms": null,
+      "avg_wall_ms": 1.0,
+      "avg_total_tokens": null,
+      "avg_output_tokens": null,
+      "avg_content_chars": 0.0,
+      "avg_content_words_approx": 0.0
+    },
+    {
+      "case_id": "technical_medium_trace",
+      "route": "respond",
+      "provider": "openai",
+      "runs": 2,
+      "successes": 0,
+      "all_success": false,
+      "response_type_all_match": true,
+      "schema_stable_across_repeats": true,
+      "routing_path_stable_across_repeats": true,
+      "provider_selected_stable_across_repeats": true,
+      "provider_models": [
+        "None"
+      ],
+      "avg_latency_ms": null,
+      "median_latency_ms": null,
+      "latency_stdev_ms": null,
+      "avg_wall_ms": 0.5,
+      "avg_total_tokens": null,
+      "avg_output_tokens": null,
+      "avg_content_chars": 0.0,
+      "avg_content_words_approx": 0.0
+    }
+  ],
+  "comparisons": [
+    {
+      "case_id": "executive_short_summary",
+      "route": "analyze",
+      "both_present": true,
+      "local_all_success": true,
+      "openai_all_success": true,
+      "schema_stable_local": true,
+      "schema_stable_openai": true,
+      "routing_stable_local": true,
+      "routing_stable_openai": true,
+      "routing_path_equal_between_providers": true,
+      "schema_equal_between_providers": true,
+      "avg_latency_ms_local": 5435.5,
+      "avg_latency_ms_openai": 5070.5,
+      "avg_total_tokens_local": 212.5,
+      "avg_total_tokens_openai": 296.0,
+      "avg_content_words_local": 98.0,
+      "avg_content_words_openai": 167.5,
+      "local_model": [
+        "qwen2.5:3b"
+      ],
+      "openai_model": [
+        "gpt-5.4"
+      ]
+    },
+    {
+      "case_id": "executive_short_summary",
+      "route": "respond",
+      "both_present": true,
+      "local_all_success": true,
+      "openai_all_success": true,
+      "schema_stable_local": true,
+      "schema_stable_openai": true,
+      "routing_stable_local": true,
+      "routing_stable_openai": true,
+      "routing_path_equal_between_providers": true,
+      "schema_equal_between_providers": true,
+      "avg_latency_ms_local": 4132.0,
+      "avg_latency_ms_openai": 7354.0,
+      "avg_total_tokens_local": 189.0,
+      "avg_total_tokens_openai": 323.5,
+      "avg_content_words_local": 77.0,
+      "avg_content_words_openai": 190.0,
+      "local_model": [
+        "qwen2.5:3b"
+      ],
+      "openai_model": [
+        "gpt-5.4"
+      ]
+    },
+    {
+      "case_id": "finance_medium_control",
+      "route": "analyze",
+      "both_present": true,
+      "local_all_success": true,
+      "openai_all_success": true,
+      "schema_stable_local": true,
+      "schema_stable_openai": true,
+      "routing_stable_local": true,
+      "routing_stable_openai": true,
+      "routing_path_equal_between_providers": true,
+      "schema_equal_between_providers": true,
+      "avg_latency_ms_local": 11121.0,
+      "avg_latency_ms_openai": 5652.0,
+      "avg_total_tokens_local": 378.0,
+      "avg_total_tokens_openai": 357.0,
+      "avg_content_words_local": 227.0,
+      "avg_content_words_openai": 186.5,
+      "local_model": [
+        "qwen2.5:3b"
+      ],
+      "openai_model": [
+        "gpt-5.4"
+      ]
+    },
+    {
+      "case_id": "finance_medium_control",
+      "route": "respond",
+      "both_present": true,
+      "local_all_success": true,
+      "openai_all_success": true,
+      "schema_stable_local": true,
+      "schema_stable_openai": true,
+      "routing_stable_local": true,
+      "routing_stable_openai": true,
+      "routing_path_equal_between_providers": true,
+      "schema_equal_between_providers": true,
+      "avg_latency_ms_local": 8098.0,
+      "avg_latency_ms_openai": 5289.5,
+      "avg_total_tokens_local": 355.0,
+      "avg_total_tokens_openai": 358.0,
+      "avg_content_words_local": 216.0,
+      "avg_content_words_openai": 186.0,
+      "local_model": [
+        "qwen2.5:3b"
+      ],
+      "openai_model": [
+        "gpt-5.4"
+      ]
+    },
+    {
+      "case_id": "general_long_comparison",
+      "route": "analyze",
+      "both_present": true,
+      "local_all_success": true,
+      "openai_all_success": true,
+      "schema_stable_local": true,
+      "schema_stable_openai": true,
+      "routing_stable_local": true,
+      "routing_stable_openai": true,
+      "routing_path_equal_between_providers": true,
+      "schema_equal_between_providers": true,
+      "avg_latency_ms_local": 9664.5,
+      "avg_latency_ms_openai": 5701.0,
+      "avg_total_tokens_local": 384.0,
+      "avg_total_tokens_openai": 363.0,
+      "avg_content_words_local": 247.0,
+      "avg_content_words_openai": 191.5,
+      "local_model": [
+        "qwen2.5:3b"
+      ],
+      "openai_model": [
+        "gpt-5.4"
+      ]
+    },
+    {
+      "case_id": "general_long_comparison",
+      "route": "respond",
+      "both_present": true,
+      "local_all_success": true,
+      "openai_all_success": true,
+      "schema_stable_local": true,
+      "schema_stable_openai": true,
+      "routing_stable_local": true,
+      "routing_stable_openai": true,
+      "routing_path_equal_between_providers": true,
+      "schema_equal_between_providers": true,
+      "avg_latency_ms_local": 9239.0,
+      "avg_latency_ms_openai": 5733.5,
+      "avg_total_tokens_local": 385.0,
+      "avg_total_tokens_openai": 364.0,
+      "avg_content_words_local": 219.0,
+      "avg_content_words_openai": 186.0,
+      "local_model": [
+        "qwen2.5:3b"
+      ],
+      "openai_model": [
+        "gpt-5.4"
+      ]
+    },
+    {
+      "case_id": "general_short_structure",
+      "route": "analyze",
+      "both_present": true,
+      "local_all_success": true,
+      "openai_all_success": true,
+      "schema_stable_local": true,
+      "schema_stable_openai": true,
+      "routing_stable_local": true,
+      "routing_stable_openai": true,
+      "routing_path_equal_between_providers": true,
+      "schema_equal_between_providers": true,
+      "avg_latency_ms_local": 5084.5,
+      "avg_latency_ms_openai": 2702.0,
+      "avg_total_tokens_local": 148.5,
+      "avg_total_tokens_openai": 162.0,
+      "avg_content_words_local": 40.5,
+      "avg_content_words_openai": 62.5,
+      "local_model": [
+        "qwen2.5:3b"
+      ],
+      "openai_model": [
+        "gpt-5.4"
+      ]
+    },
+    {
+      "case_id": "general_short_structure",
+      "route": "respond",
+      "both_present": true,
+      "local_all_success": true,
+      "openai_all_success": true,
+      "schema_stable_local": true,
+      "schema_stable_openai": true,
+      "routing_stable_local": true,
+      "routing_stable_openai": true,
+      "routing_path_equal_between_providers": true,
+      "schema_equal_between_providers": true,
+      "avg_latency_ms_local": 2315.0,
+      "avg_latency_ms_openai": 3042.5,
+      "avg_total_tokens_local": 146.0,
+      "avg_total_tokens_openai": 159.5,
+      "avg_content_words_local": 38.0,
+      "avg_content_words_openai": 60.5,
+      "local_model": [
+        "qwen2.5:3b"
+      ],
+      "openai_model": [
+        "gpt-5.4"
+      ]
+    },
+    {
+      "case_id": "technical_medium_trace",
+      "route": "analyze",
+      "both_present": true,
+      "local_all_success": false,
+      "openai_all_success": false,
+      "schema_stable_local": true,
+      "schema_stable_openai": true,
+      "routing_stable_local": true,
+      "routing_stable_openai": true,
+      "routing_path_equal_between_providers": true,
+      "schema_equal_between_providers": true,
+      "avg_latency_ms_local": null,
+      "avg_latency_ms_openai": null,
+      "avg_total_tokens_local": null,
+      "avg_total_tokens_openai": null,
+      "avg_content_words_local": 0.0,
+      "avg_content_words_openai": 0.0,
+      "local_model": [
+        "None"
+      ],
+      "openai_model": [
+        "None"
+      ]
+    },
+    {
+      "case_id": "technical_medium_trace",
+      "route": "respond",
+      "both_present": true,
+      "local_all_success": false,
+      "openai_all_success": false,
+      "schema_stable_local": true,
+      "schema_stable_openai": true,
+      "routing_stable_local": true,
+      "routing_stable_openai": true,
+      "routing_path_equal_between_providers": true,
+      "schema_equal_between_providers": true,
+      "avg_latency_ms_local": null,
+      "avg_latency_ms_openai": null,
+      "avg_total_tokens_local": null,
+      "avg_total_tokens_openai": null,
+      "avg_content_words_local": 0.0,
+      "avg_content_words_openai": 0.0,
+      "local_model": [
+        "None"
+      ],
+      "openai_model": [
+        "None"
+      ]
+    }
+  ],
+  "results": [
+    {
+      "repeat": 1,
+      "case_id": "general_short_structure",
+      "route": "analyze",
+      "provider_requested": "local",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "analysis",
+      "observed": {
+        "status": "success",
+        "response_type": "analysis",
+        "provider_selected": "local",
+        "provider_model": "qwen2.5:3b",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "standard_response",
+        "latency_ms": 6537,
+        "wall_ms": 6556,
+        "input_tokens": 100,
+        "output_tokens": 51,
+        "total_tokens": 151,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "local",
+        "trace_provider_allowed": [
+          "local"
+        ],
+        "trace_fallback_provider": "local",
+        "content_chars": 323,
+        "content_words_approx": 42,
+        "content_preview": "The EP API employs a shared orchestration core that serves as the backbone, enabling consistent and reliable operations across different providers. Provider-specific adapters are then integrated to tailor the API's functionality to each pro",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 1,
+      "case_id": "general_short_structure",
+      "route": "analyze",
+      "provider_requested": "openai",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "analysis",
+      "observed": {
+        "status": "success",
+        "response_type": "analysis",
+        "provider_selected": "openai",
+        "provider_model": "gpt-5.4",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "standard_response",
+        "latency_ms": 2626,
+        "wall_ms": 2630,
+        "input_tokens": 78,
+        "output_tokens": 76,
+        "total_tokens": 154,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "openai",
+        "trace_provider_allowed": [
+          "openai"
+        ],
+        "trace_fallback_provider": "openai",
+        "content_chars": 448,
+        "content_words_approx": 58,
+        "content_preview": "Yes. The EP API uses a shared orchestration core that handles common request flow, normalization, routing, and response shaping, while provider-specific adapters encapsulate the differences between underlying model vendors such as authentic",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 1,
+      "case_id": "general_short_structure",
+      "route": "respond",
+      "provider_requested": "local",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "final_answer",
+      "observed": {
+        "status": "success",
+        "response_type": "final_answer",
+        "provider_selected": "local",
+        "provider_model": "qwen2.5:3b",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "standard_response",
+        "latency_ms": 2018,
+        "wall_ms": 2026,
+        "input_tokens": 101,
+        "output_tokens": 46,
+        "total_tokens": 147,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "local",
+        "trace_provider_allowed": [
+          "local"
+        ],
+        "trace_fallback_provider": "local",
+        "content_chars": 301,
+        "content_words_approx": 39,
+        "content_preview": "The EP API employs a shared orchestration core that is designed to handle common functionalities and protocols, while provider-specific adapters are utilized to integrate and customize these core functionalities for different providers, ens",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 1,
+      "case_id": "general_short_structure",
+      "route": "respond",
+      "provider_requested": "openai",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "final_answer",
+      "observed": {
+        "status": "success",
+        "response_type": "final_answer",
+        "provider_selected": "openai",
+        "provider_model": "gpt-5.4",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "standard_response",
+        "latency_ms": 3246,
+        "wall_ms": 3263,
+        "input_tokens": 79,
+        "output_tokens": 87,
+        "total_tokens": 166,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "openai",
+        "trace_provider_allowed": [
+          "openai"
+        ],
+        "trace_fallback_provider": "openai",
+        "content_chars": 480,
+        "content_words_approx": 64,
+        "content_preview": "Yes. The EP API is designed around a shared orchestration core that handles common concerns like request normalization, routing, retries, safety/policy checks, and response shaping, while provider-specific adapters translate between that co",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 1,
+      "case_id": "general_long_comparison",
+      "route": "analyze",
+      "provider_requested": "local",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "analysis",
+      "observed": {
+        "status": "success",
+        "response_type": "analysis",
+        "provider_selected": "local",
+        "provider_model": "qwen2.5:3b",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "ep_deep_reasoning",
+        "latency_ms": 8561,
+        "wall_ms": 8581,
+        "input_tokens": 104,
+        "output_tokens": 280,
+        "total_tokens": 384,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "local",
+        "trace_provider_allowed": [
+          "local"
+        ],
+        "trace_fallback_provider": "local",
+        "content_chars": 1656,
+        "content_words_approx": 247,
+        "content_preview": "### Energetic Paradigm (EP) API Comparison Analysis  #### Route Handling The Energetic Paradigm API employs a robust routing system that is designed to handle a wide variety of routes efficiently. The routing system is designed to be highly",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 1,
+      "case_id": "general_long_comparison",
+      "route": "analyze",
+      "provider_requested": "openai",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "analysis",
+      "observed": {
+        "status": "success",
+        "response_type": "analysis",
+        "provider_selected": "openai",
+        "provider_model": "gpt-5.4",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "ep_deep_reasoning",
+        "latency_ms": 6276,
+        "wall_ms": 6284,
+        "input_tokens": 83,
+        "output_tokens": 280,
+        "total_tokens": 363,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "openai",
+        "trace_provider_allowed": [
+          "openai"
+        ],
+        "trace_fallback_provider": "openai",
+        "content_chars": 1274,
+        "content_words_approx": 188,
+        "content_preview": "Below is a structured comparison of how the EP API handles:  1. route handling   2. provider dispatch   3. response building   4. latency reporting   5. token accounting    I’ll describe each area in terms of its role, typical flow, what it",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 1,
+      "case_id": "general_long_comparison",
+      "route": "respond",
+      "provider_requested": "local",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "final_answer",
+      "observed": {
+        "status": "success",
+        "response_type": "final_answer",
+        "provider_selected": "local",
+        "provider_model": "qwen2.5:3b",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "ep_deep_reasoning",
+        "latency_ms": 7560,
+        "wall_ms": 7582,
+        "input_tokens": 105,
+        "output_tokens": 280,
+        "total_tokens": 385,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "local",
+        "trace_provider_allowed": [
+          "local"
+        ],
+        "trace_fallback_provider": "local",
+        "content_chars": 1570,
+        "content_words_approx": 218,
+        "content_preview": "Certainly, I will provide a detailed comparison of route handling, provider dispatch, response building, latency reporting, and token accounting in the Energetic Paradigm (EP) API, following the requested structure.  ### Route Handling **EP",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 1,
+      "case_id": "general_long_comparison",
+      "route": "respond",
+      "provider_requested": "openai",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "final_answer",
+      "observed": {
+        "status": "success",
+        "response_type": "final_answer",
+        "provider_selected": "openai",
+        "provider_model": "gpt-5.4",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "ep_deep_reasoning",
+        "latency_ms": 5803,
+        "wall_ms": 5812,
+        "input_tokens": 84,
+        "output_tokens": 280,
+        "total_tokens": 364,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "openai",
+        "trace_provider_allowed": [
+          "openai"
+        ],
+        "trace_fallback_provider": "openai",
+        "content_chars": 1219,
+        "content_words_approx": 184,
+        "content_preview": "Below is a structured comparison of how the EP API handles:  1. Route handling   2. Provider dispatch   3. Response building   4. Latency reporting   5. Token accounting    I’ll describe each area in terms of purpose, typical behavior, and ",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 1,
+      "case_id": "finance_medium_control",
+      "route": "analyze",
+      "provider_requested": "local",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "analysis",
+      "observed": {
+        "status": "success",
+        "response_type": "analysis",
+        "provider_selected": "local",
+        "provider_model": "qwen2.5:3b",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "domain_specific_path",
+        "latency_ms": 10684,
+        "wall_ms": 10709,
+        "input_tokens": 98,
+        "output_tokens": 280,
+        "total_tokens": 378,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "local",
+        "trace_provider_allowed": [
+          "local"
+        ],
+        "trace_fallback_provider": "local",
+        "content_chars": 1682,
+        "content_words_approx": 228,
+        "content_preview": "In the realm of finance systems, the implementation of orchestration control and provider adapters plays a crucial role in ensuring the seamless integration and management of various financial services and applications. Below is an analysis",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 1,
+      "case_id": "finance_medium_control",
+      "route": "analyze",
+      "provider_requested": "openai",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "analysis",
+      "observed": {
+        "status": "success",
+        "response_type": "analysis",
+        "provider_selected": "openai",
+        "provider_model": "gpt-5.4",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "domain_specific_path",
+        "latency_ms": 6077,
+        "wall_ms": 6089,
+        "input_tokens": 77,
+        "output_tokens": 280,
+        "total_tokens": 357,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "openai",
+        "trace_provider_allowed": [
+          "openai"
+        ],
+        "trace_fallback_provider": "openai",
+        "content_chars": 1355,
+        "content_words_approx": 186,
+        "content_preview": "**Implementation difference: orchestration control vs. provider adapters**  **1) Orchestration control** - This is the **central decision and workflow layer**. - It decides **what should happen, in what order, and under which rules**. - In ",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 1,
+      "case_id": "finance_medium_control",
+      "route": "respond",
+      "provider_requested": "local",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "final_answer",
+      "observed": {
+        "status": "success",
+        "response_type": "final_answer",
+        "provider_selected": "local",
+        "provider_model": "qwen2.5:3b",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "domain_specific_path",
+        "latency_ms": 7534,
+        "wall_ms": 7545,
+        "input_tokens": 99,
+        "output_tokens": 232,
+        "total_tokens": 331,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "local",
+        "trace_provider_allowed": [
+          "local"
+        ],
+        "trace_fallback_provider": "local",
+        "content_chars": 1375,
+        "content_words_approx": 195,
+        "content_preview": "In the realm of finance systems, orchestration control and provider adapters play crucial roles in ensuring smooth and secure operations.   **Orchestration Control** is the backbone that manages the flow of tasks and processes within a syst",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 1,
+      "case_id": "finance_medium_control",
+      "route": "respond",
+      "provider_requested": "openai",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "final_answer",
+      "observed": {
+        "status": "success",
+        "response_type": "final_answer",
+        "provider_selected": "openai",
+        "provider_model": "gpt-5.4",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "domain_specific_path",
+        "latency_ms": 5090,
+        "wall_ms": 5102,
+        "input_tokens": 78,
+        "output_tokens": 280,
+        "total_tokens": 358,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "openai",
+        "trace_provider_allowed": [
+          "openai"
+        ],
+        "trace_fallback_provider": "openai",
+        "content_chars": 1413,
+        "content_words_approx": 183,
+        "content_preview": "**Implementation difference: orchestration control vs. provider adapters**  **1) Orchestration control** - The **central decision layer**. - It decides **what should happen, in what order, under which rules**. - Typical responsibilities:   ",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 1,
+      "case_id": "technical_medium_trace",
+      "route": "analyze",
+      "provider_requested": "local",
+      "http_status": 500,
+      "success": false,
+      "expected_response_type": "analysis",
+      "observed": {
+        "status": null,
+        "response_type": null,
+        "provider_selected": null,
+        "provider_model": null,
+        "provider_simulated": null,
+        "provider_fallback_used": null,
+        "routing_path": null,
+        "latency_ms": null,
+        "wall_ms": 63,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "estimated_cost": null,
+        "warnings": null,
+        "error": null,
+        "trace_provider_requested": null,
+        "trace_provider_allowed": null,
+        "trace_fallback_provider": null,
+        "content_chars": 0,
+        "content_words_approx": 0,
+        "content_preview": "",
+        "schema_shape": {
+          "raw_error_body": "str"
+        }
+      }
+    },
+    {
+      "repeat": 1,
+      "case_id": "technical_medium_trace",
+      "route": "analyze",
+      "provider_requested": "openai",
+      "http_status": 500,
+      "success": false,
+      "expected_response_type": "analysis",
+      "observed": {
+        "status": null,
+        "response_type": null,
+        "provider_selected": null,
+        "provider_model": null,
+        "provider_simulated": null,
+        "provider_fallback_used": null,
+        "routing_path": null,
+        "latency_ms": null,
+        "wall_ms": 1,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "estimated_cost": null,
+        "warnings": null,
+        "error": null,
+        "trace_provider_requested": null,
+        "trace_provider_allowed": null,
+        "trace_fallback_provider": null,
+        "content_chars": 0,
+        "content_words_approx": 0,
+        "content_preview": "",
+        "schema_shape": {
+          "raw_error_body": "str"
+        }
+      }
+    },
+    {
+      "repeat": 1,
+      "case_id": "technical_medium_trace",
+      "route": "respond",
+      "provider_requested": "local",
+      "http_status": 500,
+      "success": false,
+      "expected_response_type": "final_answer",
+      "observed": {
+        "status": null,
+        "response_type": null,
+        "provider_selected": null,
+        "provider_model": null,
+        "provider_simulated": null,
+        "provider_fallback_used": null,
+        "routing_path": null,
+        "latency_ms": null,
+        "wall_ms": 1,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "estimated_cost": null,
+        "warnings": null,
+        "error": null,
+        "trace_provider_requested": null,
+        "trace_provider_allowed": null,
+        "trace_fallback_provider": null,
+        "content_chars": 0,
+        "content_words_approx": 0,
+        "content_preview": "",
+        "schema_shape": {
+          "raw_error_body": "str"
+        }
+      }
+    },
+    {
+      "repeat": 1,
+      "case_id": "technical_medium_trace",
+      "route": "respond",
+      "provider_requested": "openai",
+      "http_status": 500,
+      "success": false,
+      "expected_response_type": "final_answer",
+      "observed": {
+        "status": null,
+        "response_type": null,
+        "provider_selected": null,
+        "provider_model": null,
+        "provider_simulated": null,
+        "provider_fallback_used": null,
+        "routing_path": null,
+        "latency_ms": null,
+        "wall_ms": 0,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "estimated_cost": null,
+        "warnings": null,
+        "error": null,
+        "trace_provider_requested": null,
+        "trace_provider_allowed": null,
+        "trace_fallback_provider": null,
+        "content_chars": 0,
+        "content_words_approx": 0,
+        "content_preview": "",
+        "schema_shape": {
+          "raw_error_body": "str"
+        }
+      }
+    },
+    {
+      "repeat": 1,
+      "case_id": "executive_short_summary",
+      "route": "analyze",
+      "provider_requested": "local",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "analysis",
+      "observed": {
+        "status": "success",
+        "response_type": "analysis",
+        "provider_selected": "local",
+        "provider_model": "qwen2.5:3b",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "standard_response",
+        "latency_ms": 5651,
+        "wall_ms": 5676,
+        "input_tokens": 98,
+        "output_tokens": 112,
+        "total_tokens": 210,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "local",
+        "trace_provider_allowed": [
+          "local"
+        ],
+        "trace_fallback_provider": "local",
+        "content_chars": 715,
+        "content_words_approx": 96,
+        "content_preview": "Executive Summary of EP API Implementation Audit Validation:  The EP API implementation audit has validated several key aspects of the system's functionality and design. These include the successful integration of the API with the existing ",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 1,
+      "case_id": "executive_short_summary",
+      "route": "analyze",
+      "provider_requested": "openai",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "analysis",
+      "observed": {
+        "status": "success",
+        "response_type": "analysis",
+        "provider_selected": "openai",
+        "provider_model": "gpt-5.4",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "standard_response",
+        "latency_ms": 5442,
+        "wall_ms": 5454,
+        "input_tokens": 77,
+        "output_tokens": 219,
+        "total_tokens": 296,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "openai",
+        "trace_provider_allowed": [
+          "openai"
+        ],
+        "trace_fallback_provider": "openai",
+        "content_chars": 1238,
+        "content_words_approx": 167,
+        "content_preview": "## Executive Summary  The EP API implementation audit has already validated the following core areas:  - **API surface and routing**   - Endpoints are present, reachable, and aligned with the documented interface structure.  - **Request/res",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 1,
+      "case_id": "executive_short_summary",
+      "route": "respond",
+      "provider_requested": "local",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "final_answer",
+      "observed": {
+        "status": "success",
+        "response_type": "final_answer",
+        "provider_selected": "local",
+        "provider_model": "qwen2.5:3b",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "standard_response",
+        "latency_ms": 3581,
+        "wall_ms": 3591,
+        "input_tokens": 99,
+        "output_tokens": 71,
+        "total_tokens": 170,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "local",
+        "trace_provider_allowed": [
+          "local"
+        ],
+        "trace_fallback_provider": "local",
+        "content_chars": 467,
+        "content_words_approx": 60,
+        "content_preview": "Executive Summary:  The EP API implementation audit has validated several key aspects of the system's functionality and performance. Key findings include successful integration with core systems, robust error handling mechanisms, and optimi",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 1,
+      "case_id": "executive_short_summary",
+      "route": "respond",
+      "provider_requested": "openai",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "final_answer",
+      "observed": {
+        "status": "success",
+        "response_type": "final_answer",
+        "provider_selected": "openai",
+        "provider_model": "gpt-5.4",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "standard_response",
+        "latency_ms": 6226,
+        "wall_ms": 6232,
+        "input_tokens": 78,
+        "output_tokens": 256,
+        "total_tokens": 334,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "openai",
+        "trace_provider_allowed": [
+          "openai"
+        ],
+        "trace_fallback_provider": "openai",
+        "content_chars": 1477,
+        "content_words_approx": 198,
+        "content_preview": "**Executive Summary — Validated in the EP API Implementation Audit**  The audit has already confirmed the following core areas of the EP API implementation:  - **API reachability and baseline operation**     Core endpoints are accessible an",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "case_id": "general_short_structure",
+      "route": "analyze",
+      "provider_requested": "local",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "analysis",
+      "observed": {
+        "status": "success",
+        "response_type": "analysis",
+        "provider_selected": "local",
+        "provider_model": "qwen2.5:3b",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "standard_response",
+        "latency_ms": 3632,
+        "wall_ms": 3645,
+        "input_tokens": 100,
+        "output_tokens": 46,
+        "total_tokens": 146,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "local",
+        "trace_provider_allowed": [
+          "local"
+        ],
+        "trace_fallback_provider": "local",
+        "content_chars": 293,
+        "content_words_approx": 39,
+        "content_preview": "The EP API employs a shared orchestration core that serves as the foundational framework, while provider-specific adapters are utilized to integrate and customize the API for different service providers, ensuring compatibility and functiona",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "case_id": "general_short_structure",
+      "route": "analyze",
+      "provider_requested": "openai",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "analysis",
+      "observed": {
+        "status": "success",
+        "response_type": "analysis",
+        "provider_selected": "openai",
+        "provider_model": "gpt-5.4",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "standard_response",
+        "latency_ms": 2778,
+        "wall_ms": 2794,
+        "input_tokens": 78,
+        "output_tokens": 92,
+        "total_tokens": 170,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "openai",
+        "trace_provider_allowed": [
+          "openai"
+        ],
+        "trace_fallback_provider": "openai",
+        "content_chars": 533,
+        "content_words_approx": 67,
+        "content_preview": "Yes—the EP API is designed around a shared orchestration core that handles common concerns like request normalization, routing, safety/policy checks, response shaping, and lifecycle management, while provider-specific adapters translate tha",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "case_id": "general_short_structure",
+      "route": "respond",
+      "provider_requested": "local",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "final_answer",
+      "observed": {
+        "status": "success",
+        "response_type": "final_answer",
+        "provider_selected": "local",
+        "provider_model": "qwen2.5:3b",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "standard_response",
+        "latency_ms": 2612,
+        "wall_ms": 2631,
+        "input_tokens": 101,
+        "output_tokens": 44,
+        "total_tokens": 145,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "local",
+        "trace_provider_allowed": [
+          "local"
+        ],
+        "trace_fallback_provider": "local",
+        "content_chars": 267,
+        "content_words_approx": 37,
+        "content_preview": "The EP API employs a shared orchestration core that serves as the backbone, while provider-specific adapters are utilized to integrate and tailor the core for different service providers, ensuring compatibility and functionality specific to",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "case_id": "general_short_structure",
+      "route": "respond",
+      "provider_requested": "openai",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "final_answer",
+      "observed": {
+        "status": "success",
+        "response_type": "final_answer",
+        "provider_selected": "openai",
+        "provider_model": "gpt-5.4",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "standard_response",
+        "latency_ms": 2839,
+        "wall_ms": 2855,
+        "input_tokens": 79,
+        "output_tokens": 74,
+        "total_tokens": 153,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "openai",
+        "trace_provider_allowed": [
+          "openai"
+        ],
+        "trace_fallback_provider": "openai",
+        "content_chars": 434,
+        "content_words_approx": 57,
+        "content_preview": "Yes. The EP API uses a shared orchestration core that handles common request flow, normalization, routing, and response shaping, while provider-specific adapters encapsulate the differences between underlying model vendors such as authentic",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "case_id": "general_long_comparison",
+      "route": "analyze",
+      "provider_requested": "local",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "analysis",
+      "observed": {
+        "status": "success",
+        "response_type": "analysis",
+        "provider_selected": "local",
+        "provider_model": "qwen2.5:3b",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "ep_deep_reasoning",
+        "latency_ms": 10768,
+        "wall_ms": 10791,
+        "input_tokens": 104,
+        "output_tokens": 280,
+        "total_tokens": 384,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "local",
+        "trace_provider_allowed": [
+          "local"
+        ],
+        "trace_fallback_provider": "local",
+        "content_chars": 1651,
+        "content_words_approx": 247,
+        "content_preview": "### Energetic Paradigm (EP) API Comparison Analysis  #### Route Handling The Energetic Paradigm API employs a sophisticated route handling system that ensures efficient and secure communication between the client and the server. The API rou",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "case_id": "general_long_comparison",
+      "route": "analyze",
+      "provider_requested": "openai",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "analysis",
+      "observed": {
+        "status": "success",
+        "response_type": "analysis",
+        "provider_selected": "openai",
+        "provider_model": "gpt-5.4",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "ep_deep_reasoning",
+        "latency_ms": 5126,
+        "wall_ms": 5145,
+        "input_tokens": 83,
+        "output_tokens": 280,
+        "total_tokens": 363,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "openai",
+        "trace_provider_allowed": [
+          "openai"
+        ],
+        "trace_fallback_provider": "openai",
+        "content_chars": 1305,
+        "content_words_approx": 195,
+        "content_preview": "Below is a structured comparison of how the EP API handles:  1. Route handling   2. Provider dispatch   3. Response building   4. Latency reporting   5. Token accounting    I’ll describe each area in terms of purpose, typical behavior, and ",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "case_id": "general_long_comparison",
+      "route": "respond",
+      "provider_requested": "local",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "final_answer",
+      "observed": {
+        "status": "success",
+        "response_type": "final_answer",
+        "provider_selected": "local",
+        "provider_model": "qwen2.5:3b",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "ep_deep_reasoning",
+        "latency_ms": 10918,
+        "wall_ms": 10937,
+        "input_tokens": 105,
+        "output_tokens": 280,
+        "total_tokens": 385,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "local",
+        "trace_provider_allowed": [
+          "local"
+        ],
+        "trace_fallback_provider": "local",
+        "content_chars": 1522,
+        "content_words_approx": 220,
+        "content_preview": "Certainly, I will provide a detailed comparison of route handling, provider dispatch, response building, latency reporting, and token accounting in the Energetic Paradigm (EP) API, following the requested structure.  ### Route Handling **EP",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "case_id": "general_long_comparison",
+      "route": "respond",
+      "provider_requested": "openai",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "final_answer",
+      "observed": {
+        "status": "success",
+        "response_type": "final_answer",
+        "provider_selected": "openai",
+        "provider_model": "gpt-5.4",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "ep_deep_reasoning",
+        "latency_ms": 5664,
+        "wall_ms": 5673,
+        "input_tokens": 84,
+        "output_tokens": 280,
+        "total_tokens": 364,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "openai",
+        "trace_provider_allowed": [
+          "openai"
+        ],
+        "trace_fallback_provider": "openai",
+        "content_chars": 1244,
+        "content_words_approx": 188,
+        "content_preview": "Below is a detailed comparison of how the EP API handles:  1. Route handling 2. Provider dispatch 3. Response building 4. Latency reporting 5. Token accounting  I’ll describe each area in terms of its role, typical flow, and how it differs ",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "case_id": "finance_medium_control",
+      "route": "analyze",
+      "provider_requested": "local",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "analysis",
+      "observed": {
+        "status": "success",
+        "response_type": "analysis",
+        "provider_selected": "local",
+        "provider_model": "qwen2.5:3b",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "domain_specific_path",
+        "latency_ms": 11558,
+        "wall_ms": 11578,
+        "input_tokens": 98,
+        "output_tokens": 280,
+        "total_tokens": 378,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "local",
+        "trace_provider_allowed": [
+          "local"
+        ],
+        "trace_fallback_provider": "local",
+        "content_chars": 1677,
+        "content_words_approx": 226,
+        "content_preview": "In the realm of finance systems, the implementation of orchestration control and provider adapters plays a crucial role in ensuring the seamless integration and management of various financial services and applications. Below is a summary o",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "case_id": "finance_medium_control",
+      "route": "analyze",
+      "provider_requested": "openai",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "analysis",
+      "observed": {
+        "status": "success",
+        "response_type": "analysis",
+        "provider_selected": "openai",
+        "provider_model": "gpt-5.4",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "domain_specific_path",
+        "latency_ms": 5227,
+        "wall_ms": 5238,
+        "input_tokens": 77,
+        "output_tokens": 280,
+        "total_tokens": 357,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "openai",
+        "trace_provider_allowed": [
+          "openai"
+        ],
+        "trace_fallback_provider": "openai",
+        "content_chars": 1362,
+        "content_words_approx": 187,
+        "content_preview": "**Implementation difference: orchestration control vs. provider adapters**  **1) Orchestration control** - This is the **decision and workflow layer**. - It determines **what should happen, in what order, and under which rules**. - In a fin",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "case_id": "finance_medium_control",
+      "route": "respond",
+      "provider_requested": "local",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "final_answer",
+      "observed": {
+        "status": "success",
+        "response_type": "final_answer",
+        "provider_selected": "local",
+        "provider_model": "qwen2.5:3b",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "domain_specific_path",
+        "latency_ms": 8662,
+        "wall_ms": 8675,
+        "input_tokens": 99,
+        "output_tokens": 280,
+        "total_tokens": 379,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "local",
+        "trace_provider_allowed": [
+          "local"
+        ],
+        "trace_fallback_provider": "local",
+        "content_chars": 1683,
+        "content_words_approx": 237,
+        "content_preview": "In the realm of finance systems, orchestration control and provider adapters serve distinct yet complementary roles in ensuring smooth and secure operations.   Orchestration control is akin to a conductor in a symphony. It oversees the flow",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "case_id": "finance_medium_control",
+      "route": "respond",
+      "provider_requested": "openai",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "final_answer",
+      "observed": {
+        "status": "success",
+        "response_type": "final_answer",
+        "provider_selected": "openai",
+        "provider_model": "gpt-5.4",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "domain_specific_path",
+        "latency_ms": 5489,
+        "wall_ms": 5497,
+        "input_tokens": 78,
+        "output_tokens": 280,
+        "total_tokens": 358,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "openai",
+        "trace_provider_allowed": [
+          "openai"
+        ],
+        "trace_fallback_provider": "openai",
+        "content_chars": 1383,
+        "content_words_approx": 189,
+        "content_preview": "**Implementation difference: orchestration control vs. provider adapters**  **1) Orchestration control** - This is the **central decision and workflow layer**. - It decides **what should happen, in what order, and under which rules**. - Typ",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "case_id": "technical_medium_trace",
+      "route": "analyze",
+      "provider_requested": "local",
+      "http_status": 500,
+      "success": false,
+      "expected_response_type": "analysis",
+      "observed": {
+        "status": null,
+        "response_type": null,
+        "provider_selected": null,
+        "provider_model": null,
+        "provider_simulated": null,
+        "provider_fallback_used": null,
+        "routing_path": null,
+        "latency_ms": null,
+        "wall_ms": 7,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "estimated_cost": null,
+        "warnings": null,
+        "error": null,
+        "trace_provider_requested": null,
+        "trace_provider_allowed": null,
+        "trace_fallback_provider": null,
+        "content_chars": 0,
+        "content_words_approx": 0,
+        "content_preview": "",
+        "schema_shape": {
+          "raw_error_body": "str"
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "case_id": "technical_medium_trace",
+      "route": "analyze",
+      "provider_requested": "openai",
+      "http_status": 500,
+      "success": false,
+      "expected_response_type": "analysis",
+      "observed": {
+        "status": null,
+        "response_type": null,
+        "provider_selected": null,
+        "provider_model": null,
+        "provider_simulated": null,
+        "provider_fallback_used": null,
+        "routing_path": null,
+        "latency_ms": null,
+        "wall_ms": 2,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "estimated_cost": null,
+        "warnings": null,
+        "error": null,
+        "trace_provider_requested": null,
+        "trace_provider_allowed": null,
+        "trace_fallback_provider": null,
+        "content_chars": 0,
+        "content_words_approx": 0,
+        "content_preview": "",
+        "schema_shape": {
+          "raw_error_body": "str"
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "case_id": "technical_medium_trace",
+      "route": "respond",
+      "provider_requested": "local",
+      "http_status": 500,
+      "success": false,
+      "expected_response_type": "final_answer",
+      "observed": {
+        "status": null,
+        "response_type": null,
+        "provider_selected": null,
+        "provider_model": null,
+        "provider_simulated": null,
+        "provider_fallback_used": null,
+        "routing_path": null,
+        "latency_ms": null,
+        "wall_ms": 1,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "estimated_cost": null,
+        "warnings": null,
+        "error": null,
+        "trace_provider_requested": null,
+        "trace_provider_allowed": null,
+        "trace_fallback_provider": null,
+        "content_chars": 0,
+        "content_words_approx": 0,
+        "content_preview": "",
+        "schema_shape": {
+          "raw_error_body": "str"
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "case_id": "technical_medium_trace",
+      "route": "respond",
+      "provider_requested": "openai",
+      "http_status": 500,
+      "success": false,
+      "expected_response_type": "final_answer",
+      "observed": {
+        "status": null,
+        "response_type": null,
+        "provider_selected": null,
+        "provider_model": null,
+        "provider_simulated": null,
+        "provider_fallback_used": null,
+        "routing_path": null,
+        "latency_ms": null,
+        "wall_ms": 1,
+        "input_tokens": null,
+        "output_tokens": null,
+        "total_tokens": null,
+        "estimated_cost": null,
+        "warnings": null,
+        "error": null,
+        "trace_provider_requested": null,
+        "trace_provider_allowed": null,
+        "trace_fallback_provider": null,
+        "content_chars": 0,
+        "content_words_approx": 0,
+        "content_preview": "",
+        "schema_shape": {
+          "raw_error_body": "str"
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "case_id": "executive_short_summary",
+      "route": "analyze",
+      "provider_requested": "local",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "analysis",
+      "observed": {
+        "status": "success",
+        "response_type": "analysis",
+        "provider_selected": "local",
+        "provider_model": "qwen2.5:3b",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "standard_response",
+        "latency_ms": 5220,
+        "wall_ms": 5238,
+        "input_tokens": 98,
+        "output_tokens": 117,
+        "total_tokens": 215,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "local",
+        "trace_provider_allowed": [
+          "local"
+        ],
+        "trace_fallback_provider": "local",
+        "content_chars": 750,
+        "content_words_approx": 100,
+        "content_preview": "Executive Summary of EP API Implementation Audit Validation:  The EP API implementation audit has validated several key aspects of the system's functionality and design. These include the successful integration of the API with the core syst",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "case_id": "executive_short_summary",
+      "route": "analyze",
+      "provider_requested": "openai",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "analysis",
+      "observed": {
+        "status": "success",
+        "response_type": "analysis",
+        "provider_selected": "openai",
+        "provider_model": "gpt-5.4",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "standard_response",
+        "latency_ms": 4699,
+        "wall_ms": 4710,
+        "input_tokens": 77,
+        "output_tokens": 219,
+        "total_tokens": 296,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "openai",
+        "trace_provider_allowed": [
+          "openai"
+        ],
+        "trace_fallback_provider": "openai",
+        "content_chars": 1238,
+        "content_words_approx": 168,
+        "content_preview": "## Executive Summary  The EP API implementation audit has already validated the following core areas:  - **API surface and routing**   - Endpoints are present, reachable, and generally aligned with the intended interface structure.  - **Req",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "case_id": "executive_short_summary",
+      "route": "respond",
+      "provider_requested": "local",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "final_answer",
+      "observed": {
+        "status": "success",
+        "response_type": "final_answer",
+        "provider_selected": "local",
+        "provider_model": "qwen2.5:3b",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "standard_response",
+        "latency_ms": 4683,
+        "wall_ms": 4701,
+        "input_tokens": 99,
+        "output_tokens": 109,
+        "total_tokens": 208,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "local",
+        "trace_provider_allowed": [
+          "local"
+        ],
+        "trace_fallback_provider": "local",
+        "content_chars": 686,
+        "content_words_approx": 94,
+        "content_preview": "Executive Summary:  The EP API implementation audit has validated several key aspects of the system, including robust data integrity, secure authentication mechanisms, and efficient API performance. The audit confirmed that the API adheres ",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    },
+    {
+      "repeat": 2,
+      "case_id": "executive_short_summary",
+      "route": "respond",
+      "provider_requested": "openai",
+      "http_status": 200,
+      "success": true,
+      "expected_response_type": "final_answer",
+      "observed": {
+        "status": "success",
+        "response_type": "final_answer",
+        "provider_selected": "openai",
+        "provider_model": "gpt-5.4",
+        "provider_simulated": false,
+        "provider_fallback_used": false,
+        "routing_path": "standard_response",
+        "latency_ms": 8482,
+        "wall_ms": 8494,
+        "input_tokens": 78,
+        "output_tokens": 235,
+        "total_tokens": 313,
+        "estimated_cost": 0.0,
+        "warnings": [],
+        "error": null,
+        "trace_provider_requested": "openai",
+        "trace_provider_allowed": [
+          "openai"
+        ],
+        "trace_fallback_provider": "openai",
+        "content_chars": 1308,
+        "content_words_approx": 182,
+        "content_preview": "## Executive Summary  The EP API implementation audit has already validated the following core areas:  - **API accessibility and basic operation**   - The API is reachable and responding.   - Core request/response flow is functioning.  - **",
+        "schema_shape": {
+          "ep": {
+            "depth_applied": "str",
+            "domain_applied": "str",
+            "mode_applied": "str",
+            "routing_path": "str"
+          },
+          "error": "NoneType",
+          "provider": {
+            "fallback_used": "bool",
+            "model": "str",
+            "selected": "str",
+            "simulated": "bool"
+          },
+          "request_id": "str",
+          "result": {
+            "content": "str",
+            "format": "str",
+            "language": "str",
+            "response_type": "str"
+          },
+          "status": "str",
+          "timing": {
+            "completed_at": "str",
+            "latency_ms": "int",
+            "started_at": "str"
+          },
+          "trace": {
+            "client_id": "str",
+            "fallback_provider": "str",
+            "provider_allowed": [
+              "str"
+            ],
+            "provider_requested": "str"
+          },
+          "usage": {
+            "estimated_cost": "float",
+            "input_tokens": "int",
+            "output_tokens": "int",
+            "total_tokens": "int"
+          },
+          "warnings": []
+        }
+      }
+    }
+  ]
+}

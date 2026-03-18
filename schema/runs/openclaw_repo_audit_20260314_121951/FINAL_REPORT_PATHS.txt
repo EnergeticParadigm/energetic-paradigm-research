@@ -1,0 +1,15 @@
+OPENCLAW_ROOT=/Users/wesleyshu/openclaw
+RUN_ROOT=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_repo_audit_20260314_121951
+REPORT_ROOT=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_repo_audit_20260314_121951/reports
+TOP_LEVEL_TREE=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_repo_audit_20260314_121951/reports/top_level_tree.txt
+KEY_FILES_MAXDEPTH6=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_repo_audit_20260314_121951/reports/key_files_maxdepth6.txt
+KEY_FILES_FULL=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_repo_audit_20260314_121951/reports/key_files_full.txt
+UI_LIKE_DIRS=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_repo_audit_20260314_121951/reports/ui_like_directories.txt
+INTERESTING_PATHS=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_repo_audit_20260314_121951/reports/interesting_paths.txt
+GIT_REPO_CHECK=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_repo_audit_20260314_121951/reports/git_repo_check.txt
+GIT_STATUS=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_repo_audit_20260314_121951/reports/git_status_short.txt
+GIT_BRANCH=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_repo_audit_20260314_121951/reports/git_branch.txt
+GIT_REMOTES=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_repo_audit_20260314_121951/reports/git_remotes.txt
+GIT_SUBMODULES=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_repo_audit_20260314_121951/reports/git_submodules.txt
+GIT_LS_FILES=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_repo_audit_20260314_121951/reports/git_ls_files.txt
+GITMODULES_CONTENTS=/Users/wesleyshu/ep_system/ep_api_system/runs/openclaw_repo_audit_20260314_121951/reports/gitmodules_contents.txt

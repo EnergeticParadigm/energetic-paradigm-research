@@ -1,0 +1,196 @@
+{
+  "version": "routing_policy_v1",
+  "policy_enabled": true,
+  "description": "Provider routing policy derived from validated benchmark results.",
+  "defaults": {
+    "preferred_provider": "local",
+    "allowed_providers": ["local", "openai"],
+    "fallback_provider": "openai",
+    "allow_fallback": true
+  },
+  "pre_routing_rules": [
+    {
+      "id": "executive_format_to_openai",
+      "priority": 100,
+      "when": {
+        "output_format_in": ["executive"]
+      },
+      "select": {
+        "preferred_provider": "openai",
+        "allowed_providers": ["openai"],
+        "fallback_provider": "openai",
+        "allow_fallback": false
+      },
+      "reason": "executive_facing_output"
+    },
+    {
+      "id": "public_safe_summary_to_openai",
+      "priority": 95,
+      "when": {
+        "input_contains_any": [
+          "public-safe summary",
+          "public safe summary",
+          "public summary",
+          "executive summary",
+          "public explanation",
+          "external-facing",
+          "external facing",
+          "press statement",
+          "publication-safe"
+        ]
+      },
+      "select": {
+        "preferred_provider": "openai",
+        "allowed_providers": ["openai"],
+        "fallback_provider": "openai",
+        "allow_fallback": false
+      },
+      "reason": "public_facing_compression"
+    },
+    {
+      "id": "deep_or_long_to_local_first",
+      "priority": 80,
+      "when": {
+        "any": [
+          { "ep_mode_in": ["deep"] },
+          { "ep_depth_in": ["long"] }
+        ]
+      },
+      "select": {
+        "preferred_provider": "local",
+        "allowed_providers": ["local", "openai"],
+        "fallback_provider": "openai",
+        "allow_fallback": true
+      },
+      "reason": "deep_internal_analysis"
+    },
+    {
+      "id": "domain_to_local_first",
+      "priority": 75,
+      "when": {
+        "ep_mode_in": ["domain"]
+      },
+      "select": {
+        "preferred_provider": "local",
+        "allowed_providers": ["local", "openai"],
+        "fallback_provider": "openai",
+        "allow_fallback": true
+      },
+      "reason": "domain_heavy_analysis"
+    },
+    {
+      "id": "short_technical_to_openai",
+      "priority": 70,
+      "when": {
+        "all": [
+          { "ep_depth_in": ["short", "medium"] },
+          {
+            "input_contains_any": [
+              "schema",
+              "trace",
+              "routing",
+              "dispatch",
+              "fallback",
+              "latency",
+              "token accounting",
+              "token usage",
+              "response fields",
+              "provider-independent orchestration",
+              "provider independent orchestration"
+            ]
+          }
+        ]
+      },
+      "select": {
+        "preferred_provider": "openai",
+        "allowed_providers": ["openai"],
+        "fallback_provider": "openai",
+        "allow_fallback": false
+      },
+      "reason": "short_precision_explanation"
+    },
+    {
+      "id": "short_standard_to_openai",
+      "priority": 60,
+      "when": {
+        "all": [
+          { "ep_mode_in": ["standard"] },
+          { "ep_depth_in": ["short"] }
+        ]
+      },
+      "select": {
+        "preferred_provider": "openai",
+        "allowed_providers": ["openai"],
+        "fallback_provider": "openai",
+        "allow_fallback": false
+      },
+      "reason": "short_polished_response"
+    }
+  ],
+  "post_local_quality_gates": {
+    "enabled": true,
+    "applies_to_provider": "local",
+    "escalate_to": "openai",
+    "rules": [
+      {
+        "id": "local_provider_error",
+        "when": {
+          "error_present": true
+        }
+      },
+      {
+        "id": "local_simulation_detected",
+        "when": {
+          "provider_simulated_equals": true
+        }
+      },
+      {
+        "id": "local_provider_mismatch",
+        "when": {
+          "provider_selected_not_equals": "local"
+        }
+      },
+      {
+        "id": "local_response_type_mismatch",
+        "when": {
+          "response_type_matches_expected": false
+        }
+      },
+      {
+        "id": "local_latency_too_high",
+        "when": {
+          "latency_ms_gt": 9000
+        }
+      },
+      {
+        "id": "local_content_too_short",
+        "when": {
+          "content_word_count_lt": 60
+        }
+      },
+      {
+        "id": "local_keyword_coverage_too_low",
+        "when": {
+          "keyword_coverage_ratio_lt": 0.5
+        }
+      },
+      {
+        "id": "local_provider_warning",
+        "when": {
+          "warning_contains_any": [
+            "provider",
+            "fallback",
+            "simulated",
+            "connector",
+            "timeout"
+          ]
+        }
+      }
+    ]
+  },
+  "policy_outputs": {
+    "attach_reason": true,
+    "attach_matched_rule_id": true,
+    "attach_escalation_reason": true
+  }
+}

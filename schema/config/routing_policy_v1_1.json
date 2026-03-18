@@ -1,0 +1,177 @@
+{
+  "version": "routing_policy_v1_1",
+  "policy_enabled": true,
+  "description": "Narrowed routing policy after policy-on versus policy-off benchmark.",
+  "defaults": {
+    "preferred_provider": "openai",
+    "allowed_providers": [
+      "openai",
+      "local"
+    ],
+    "fallback_provider": "local",
+    "allow_fallback": true
+  },
+  "pre_routing_rules": [
+    {
+      "id": "executive_format_to_openai",
+      "priority": 100,
+      "when": {
+        "output_format_in": [
+          "executive"
+        ]
+      },
+      "select": {
+        "preferred_provider": "openai",
+        "allowed_providers": [
+          "openai"
+        ],
+        "fallback_provider": "openai",
+        "allow_fallback": false
+      },
+      "reason": "executive_facing_output"
+    },
+    {
+      "id": "public_safe_summary_to_openai",
+      "priority": 95,
+      "when": {
+        "input_contains_any": [
+          "public-safe summary",
+          "public safe summary",
+          "public summary",
+          "executive summary",
+          "public explanation",
+          "external-facing",
+          "external facing",
+          "press statement",
+          "publication-safe"
+        ]
+      },
+      "select": {
+        "preferred_provider": "openai",
+        "allowed_providers": [
+          "openai"
+        ],
+        "fallback_provider": "openai",
+        "allow_fallback": false
+      },
+      "reason": "public_facing_compression"
+    },
+    {
+      "id": "short_technical_to_openai",
+      "priority": 90,
+      "when": {
+        "all": [
+          {
+            "ep_depth_in": [
+              "short",
+              "medium"
+            ]
+          },
+          {
+            "input_contains_any": [
+              "schema",
+              "trace",
+              "routing",
+              "dispatch",
+              "fallback",
+              "latency",
+              "token accounting",
+              "token usage",
+              "response fields",
+              "provider-independent orchestration",
+              "provider independent orchestration"
+            ]
+          }
+        ]
+      },
+      "select": {
+        "preferred_provider": "openai",
+        "allowed_providers": [
+          "openai"
+        ],
+        "fallback_provider": "openai",
+        "allow_fallback": false
+      },
+      "reason": "short_precision_explanation"
+    },
+    {
+      "id": "short_standard_to_openai",
+      "priority": 80,
+      "when": {
+        "all": [
+          {
+            "ep_mode_in": [
+              "standard"
+            ]
+          },
+          {
+            "ep_depth_in": [
+              "short"
+            ]
+          }
+        ]
+      },
+      "select": {
+        "preferred_provider": "openai",
+        "allowed_providers": [
+          "openai"
+        ],
+        "fallback_provider": "openai",
+        "allow_fallback": false
+      },
+      "reason": "short_polished_response"
+    },
+    {
+      "id": "internal_deep_local_first",
+      "priority": 55,
+      "when": {
+        "all": [
+          {
+            "any": [
+              {
+                "ep_mode_in": [
+                  "deep",
+                  "domain"
+                ]
+              },
+              {
+                "ep_depth_in": [
+                  "long"
+                ]
+              }
+            ]
+          },
+          {
+            "input_contains_any": [
+              "internal only",
+              "internal analysis",
+              "internal memo",
+              "working note",
+              "working draft",
+              "raw analysis",
+              "rough analysis",
+              "private note",
+              "private comparison",
+              "cost-sensitive",
+              "cost sensitive"
+            ]
+          }
+        ]
+      },
+      "select": {
+        "preferred_provider": "local",
+        "allowed_providers": [
+          "local",
+          "openai"
+        ],
+        "fallback_provider": "openai",
+        "allow_fallback": true
+      },
+      "reason": "narrow_internal_local_first"
+    }
+  ],
+  "policy_outputs": {
+    "attach_reason": true,
+    "attach_matched_rule_id": true
+  }
+}

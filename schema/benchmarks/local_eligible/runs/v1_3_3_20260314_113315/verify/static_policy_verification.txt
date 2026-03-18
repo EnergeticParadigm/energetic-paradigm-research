@@ -1,0 +1,3 @@
+Static policy verification passed.
+Active policy: /Users/wesleyshu/ep_system/ep_api_system/config/routing_policy_v1.json
+Target rules found: 1

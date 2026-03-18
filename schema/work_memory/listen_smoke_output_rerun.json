@@ -1,0 +1,236 @@
+[
+  {
+    "request_id": "5d53572b-bfc8-44b4-86df-316c13f4484d",
+    "authorized": true,
+    "source": "script",
+    "timestamp": "2026-03-18T12:23:59.950730+00:00",
+    "client_fp": "local_smoke",
+    "raw_text": "ep/trigger1 what is ep",
+    "normalized_text": "ep/trigger1 what is ep",
+    "trigger_present": true,
+    "signals": {
+      "language": "en",
+      "ambiguity": 0.1,
+      "complexity": 0.217,
+      "urgency": 0.05,
+      "emotional_intensity": 0.04,
+      "decision_density": 0.12,
+      "domain_type": "ep",
+      "speech_act": "stating",
+      "ep_compatibility": "high",
+      "local_hits": {
+        "admin": 0,
+        "writing": 0,
+        "legal": 0,
+        "research": 0,
+        "api": 0,
+        "system": 0
+      }
+    },
+    "routing": {
+      "mode": "ep_reasoning",
+      "reason": "ep_trigger_or_high_ep_compatibility"
+    },
+    "governance": {
+      "allowed": true,
+      "needs_narrowing": false,
+      "needs_context": false,
+      "risk_flags": []
+    }
+  },
+  {
+    "request_id": "c5a0cbf1-09fc-438d-9e27-117c6b7f4878",
+    "authorized": true,
+    "source": "script",
+    "timestamp": "2026-03-18T12:23:59.952013+00:00",
+    "client_fp": "local_smoke",
+    "raw_text": "Please build the listening engine into the EP API and add governance.",
+    "normalized_text": "Please build the listening engine into the EP API and add governance.",
+    "trigger_present": false,
+    "signals": {
+      "language": "en",
+      "ambiguity": 0.1,
+      "complexity": 0.317,
+      "urgency": 0.05,
+      "emotional_intensity": 0.12,
+      "decision_density": 0.19,
+      "domain_type": "ep",
+      "speech_act": "requesting",
+      "ep_compatibility": "high",
+      "local_hits": {
+        "admin": 0,
+        "writing": 0,
+        "legal": 0,
+        "research": 0,
+        "api": 1,
+        "system": 0
+      }
+    },
+    "routing": {
+      "mode": "ep_reasoning",
+      "reason": "ep_trigger_or_high_ep_compatibility"
+    },
+    "governance": {
+      "allowed": true,
+      "needs_narrowing": false,
+      "needs_context": false,
+      "risk_flags": []
+    }
+  },
+  {
+    "request_id": "9977bfe1-f475-4353-91e5-d37e8039e8bf",
+    "authorized": true,
+    "source": "script",
+    "timestamp": "2026-03-18T12:23:59.952046+00:00",
+    "client_fp": "local_smoke",
+    "raw_text": "Fix the token auth on the boundary endpoint now!",
+    "normalized_text": "Fix the token auth on the boundary endpoint now!",
+    "trigger_present": false,
+    "signals": {
+      "language": "en",
+      "ambiguity": 0.1,
+      "complexity": 0.279,
+      "urgency": 0.31,
+      "emotional_intensity": 0.09,
+      "decision_density": 0.12,
+      "domain_type": "api",
+      "speech_act": "requesting",
+      "ep_compatibility": "low",
+      "local_hits": {
+        "admin": 0,
+        "writing": 0,
+        "legal": 0,
+        "research": 0,
+        "api": 4,
+        "system": 0
+      }
+    },
+    "routing": {
+      "mode": "admin_tooling",
+      "reason": "api_or_system_hits"
+    },
+    "governance": {
+      "allowed": true,
+      "needs_narrowing": false,
+      "needs_context": false,
+      "risk_flags": []
+    }
+  },
+  {
+    "request_id": "02a51d3c-035b-43fc-9132-61c094090c91",
+    "authorized": true,
+    "source": "script",
+    "timestamp": "2026-03-18T12:23:59.952075+00:00",
+    "client_fp": "local_smoke",
+    "raw_text": "Translate this article into English.",
+    "normalized_text": "Translate this article into English.",
+    "trigger_present": false,
+    "signals": {
+      "language": "en",
+      "ambiguity": 0.1,
+      "complexity": 0.229,
+      "urgency": 0.05,
+      "emotional_intensity": 0.04,
+      "decision_density": 0.12,
+      "domain_type": "writing",
+      "speech_act": "stating",
+      "ep_compatibility": "low",
+      "local_hits": {
+        "admin": 0,
+        "writing": 2,
+        "legal": 0,
+        "research": 0,
+        "api": 0,
+        "system": 0
+      }
+    },
+    "routing": {
+      "mode": "writing_mode",
+      "reason": "writing_hits"
+    },
+    "governance": {
+      "allowed": true,
+      "needs_narrowing": false,
+      "needs_context": false,
+      "risk_flags": []
+    }
+  },
+  {
+    "request_id": "848b945d-bd25-41dc-b584-98d9edf910f7",
+    "authorized": true,
+    "source": "script",
+    "timestamp": "2026-03-18T12:23:59.952103+00:00",
+    "client_fp": "local_smoke",
+    "raw_text": "Can this contract clause be enforced under Taiwan law?",
+    "normalized_text": "Can this contract clause be enforced under Taiwan law?",
+    "trigger_present": false,
+    "signals": {
+      "language": "en",
+      "ambiguity": 0.1,
+      "complexity": 0.279,
+      "urgency": 0.05,
+      "emotional_intensity": 0.04,
+      "decision_density": 0.12,
+      "domain_type": "legal",
+      "speech_act": "asking",
+      "ep_compatibility": "low",
+      "local_hits": {
+        "admin": 0,
+        "writing": 0,
+        "legal": 2,
+        "research": 0,
+        "api": 0,
+        "system": 0
+      }
+    },
+    "routing": {
+      "mode": "structured_answer",
+      "reason": "legal_domain_requires_structure"
+    },
+    "governance": {
+      "allowed": true,
+      "needs_narrowing": false,
+      "needs_context": false,
+      "risk_flags": []
+    }
+  },
+  {
+    "request_id": "6d951a27-6c6c-45e1-b19e-bba649f391a5",
+    "authorized": true,
+    "source": "script",
+    "timestamp": "2026-03-18T12:23:59.952129+00:00",
+    "client_fp": "local_smoke",
+    "raw_text": "something about system",
+    "normalized_text": "something about system",
+    "trigger_present": false,
+    "signals": {
+      "language": "en",
+      "ambiguity": 0.38,
+      "complexity": 0.171,
+      "urgency": 0.05,
+      "emotional_intensity": 0.04,
+      "decision_density": 0.12,
+      "domain_type": "system",
+      "speech_act": "stating",
+      "ep_compatibility": "low",
+      "local_hits": {
+        "admin": 0,
+        "writing": 0,
+        "legal": 0,
+        "research": 0,
+        "api": 0,
+        "system": 1
+      }
+    },
+    "routing": {
+      "mode": "clarify_or_narrow",
+      "reason": "ambiguous_system_or_api_request"
+    },
+    "governance": {
+      "allowed": true,
+      "needs_narrowing": true,
+      "needs_context": false,
+      "risk_flags": []
+    }
+  }
+]

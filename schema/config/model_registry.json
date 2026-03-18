@@ -1,0 +1,40 @@
+{
+  "version": "1.0",
+  "models": {
+    "gpt-4.1": {
+      "providers": [
+        "openai"
+      ],
+      "default_provider": "openai",
+      "local": false
+    },
+    "gpt-4.1-mini": {
+      "providers": [
+        "openai"
+      ],
+      "default_provider": "openai",
+      "local": false
+    },
+    "gpt-4o": {
+      "providers": [
+        "openai"
+      ],
+      "default_provider": "openai",
+      "local": false
+    },
+    "gpt-5.4": {
+      "providers": [
+        "openai"
+      ],
+      "default_provider": "openai",
+      "local": false
+    },
+    "qwen2.5:3b": {
+      "providers": [
+        "local"
+      ],
+      "default_provider": "local",
+      "local": true
+    }
+  }
+}

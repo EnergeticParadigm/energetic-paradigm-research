@@ -1,0 +1,54 @@
+{
+  "result": "FAIL",
+  "restored_from": "/Users/wesleyshu/ep_backups/ep_8010_signature_registry_fix_20260318_074928/app.py.bak",
+  "app": "/Users/wesleyshu/ep_system/ep_api_system/app.py",
+  "session_backup": "/Users/wesleyshu/ep_backups/ep_8010_boundary_auth_final_20260318_081219/app_before_fix.py.bak",
+  "registry": "/Users/wesleyshu/ep_system/ep_api_system/client_registry.json",
+  "runtime_log": "/private/tmp/ep_api_8010_boundary_auth_final.log",
+  "token_key": "external_boundary_bearer_token",
+  "token_masked": "Eh8q...Z9dK",
+  "patch_counts": {
+    "get:/v1/ep/health": 1,
+    "get:/v1/ep/providers": 1,
+    "post:/v1/ep/respond": 1,
+    "post:/v1/ep/analyze": 1
+  },
+  "tests": {
+    "no_token_health": {
+      "status": 401,
+      "body": "{\"detail\":\"Missing Bearer token\"}"
+    },
+    "invalid_token_health": {
+      "status": 503,
+      "body": "{\"detail\":\"No registered boundary token\"}"
+    },
+    "valid_token_health": {
+      "status": 503,
+      "body": "{\"detail\":\"No registered boundary token\"}"
+    },
+    "no_token_providers": {
+      "status": 401,
+      "body": "{\"detail\":\"Missing Bearer token\"}"
+    },
+    "invalid_token_providers": {
+      "status": 503,
+      "body": "{\"detail\":\"No registered boundary token\"}"
+    },
+    "valid_token_providers": {
+      "status": 503,
+      "body": "{\"detail\":\"No registered boundary token\"}"
+    },
+    "no_token_respond": {
+      "status": 401,
+      "body": "{\"detail\":\"Missing Bearer token\"}"
+    },
+    "invalid_token_respond": {
+      "status": 503,
+      "body": "{\"detail\":\"No registered boundary token\"}"
+    },
+    "valid_token_respond": {
+      "status": 503,
+      "body": "{\"detail\":\"No registered boundary token\"}"
+    }
+  }
+}

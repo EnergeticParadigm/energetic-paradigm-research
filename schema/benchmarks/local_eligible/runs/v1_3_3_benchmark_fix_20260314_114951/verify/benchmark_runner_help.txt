@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/Users/wesleyshu/ep_system/ep_api_system/benchmarks/local_eligible/local_eligible_policy_on_off_runner.py", line 9, in <module>
+    phase_name = os.environ["PHASE_NAME"]
+                 ~~~~~~~~~~^^^^^^^^^^^^^^
+  File "<frozen os>", line 709, in __getitem__
+KeyError: 'PHASE_NAME'

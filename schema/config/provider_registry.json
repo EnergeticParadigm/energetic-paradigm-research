@@ -1,0 +1,35 @@
+{
+  "version": "1.0",
+  "default_provider": "openai",
+  "providers": {
+    "openai": {
+      "enabled": true,
+      "label": "OpenAI",
+      "api_mode": "openai",
+      "requires_authorization": true,
+      "base_url": "https://api.openai.com/v1",
+      "default_model": "gpt-4.1-mini",
+      "models": [
+        "gpt-4.1",
+        "gpt-4.1-mini",
+        "gpt-4o",
+        "gpt-5.4"
+      ],
+      "priority": 100,
+      "timeout_seconds": 90.0
+    },
+    "local": {
+      "enabled": true,
+      "label": "Local OpenAI Compatible",
+      "api_mode": "openai_compatible",
+      "requires_authorization": false,
+      "base_url": "http://127.0.0.1:11434/v1",
+      "default_model": "qwen2.5:3b",
+      "models": [
+        "qwen2.5:3b"
+      ],
+      "priority": 50,
+      "timeout_seconds": 25.0
+    }
+  }
+}

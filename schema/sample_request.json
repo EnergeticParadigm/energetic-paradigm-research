@@ -1,0 +1,42 @@
+{
+  "request_id": "req_demo_en_0001",
+  "client": {
+    "client_id": "ep_partner_app_demo",
+    "client_type": "partner_app",
+    "session_id": "sess_demo_123"
+  },
+  "user": {
+    "user_id": "user_001",
+    "locale": "en",
+    "timezone": "Asia/Riyadh"
+  },
+  "input": {
+    "text": "Explain exactly what this EP API currently does, what each major layer is responsible for, and whether it already has a provider-independent core. Draw a plain-text structure diagram. Answer in English only.",
+    "attachments": []
+  },
+  "ep": {
+    "mode": "deep",
+    "depth": "long",
+    "domain": "general",
+    "format": "structured",
+    "safety_level": "standard"
+  },
+  "routing": {
+    "preferred_provider": "auto",
+    "allowed_providers": ["openai", "local"],
+    "fallback_provider": "local",
+    "allow_fallback": true
+  },
+  "output": {
+    "response_type": "final_answer",
+    "max_tokens": 1400,
+    "temperature": 0.1,
+    "include_citations": false,
+    "include_trace": true,
+    "language": "en"
+  },
+  "metadata": {
+    "source": "terminal",
+    "tags": ["ep", "api-test", "architecture"]
+  }
+}
