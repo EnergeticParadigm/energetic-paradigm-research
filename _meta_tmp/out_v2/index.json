@@ -1,0 +1,366 @@
+[
+  {
+    "index": 1,
+    "journal": "ACM Transactions on Intelligent Systems and Technology (TIST)",
+    "publisher_family": "ACM",
+    "file": "01_acm_transactions_on_intelligent_systems_and_technology_tist.csv",
+    "count": 306
+  },
+  {
+    "index": 2,
+    "journal": "ACM Transactions on Autonomous and Adaptive Systems (TAAS)",
+    "publisher_family": "ACM",
+    "file": "02_acm_transactions_on_autonomous_and_adaptive_systems_taas.csv",
+    "count": 101
+  },
+  {
+    "index": 3,
+    "journal": "ACM Transactions on Evolutionary Learning and Optimization (TELO)",
+    "publisher_family": "ACM",
+    "file": "03_acm_transactions_on_evolutionary_learning_and_optimization_telo.csv",
+    "count": 66
+  },
+  {
+    "index": 4,
+    "journal": "ACM Transactions on Probabilistic Machine Learning (TOPML)",
+    "publisher_family": "ACM",
+    "file": "04_acm_transactions_on_probabilistic_machine_learning_topml.csv",
+    "count": 23
+  },
+  {
+    "index": 5,
+    "journal": "ACM Transactions on Interactive Intelligent Systems (TiiS)",
+    "publisher_family": "ACM",
+    "file": "05_acm_transactions_on_interactive_intelligent_systems_tiis.csv",
+    "count": 51
+  },
+  {
+    "index": 6,
+    "journal": "ACM Transactions on Knowledge Discovery from Data (TKDD)",
+    "publisher_family": "ACM",
+    "file": "06_acm_transactions_on_knowledge_discovery_from_data_tkdd.csv",
+    "count": 257
+  },
+  {
+    "index": 7,
+    "journal": "ACM Transactions on Information Systems (TOIS)",
+    "publisher_family": "ACM",
+    "file": "07_acm_transactions_on_information_systems_tois.csv",
+    "count": 293
+  },
+  {
+    "index": 8,
+    "journal": "ACM Computing Surveys (CSUR)",
+    "publisher_family": "ACM",
+    "file": "08_acm_computing_surveys_csur.csv",
+    "count": 642
+  },
+  {
+    "index": 9,
+    "journal": "ACM Transactions on Recommender Systems (TORS)",
+    "publisher_family": "ACM",
+    "file": "09_acm_transactions_on_recommender_systems_tors.csv",
+    "count": 120
+  },
+  {
+    "index": 10,
+    "journal": "ACM Transactions on Human-Robot Interaction (THRI)",
+    "publisher_family": "ACM",
+    "file": "10_acm_transactions_on_human_robot_interaction_thri.csv",
+    "count": 161
+  },
+  {
+    "index": 11,
+    "journal": "ACM Transactions on Cyber-Physical Systems (TCPS)",
+    "publisher_family": "ACM",
+    "file": "11_acm_transactions_on_cyber_physical_systems_tcps.csv",
+    "count": 106
+  },
+  {
+    "index": 12,
+    "journal": "ACM Transactions on Software Engineering and Methodology (TOSEM)",
+    "publisher_family": "ACM",
+    "file": "12_acm_transactions_on_software_engineering_and_methodology_tosem.csv",
+    "count": 744
+  },
+  {
+    "index": 13,
+    "journal": "ACM Journal on Responsible Computing (JRC)",
+    "publisher_family": "ACM",
+    "file": "13_acm_journal_on_responsible_computing_jrc.csv",
+    "count": 37
+  },
+  {
+    "index": 14,
+    "journal": "Collective Intelligence",
+    "publisher_family": "ACM/SAGE",
+    "file": "14_collective_intelligence.csv",
+    "count": 20
+  },
+  {
+    "index": 15,
+    "journal": "Journal of Artificial Intelligence Research (JAIR)",
+    "publisher_family": "Independent",
+    "file": "15_journal_of_artificial_intelligence_research_jair.csv",
+    "count": 237
+  },
+  {
+    "index": 16,
+    "journal": "Journal of Machine Learning Research (JMLR)",
+    "publisher_family": "Independent",
+    "file": "16_journal_of_machine_learning_research_jmlr.csv",
+    "count": 1
+  },
+  {
+    "index": 17,
+    "journal": "Transactions on Machine Learning Research (TMLR)",
+    "publisher_family": "Independent",
+    "file": "17_transactions_on_machine_learning_research_tmlr.csv",
+    "count": 3
+  },
+  {
+    "index": 18,
+    "journal": "Artificial Intelligence",
+    "publisher_family": "Elsevier",
+    "file": "18_artificial_intelligence.csv",
+    "count": 188
+  },
+  {
+    "index": 19,
+    "journal": "Neural Networks",
+    "publisher_family": "Elsevier",
+    "file": "19_neural_networks.csv",
+    "count": 2376
+  },
+  {
+    "index": 20,
+    "journal": "Knowledge-Based Systems",
+    "publisher_family": "Elsevier",
+    "file": "20_knowledge_based_systems.csv",
+    "count": 3680
+  },
+  {
+    "index": 21,
+    "journal": "Expert Systems with Applications",
+    "publisher_family": "Elsevier",
+    "file": "21_expert_systems_with_applications.csv",
+    "count": 7377
+  },
+  {
+    "index": 22,
+    "journal": "Information Sciences",
+    "publisher_family": "Elsevier",
+    "file": "22_information_sciences.csv",
+    "count": 1928
+  },
+  {
+    "index": 23,
+    "journal": "International Journal of Approximate Reasoning",
+    "publisher_family": "Elsevier",
+    "file": "23_international_journal_of_approximate_reasoning.csv",
+    "count": 343
+  },
+  {
+    "index": 24,
+    "journal": "Neurocomputing",
+    "publisher_family": "Elsevier",
+    "file": "24_neurocomputing.csv",
+    "count": 5062
+  },
+  {
+    "index": 25,
+    "journal": "Applied Soft Computing",
+    "publisher_family": "Elsevier",
+    "file": "25_applied_soft_computing.csv",
+    "count": 3348
+  },
+  {
+    "index": 26,
+    "journal": "Engineering Applications of Artificial Intelligence",
+    "publisher_family": "Elsevier",
+    "file": "26_engineering_applications_of_artificial_intelligence.csv",
+    "count": 5511
+  },
+  {
+    "index": 27,
+    "journal": "Robotics and Autonomous Systems",
+    "publisher_family": "Elsevier",
+    "file": "27_robotics_and_autonomous_systems.csv",
+    "count": 697
+  },
+  {
+    "index": 28,
+    "journal": "Cognitive Systems Research",
+    "publisher_family": "Elsevier",
+    "file": "28_cognitive_systems_research.csv",
+    "count": 125
+  },
+  {
+    "index": 29,
+    "journal": "AI Open",
+    "publisher_family": "Elsevier",
+    "file": "29_ai_open.csv",
+    "count": 37
+  },
+  {
+    "index": 30,
+    "journal": "Artificial Intelligence Review",
+    "publisher_family": "Springer Nature",
+    "file": "30_artificial_intelligence_review.csv",
+    "count": 646
+  },
+  {
+    "index": 31,
+    "journal": "Machine Learning",
+    "publisher_family": "Springer Nature",
+    "file": "31_machine_learning.csv",
+    "count": 617
+  },
+  {
+    "index": 32,
+    "journal": "Applied Intelligence",
+    "publisher_family": "Springer Nature",
+    "file": "32_applied_intelligence.csv",
+    "count": 1334
+  },
+  {
+    "index": 33,
+    "journal": "Autonomous Agents and Multi-Agent Systems",
+    "publisher_family": "Springer Nature",
+    "file": "33_autonomous_agents_and_multi_agent_systems.csv",
+    "count": 82
+  },
+  {
+    "index": 34,
+    "journal": "Genetic Programming and Evolvable Machines",
+    "publisher_family": "Springer Nature",
+    "file": "34_genetic_programming_and_evolvable_machines.csv",
+    "count": 40
+  },
+  {
+    "index": 35,
+    "journal": "Swarm Intelligence",
+    "publisher_family": "Springer Nature",
+    "file": "35_swarm_intelligence.csv",
+    "count": 27
+  },
+  {
+    "index": 36,
+    "journal": "Data Mining and Knowledge Discovery",
+    "publisher_family": "Springer Nature",
+    "file": "36_data_mining_and_knowledge_discovery.csv",
+    "count": 186
+  },
+  {
+    "index": 37,
+    "journal": "Machine Intelligence Research",
+    "publisher_family": "Springer Nature",
+    "file": "37_machine_intelligence_research.csv",
+    "count": 152
+  },
+  {
+    "index": 38,
+    "journal": "IEEE Transactions on Artificial Intelligence",
+    "publisher_family": "IEEE",
+    "file": "38_ieee_transactions_on_artificial_intelligence.csv",
+    "count": 731
+  },
+  {
+    "index": 39,
+    "journal": "IEEE Transactions on Neural Networks and Learning Systems",
+    "publisher_family": "IEEE",
+    "file": "39_ieee_transactions_on_neural_networks_and_learning_systems.csv",
+    "count": 1256
+  },
+  {
+    "index": 40,
+    "journal": "IEEE Transactions on Knowledge and Data Engineering",
+    "publisher_family": "IEEE",
+    "file": "40_ieee_transactions_on_knowledge_and_data_engineering.csv",
+    "count": 951
+  },
+  {
+    "index": 41,
+    "journal": "IEEE Transactions on Emerging Topics in Computational Intelligence",
+    "publisher_family": "IEEE",
+    "file": "41_ieee_transactions_on_emerging_topics_in_computational_intelligence.csv",
+    "count": 545
+  },
+  {
+    "index": 42,
+    "journal": "IEEE Transactions on Cognitive and Developmental Systems",
+    "publisher_family": "IEEE",
+    "file": "42_ieee_transactions_on_cognitive_and_developmental_systems.csv",
+    "count": 239
+  },
+  {
+    "index": 43,
+    "journal": "IEEE Transactions on Systems, Man, and Cybernetics: Systems",
+    "publisher_family": "IEEE",
+    "file": "43_ieee_transactions_on_systems_man_and_cybernetics_systems.csv",
+    "count": 1360
+  },
+  {
+    "index": 44,
+    "journal": "IEEE Robotics and Automation Letters",
+    "publisher_family": "IEEE",
+    "file": "44_ieee_robotics_and_automation_letters.csv",
+    "count": 3176
+  },
+  {
+    "index": 45,
+    "journal": "Computational Linguistics",
+    "publisher_family": "MIT Press",
+    "file": "45_computational_linguistics.csv",
+    "count": 75
+  },
+  {
+    "index": 46,
+    "journal": "Transactions of the Association for Computational Linguistics (TACL)",
+    "publisher_family": "MIT Press/ACL",
+    "file": "46_transactions_of_the_association_for_computational_linguistics_tacl.csv",
+    "count": 182
+  },
+  {
+    "index": 47,
+    "journal": "Evolutionary Computation",
+    "publisher_family": "MIT Press",
+    "file": "47_evolutionary_computation.csv",
+    "count": 37
+  },
+  {
+    "index": 48,
+    "journal": "Artificial Life",
+    "publisher_family": "MIT Press",
+    "file": "48_artificial_life.csv",
+    "count": 34
+  },
+  {
+    "index": 49,
+    "journal": "Natural Language Processing",
+    "publisher_family": "Cambridge University Press",
+    "file": "49_natural_language_processing.csv",
+    "count": 16
+  },
+  {
+    "index": 50,
+    "journal": "Nature Machine Intelligence",
+    "publisher_family": "Nature Portfolio",
+    "file": "50_nature_machine_intelligence.csv",
+    "count": 343
+  },
+  {
+    "index": 51,
+    "journal": "npj Artificial Intelligence",
+    "publisher_family": "Nature Portfolio",
+    "file": "51_npj_artificial_intelligence.csv",
+    "count": 151
+  },
+  {
+    "index": 52,
+    "journal": "Science Robotics",
+    "publisher_family": "AAAS",
+    "file": "52_science_robotics.csv",
+    "count": 218
+  }
+]

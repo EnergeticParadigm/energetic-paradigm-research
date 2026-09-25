@@ -1,0 +1,2 @@
+journal,publisher_family,year,publication_date,title,authors,volume,issue,doi,article_url,article_type,source_container_title,openalex_id
+Journal of Machine Learning Research (JMLR),Independent,2025,2025-01-01,MEKA: A multi-label/multi-target extension to Weka,Jesse Read,17,1,10.57702/tmdwazw3,https://jmlr.org/papers/volume17/12-164/12-164.pdf,article,Journal of Machine Learning Research,https://openalex.org/W2343252634
