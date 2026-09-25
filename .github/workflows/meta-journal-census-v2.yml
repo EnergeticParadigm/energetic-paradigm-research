@@ -1,0 +1,24 @@
+name: Meta Research Journal Census V2
+on:
+  push:
+    branches: [meta-research-journal-census-2026-09-26]
+    paths: ['.github/workflows/meta-journal-census-v2.yml']
+permissions:
+  contents: write
+jobs:
+  census-v2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: meta-research-journal-census-2026-09-26
+      - name: Run robust OpenAlex census
+        run: python3 _meta_tmp/journal_census_v2.py
+      - name: Commit outputs
+        run: |
+          git config user.name 'EP Meta Research Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add _meta_tmp/out_v2/
+          git commit -m 'Generate robust Level A journal census 2025-2026' || exit 0
+          git push origin HEAD:meta-research-journal-census-2026-09-26
