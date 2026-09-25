@@ -1,0 +1,53 @@
+count,issn,issn_l,journal,match_score,source,source_id,status
+653,0360-0300;1557-7341,0360-0300,ACM Computing Surveys,1.0,ACM Computing Surveys,S157921468,OK
+38,2832-0565,2832-0565,ACM Journal on Responsible Computing,1.0,ACM Journal on Responsible Computing,S4387289179,OK
+101,1556-4665;1556-4703,1556-4665,ACM Transactions on Autonomous and Adaptive Systems,1.0,ACM Transactions on Autonomous and Adaptive Systems,S16632050,OK
+106,2378-962X;2378-9638,2378-962X,ACM Transactions on Cyber-Physical Systems,1.0,ACM Transactions on Cyber-Physical Systems,S2506189754,OK
+67,2688-299X;2688-3007,2688-299X,ACM Transactions on Evolutionary Learning and Optimization,1.0,ACM Transactions on Evolutionary Learning and Optimization,S4210221532,OK
+163,2573-9522,2573-9522,ACM Transactions on Human-Robot Interaction,1.0,ACM Transactions on Human-Robot Interaction,S4210193251,OK
+293,1046-8188;1558-2868,1046-8188,ACM Transactions on Information Systems,1.0,ACM Transactions on Information Systems,S4394735545,OK
+306,2157-6904;2157-6912,2157-6904,ACM Transactions on Intelligent Systems and Technology,1.0,ACM Transactions on Intelligent Systems and Technology,S2492086750,OK
+51,2160-6455;2160-6463,2160-6455,ACM Transactions on Interactive Intelligent Systems,1.0,ACM Transactions on Interactive Intelligent Systems,S4210173818,OK
+258,1556-4681;1556-472X,1556-4681,ACM Transactions on Knowledge Discovery from Data,1.0,ACM Transactions on Knowledge Discovery from Data,S41523882,OK
+24,2836-8924,2836-8924,ACM Transactions on Probabilistic Machine Learning,1.0,ACM transactions on probabilistic machine learning.,S4404675036,OK
+123,2770-6699,2770-6699,ACM Transactions on Recommender Systems,1.0,ACM Transactions on Recommender Systems,S4387284325,OK
+753,1049-331X;1557-7392,1049-331X,ACM Transactions on Software Engineering and Methodology,1.0,ACM Transactions on Software Engineering and Methodology,S142627899,OK
+38,2666-6510,2666-6510,AI Open,1.0,AI Open,S4210194376,OK
+1341,0924-669X;1573-7497,0924-669X,Applied Intelligence,1.0,Applied Intelligence,S74726891,OK
+3350,1568-4946;1872-9681,1568-4946,Applied Soft Computing,1.0,Applied Soft Computing,S140556538,OK
+195,0004-3702;1872-7921,0004-3702,Artificial Intelligence,1.0,Artificial Intelligence,S196139623,OK
+650,0269-2821;1573-7462,0269-2821,Artificial Intelligence Review,1.0,Artificial Intelligence Review,S122814990,OK
+34,1064-5462;1530-9185,1064-5462,Artificial Life,1.0,Artificial Life,S2181302,OK
+82,1387-2532;1573-7454,1387-2532,Autonomous Agents and Multi-Agent Systems,1.0,Autonomous Agents and Multi-Agent Systems,S5405189,OK
+125,1389-0417;2214-4366,1389-0417,Cognitive Systems Research,1.0,Cognitive Systems Research,S96254641,OK
+20,2633-9137,2633-9137,Collective Intelligence,1.0,Collective Intelligence,S4220651559,OK
+76,0891-2017;1530-9312,0891-2017,Computational Linguistics,1.0,Computational Linguistics,S155526855,OK
+186,1384-5810;1573-756X,1384-5810,Data Mining and Knowledge Discovery,1.0,Data Mining and Knowledge Discovery,S121920818,OK
+5520,0952-1976;1873-6769,0952-1976,Engineering Applications of Artificial Intelligence,1.0,Engineering Applications of Artificial Intelligence,S900972176,OK
+37,1063-6560;1530-9304,1063-6560,Evolutionary Computation,1.0,Evolutionary Computation,S38677346,OK
+7392,0957-4174;1873-6793,0957-4174,Expert Systems with Applications,1.0,Expert Systems with Applications,S13144211,OK
+40,1389-2576;1573-7632,1389-2576,Genetic Programming and Evolvable Machines,1.0,Genetic Programming and Evolvable Machines,S47930974,OK
+3198,2377-3766;2377-3774,2377-3766,IEEE Robotics and Automation Letters,1.0,IEEE Robotics and Automation Letters,S4210169774,OK
+732,2691-4581,2691-4581,IEEE Transactions on Artificial Intelligence,1.0,IEEE Transactions on Artificial Intelligence,S4210169448,OK
+240,2379-8920;2379-8939,2379-8920,IEEE Transactions on Cognitive and Developmental Systems,1.0,IEEE Transactions on Cognitive and Developmental Systems,S2488537894,OK
+546,2471-285X,2471-285X,IEEE Transactions on Emerging Topics in Computational Intelligence,1.0,IEEE Transactions on Emerging Topics in Computational Intelligence,S4210210251,OK
+956,1041-4347;1558-2191;2326-3865,1041-4347,IEEE Transactions on Knowledge and Data Engineering,1.0,IEEE Transactions on Knowledge and Data Engineering,S30698027,OK
+1260,2162-237X;2162-2388,2162-237X,IEEE Transactions on Neural Networks and Learning Systems,1.0,IEEE Transactions on Neural Networks and Learning Systems,S4210175523,OK
+1361,2168-2216;2168-2232,2168-2216,"IEEE Transactions on Systems, Man, and Cybernetics: Systems",1.0,IEEE Transactions on Systems Man and Cybernetics Systems,S4210209078,OK
+1932,0020-0255;1872-6291,0020-0255,Information Sciences,1.0,Information Sciences,S192650101,OK
+343,0888-613X;1873-4731,0888-613X,International Journal of Approximate Reasoning,1.0,International Journal of Approximate Reasoning,S33368595,OK
+250,1076-9757;1943-5037,1076-9757,Journal of Artificial Intelligence Research,1.0,Journal of Artificial Intelligence Research,S139930977,OK
+0,1532-4435;1533-7928,1532-4435,Journal of Machine Learning Research,1.0,Journal of Machine Learning Research,S118988714,OK
+3689,0950-7051;1872-7409,0950-7051,Knowledge-Based Systems,1.0,Knowledge-Based Systems,S10169007,OK
+152,1476-8186;1751-8520;2731-538X;2731-5398,1476-8186,Machine Intelligence Research,1.0,Machine Intelligence Research,S28082686,OK
+622,0885-6125;1573-0565,0885-6125,Machine Learning,1.0,Machine Learning,S62148650,OK
+16,1567-8202,1567-8202,Natural Language Processing,1.0,Natural language processing,S4210238404,OK
+349,2522-5839,2522-5839,Nature Machine Intelligence,1.0,Nature Machine Intelligence,S2912241403,OK
+2390,0893-6080;1879-2782,0893-6080,Neural Networks,1.0,Neural Networks,S123019304,OK
+5078,0925-2312;1872-8286,0925-2312,Neurocomputing,1.0,Neurocomputing,S45693802,OK
+701,0921-8890;1872-793X,0921-8890,Robotics and Autonomous Systems,1.0,Robotics and Autonomous Systems,S133768115,OK
+218,2470-9476,2470-9476,Science Robotics,1.0,Science Robotics,S4210213233,OK
+27,1935-3812;1935-3820,1935-3812,Swarm Intelligence,1.0,Swarm Intelligence,S120411249,OK
+183,2307-387X,2307-387X,Transactions of the Association for Computational Linguistics,1.0,Transactions of the Association for Computational Linguistics,S2729999759,OK
+1,2835-8856,2835-8856,Transactions on Machine Learning Research,1.0,Transactions on machine learning research,S4393919742,OK
+154,3005-1460,3005-1460,npj Artificial Intelligence,1.0,npj Artificial Intelligence,S5407042906,OK
