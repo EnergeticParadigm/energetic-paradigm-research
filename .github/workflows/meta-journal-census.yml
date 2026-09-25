@@ -1,0 +1,30 @@
+name: Meta Research Level A Journal Census
+
+on:
+  push:
+    branches:
+      - meta-research-journal-census-2026-09-26
+    paths:
+      - '.github/workflows/meta-journal-census.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  census:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: meta-research-journal-census-2026-09-26
+      - name: Run journal census
+        run: python3 _meta_tmp/journal_census.py
+      - name: Commit census outputs
+        run: |
+          git config user.name 'EP Meta Research Bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add _meta_tmp/out/
+          git commit -m 'Generate Level A journal census 2025-2026' || exit 0
+          git push origin HEAD:meta-research-journal-census-2026-09-26
